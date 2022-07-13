@@ -19,5 +19,16 @@
 		WHERE M_ID = #{m_id}
 		
 	</select>
+	
+	<!-- 로그인 정보 인증 작업 -->
+	<select id="login_ok" resultType="com.psamall.domain.MemberVO">
+		
+		SELECT M_ID, M_NAME, M_PASSWD, M_POSTNUM, M_ADDR, 
+				M_ADDR_D, M_TEL, M_EMAIL, M_EMAIL_ACCEPT, M_POINT, 
+				M_REGDATE, M_UPDATEDATE, M_LASTDATE, M_AUTHCODE
+		FROM TBL_MEMBER
+		WHERE M_ID = #{m_id}
+		
+	</select>
 
 </mapper>

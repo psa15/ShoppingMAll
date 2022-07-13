@@ -231,9 +231,15 @@
 					url: '/email/confirmAuthCode',
 					type: 'post',
 					dataType: 'text',
-					data: {  },
+					data: { userAuthCode : authCode },
 					success: function(result){
-						
+						if(result == "success") {
+							alert("인증되었습니다.");
+							isAuthCode = true;
+						} else if(result == "fail") {
+							alert("인증코드가 다릅니다. \n 메일 인증요청을 다시해주세요");
+							isAuthCode = false;
+						}
 					}
 				});
 			});

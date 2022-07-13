@@ -68,15 +68,72 @@ public class MemberController {
 		return entity;
 	}
 	
+	//메일 인증확인 작업
+	@PostMapping("/confirmAuthCode")
+	@ResponseBody
+	public ResponseEntity<String> confirmAuthCode(String userAuthCode, HttpSession session){
+		
+		ResponseEntity<String> entity = null;
+		
+		String authCode = (String) session.getAttribute("authCode");
+		//emailcontroller의 session.setAttribute("authCode", authCode);
+		
+		if(userAuthCode.equals(authCode)) {
+			entity = new ResponseEntity<String>("success", HttpStatus.OK);
+		} else {
+			entity = new ResponseEntity<String>("fail", HttpStatus.OK);
+		}
+		
+		return entity;
+	}
+	
+	
 	//로그인 폼
 	@GetMapping("/login")
 	public void login() {
 		
 	}
 	@PostMapping("/login")
-	public String login(LoginDTO dto, RedirectAttributes rttr, HttpSession session) {
+	public String login(LoginDTO dto, RedirectAttributes rttr, HttpSession session) throws Exception{
+		//throws Exception : db작업이 들어가므로
 		
-		return "";
+		//로그인 정보 인증 작업
+		MemberVO vo = service.login_ok(dto); //vo에는 사용자가 입력한 아이디에 해당하는 회원정보들이 저장
+		
+		//이동할 주소
+		String url = "";
+		
+		//아이디 혹은 비밀번호가 틀렸다고 사용자에게 알리기
+		String msg = "";
+		
+		if(vo != null) {
+			//아이디 존재 -> 평문비밀번호와 db비밀번호 비교			
+			String passwd = dto.getM_passwd();
+			String db_passwd = vo.getM_passwd();
+			
+			if(passwd.equals(db_passwd)) {
+				//1) 비번 일치 -> 메인페이지로 이동
+				url = "/";
+				
+				//로그인 성공 시 서버측에 세션을 통해 회원정보 저장
+				session.setAttribute("loginStatus", vo);
+			} else {
+				//2)비번 불일치 -> 다시 로그인 페이지로
+				url = "/member/login";
+				
+				msg = "noPW";
+			}
+			
+		} else {
+			//아이디가 존재하지 않는 경우 -> 로그인 페이지로
+			url = "/member/login";
+			
+			msg = "noID";
+		}
+		
+		rttr.addFlashAttribute("msg", msg);
+		
+		return "redirect:" + url;
 	}
 	
 }

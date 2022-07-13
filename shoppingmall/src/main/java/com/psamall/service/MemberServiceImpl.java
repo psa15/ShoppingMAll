@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.psamall.domain.MemberVO;
+import com.psamall.dto.LoginDTO;
 import com.psamall.mapper.MemberMapper;
 
 import lombok.Setter;
@@ -25,6 +26,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public String idCheck(String m_id) {
 		return mapper.idCheck(m_id);
+	}
+
+	@Override
+	public MemberVO login_ok(LoginDTO dto) {
+		return mapper.login_ok(dto);
 	}
 
 }

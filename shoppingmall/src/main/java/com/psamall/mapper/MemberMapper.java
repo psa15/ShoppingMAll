@@ -1,6 +1,7 @@
 package com.psamall.mapper;
 
 import com.psamall.domain.MemberVO;
+import com.psamall.dto.LoginDTO;
 
 public interface MemberMapper {
 
@@ -10,4 +11,7 @@ public interface MemberMapper {
 	
 	//id 존재 여부 확인 -> 중복확인
 	String idCheck(String m_id);
+	
+	//로그인 정보 인증
+	MemberVO login_ok(LoginDTO dto);
 }

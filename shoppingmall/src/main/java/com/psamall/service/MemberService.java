@@ -1,6 +1,7 @@
 package com.psamall.service;
 
 import com.psamall.domain.MemberVO;
+import com.psamall.dto.LoginDTO;
 
 public interface MemberService {
 
@@ -9,4 +10,7 @@ public interface MemberService {
 	
 	//id 존재 여부 확인 -> 중복확인
 	String idCheck(String m_id);
+	
+	//로그인 정보 인증
+	MemberVO login_ok(LoginDTO dto);
 }
