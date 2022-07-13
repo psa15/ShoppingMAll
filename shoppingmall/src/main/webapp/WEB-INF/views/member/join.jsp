@@ -48,17 +48,17 @@
 	
 	<div class="container">
 	  <div class=" mb-3 text-center">
-	    <form action="join" method="post">
+	    <form action="join" method="post" id="joinForm">
 		  <div class="form-group row">
 		    <label for="m_id" class="col-sm-2 col-form-label">아이디</label>
 		    <div class="col-sm-5">
 		      <input type="text" class="form-control" id="m_id" name="m_id" placeholder="아이디를 8 ~ 15이내로 입력하세요">
 		    </div>
 		    <div class="col-sm-3">
-		      <button type="button" class="btn btn-link">아이디 중복체크</button>
+		      <button type="button" class="btn btn-link" id="btnIdCheck">아이디 중복체크</button>
 		      
 		    </div>
-		    <label for="staticEmail" class="col-form-label col-sm-2">중복체크 결과</label>
+		    <label for="staticEmail" class="col-form-label col-sm-2" style="display: none;" id="idCheckResult">중복체크 결과</label>
 		  </div>
 		  <div class="form-group row">
 		    <label for="m_passwd" class="col-sm-2 col-form-label">비밀번호</label>
@@ -85,9 +85,15 @@
 		    </div>
 		  </div>
 		  <div class="form-group row">
-		    <label for="m_authcode" class="col-sm-2 col-form-label">이메일 인증코드</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_authcode" name="m_authcode" >
+		  	<label for="m_authcode" class="col-sm-2 col-form-label">이메일 인증코드</label>
+		  	<div class="col-sm-3">
+		      <button type="button" class="form-control btn btn-info" id="btnAuthcode" > 메일 인증 요청 </button>
+		    </div>		    
+		    <div class="col-sm-4">
+		      <input type="text" class="form-control" id="m_authcode" name="m_authcode">
+		    </div>
+		    <div class="col-sm-3">
+		      <button type="button" class="form-control btn btn-info" id="btnConfirmAuthcode">메일 인증 확인 </button>
 		    </div>
 		  </div>
 		  <div class="form-group row">
@@ -119,11 +125,11 @@
 		  <div class="form-group row">
 	      	<label class="form-check-label col-sm-2" for="m_email_accept">메일 수신 동의</label>
 	      	<div class="col-sm-10 text-left">
-		    	<input type="checkbox" class="form-check-input" id="m_email_accept" name="m_email_accept" >		
+		    	<input type="checkbox" class="form-check-input" id="m_email_accept" name="m_email_accept"  >		
 		    </div>	    		    
 		  </div>
 		  
-	      <button type="button" class="btn btn-dark text-center">회원가입</button>
+	      <button type="button" class="btn btn-dark text-center" id="btnJoinSend">회원가입</button>
 	      		
 		</form>
 	  </div>
@@ -134,6 +140,105 @@
 	
 	<!-- bootstrap 버전 및 여러 파일들 -->
 	<%@include file="/WEB-INF/views/include/common.jsp" %>
+
+	<script>
+
+		let joinForm = $("#joinForm");
+
+		$(document).ready(function(){
+
+			
+			//회원가입 정보 저장
+			$("#btnJoinSend").on("click", function(){
+				//console.log("회원가입 하기");
+
+				//유효성 검사
+
+				//정보 전송
+				joinForm.submit();
+			});
+
+			//아이디 중복체크를 했는지 확인하기 위한 전역변수(상태변수) 선언
+			let isIDCheck = false;
+
+			//ID 중복 체크
+			$("#btnIdCheck").on("click", function(){
+
+				//ID입력됐는지 확인
+				if($("#m_id").val == "") { 
+					//아이디가 공백일 때
+					alert("아이디를 입력하세요.");
+					$("#m_id").focus();
+					return;
+				} 
+
+				//중복확인 결과 출력되는 태그 보이기
+				$("#idCheckResult").css({ 'display' : 'inline', 'color' : 'red'});
+
+				$.ajax ({
+					url: '/member/idCheck',
+					type: 'get',
+					dataType: 'text',
+					data: { m_id : $("#m_id").val() },
+					success: function(result) {
+						console.log(result);
+
+						if(result == "yes") {
+							$("#idCheckResult").html("<b>" + $('#m_id').val() + "사용가능</b>");
+							isIDCheck = true;
+						} else {
+							$("#idCheckResult").html("<b> 해당 아이디는 사용 불가능 </b>");
+							isIDCheck = false;
+						}
+					}
+				});
+			});
+
+			//메일 인증코드 요청 작업
+			$("#btnAuthcode").on("click", function(){
+
+				//메일 작성됐는지 확인
+				if($("#m_email").val() == "") {
+					alert("메일 주소를 입력해 주세요.");
+					return;
+				}
+
+				$.ajax({
+					url: '/email/send',
+					type: 'get',
+					dataType: 'text',
+					data: { receiverMail : $("#m_email").val() },
+					success: function(result) {
+						if(result == "success") {
+							alert("인증코드가 발송되었으니 메일을 확인해 주세요.");
+						} else if(result == "fail") {
+							alert("메일 발송이 실패되었으니 메일주소 확인 및 관리자에게 문의바랍니다.");
+						}
+
+					}
+				});
+			});
+
+			//메일 인증코드를 확인했는지 알려주는 변수
+			let isAuthCode = false;
+
+			//메일 인증 확인
+			$("#btnConfirmAuthcode").on("click", function(){
+				
+				let authCode = $("#m_authcode").val();
+
+				$.ajax({
+					url: '/email/confirmAuthCode',
+					type: 'post',
+					dataType: 'text',
+					data: {  },
+					success: function(result){
+						
+					}
+				});
+			});
+		});
+	</script>
     
     <%-- 우편번호와 주소 입력 폼 - kakao 우편번호 api 사용 (함수이름이나 id값 변경함)
     		https://postcode.map.daum.net/guide --%>

@@ -37,6 +37,21 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
+	<!-- 메일인증코드 관련 설정 -->
+	<!-- 앱 비밀번호 발급받기 --> 
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	  <property name="host" value="smtp.gmail.com" />
+	  <property name="port" value="587" />
+	  <property name="username" value="" />
+	  <property name="password" value="" />
+	  <property name="javaMailProperties">
+	  <props>
+	    <prop key="mail.smtp.auth">true</prop>
+	    <prop key="mail.smtp.starttls.enable">true</prop>
+	  </props>
+	  </property>
+	</bean>
+	
 	<!-- com.demo.mapper 패키지에 존재하는 Interface를 Mapper Interface로 만들어 주는 설정 구문  -->
 	<mybatis-spring:scan base-package="com.psamall.mapper"/>
 	
