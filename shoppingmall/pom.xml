@@ -224,6 +224,26 @@
 		    <artifactId>spring-context-support</artifactId>
 		    <version>${org.springframework-version}</version>
 		</dependency>
+		
+		<!-- 비밀번호 암호화 기능이 포함되어 있는 라이브러리 -->
+		<!--스프링시큐리티 web 라이브러리-->                          
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>4.1.0.RELEASE</version>
+        </dependency>
+        <!--스프링시큐리티 core 라이브러리-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>4.1.0.RELEASE</version>
+        </dependency>
+        <!--스프링시큐리티 config 라이브러리-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>4.1.0.RELEASE</version>
+        </dependency>
 
 		<!-- 추가 끝 -->
 		

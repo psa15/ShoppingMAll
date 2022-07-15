@@ -8,19 +8,21 @@
 	  <nav class="my-2 my-md-0 mr-md-3">
 	  
 	  	<!-- 로그인 전 -->
-	  	<c:if test="">
-		    <a class="p-2 text-dark" href="#">LOGIN</a>
+	  	<c:if test="${sessionScope.loginStatus == null}">
+		    <a class="p-2 text-dark" href="member/login">LOGIN</a>
 		    <a class="p-2 text-dark" href="member/join">JOIN</a>
-	    </c:if>
-	    
-	    <!-- 로그인 후 -->
-	  	<c:if test="">
-		    <a class="p-2 text-dark" href="#">LOGOUT</a>
 	    </c:if>
 	    
 	    <!-- 공통 -->
 	    <a class="p-2 text-dark" href="#">MYPAGE</a>
 	    <a class="p-2 text-dark" href="#">ORDER</a>
+	    
+	    <!-- 로그인 후 -->
+	  	<c:if test="${sessionScope.loginStatus != null}">
+		    <a class="p-2 text-dark" href="member/logout">LOGOUT</a>
+	    </c:if>
+	    
+	    <!-- 공통 -->
 	    <a class="p-2 text-dark" href="#">CART</a>
 	  </nav>
 	</div>

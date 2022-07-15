@@ -153,6 +153,17 @@
 				//console.log("회원가입 하기");
 
 				//유효성 검사
+				
+				//id중복체크 여부 확인
+				if(!isIDCheck) {
+					alert("아이디 중복체크를 해주세요.");
+					return;
+				}
+				//이메일 인증 여부 확인
+				if(!isAuthCode) {
+					alert("메일 인증확인을 해주세요.");
+					return;
+				}
 
 				//정보 전송
 				joinForm.submit();

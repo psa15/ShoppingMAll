@@ -52,27 +52,36 @@
 	<!-- header -->
 	<%@include file="/WEB-INF/views/include/header.jsp" %>
 	
-	<h3>로그인</h3>
+	<h3>임시 비밀번호 발급</h3>
 	
 	<div class="container">
 	  <div class=" mb-3 text-center">
-	    <form id="loginForm" class="form-signin" action="login" method="post">
-		  <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-		  <label for="m_id" class="sr-only">아이디</label>
-		  <input type="text" id="m_id" class="form-control" name="m_id" placeholder="ID" required autofocus>
-		  <div class="m_id regex"></div>
-		  <label for="m_passwd" class="sr-only">비밀번호</label>
-		  <input type="password" id="m_passwd" class="form-control" name="m_passwd" placeholder="Password" required>
-		  <div class="m_passwd regex"></div>
-		  <div class="checkbox mb-3">
-		    <label>
-		      <input type="checkbox" value="remember-me"> Remember me
-		    </label>
-		  </div>
-		  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-		  <button class="btn btn-lg btn-primary btn-block" id="btnlostId" type="button">아이디 찾기</button>
-		  <button class="btn btn-lg btn-primary btn-block" id="btnNewPw" type="button">비밀번호 발급받기</button>
-		</form>
+	    <div class="col-6">
+  			<form id="loginForm" method="post" action="login">
+			  <div class="form-group row">
+			    <label for="m_userid" class="col-sm-4 col-form-label">아이디</label>
+			    <div class="col-sm-6">
+			      <input type="text" class="form-control" id="m_userid" name="m_userid">
+			    </div>
+			   </div>		    
+			  <div class="form-group row">
+			    <label for="m_passwd" class="col-sm-4 col-form-label">비밀번호</label>
+			    <div class="col-sm-6">
+			      <input type="password" class="form-control" id="m_passwd" name="m_passwd">
+			    </div>
+			  </div>		  
+			  <div class="form-group">
+			    <div class="text-center">
+					<button class="btn btn-lg btn-primary btn-block" type="submit">로그인</button>
+			    </div>
+			  </div>
+			  <div class="form-group">
+				<div class="text-center">
+					<button class="btn btn-lg btn-primary btn-block" id="btnSearchId" type="button">아이디 찾기</button>
+			    </div>
+			  </div>
+			</form>
+	  	</div>	
 	  </div>
 	
 	  <!-- footer -->
@@ -86,36 +95,9 @@
 
       $(document).ready(function(){
         
-        let loginForm = $("#loginForm");
-
-        //로그인 정보 전송
-        $("#loginForm").on("submit", function(){
-          console.log("로그인");
-
-          /*유효성 검사*/
-          
-          //아이디와 비밀번호 입력했는지 확인
-          if($("#m_id").val() == "") {
-            alert("아이디를 입력하세요");
-            $("#m_id").focus();
-            return false;
-          }
-          if($("#m_passwd").val() == "") {
-            alert("비밀번호를 입력하세요");
-            $("#m_passwd").focus();
-            return false;
-          }
-
-          return true; //전송
-        });
-
         //아이디 찾기 버튼
-        $("#btnlostId").on("click", function(){
-          location.href = "/member/lostId";
-        });
-      	//비밀번호 찾기 버튼
-        $("#btnNewPw").on("click", function(){
-          location.href = "/member/newPw";
+        $("#btnSearchId").on("click", function(){
+          location.href = "/member/searchId";
         });
 
       });
