@@ -10,7 +10,7 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">  
 <%@include file="/WEB-INF/views/admin/include/script1.jsp" %>
 
-<link rel="stylesheet" href="/resources/css/adLogin.css">
+<link rel="stylesheet" href="/css/adLogin.css">
  
  <script>
  	if("${msg}" == "noData") {
