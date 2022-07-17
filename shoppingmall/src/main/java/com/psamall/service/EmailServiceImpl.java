@@ -20,7 +20,7 @@ public class EmailServiceImpl implements EmailService {
 	private JavaMailSender mailSender;
 	
 	@Override
-	public void sendMail(EmailDTO dto, String authCode) {
+	public void sendMail(EmailDTO dto, String message) {
 		
 		//메일 구성 정보를 답당하는 객체
 		MimeMessage msg = mailSender.createMimeMessage();
@@ -37,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
 			msg.setSubject(dto.getTitle(), "utf-8");
 			
 			//본문 내용
-			msg.setText(authCode, "utf-8");
+			msg.setText(message, "utf-8");
 			
 			//메일 전송
 			mailSender.send(msg);

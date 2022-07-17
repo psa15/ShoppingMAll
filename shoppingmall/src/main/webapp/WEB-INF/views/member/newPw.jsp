@@ -39,11 +39,9 @@
     <script>
       let msg = "${msg}";
 
-      if(msg == "noID") {
-        alert("아이디를 확인하세요");
-      } else if(msg == "noPW") {
-        alert("비밀번호가 다릅니다.");
-      }
+      if(msg == "noData") {
+        alert("입력하신 정보를 확인해 주세요.");
+      } 
     </script>
     
   </head>
@@ -57,31 +55,27 @@
 	<div class="container">
 	  <div class=" mb-3 text-center">
 	    <div class="col-6">
-  			<form id="loginForm" method="post" action="login">
+	 		<form id="loginForm" method="post" action=sendNewPw>
 			  <div class="form-group row">
-			    <label for="m_userid" class="col-sm-4 col-form-label">아이디</label>
+			    <label for="m_id" class="col-sm-4 col-form-label">아이디</label>
 			    <div class="col-sm-6">
-			      <input type="text" class="form-control" id="m_userid" name="m_userid">
+			      <input type="text" class="form-control" id="m_id" name="m_id">
 			    </div>
 			   </div>		    
 			  <div class="form-group row">
-			    <label for="m_passwd" class="col-sm-4 col-form-label">비밀번호</label>
+			    <label for="m_email" class="col-sm-4 col-form-label">이메일</label>
 			    <div class="col-sm-6">
-			      <input type="password" class="form-control" id="m_passwd" name="m_passwd">
+			      <input type="text" class="form-control" id="m_email" name="m_email">
 			    </div>
 			  </div>		  
 			  <div class="form-group">
 			    <div class="text-center">
-					<button class="btn btn-lg btn-primary btn-block" type="submit">로그인</button>
+					<button class="btn btn-lg btn-primary" type="submit">임시 비밀번호 발급받기</button>
+					<button class="btn btn-lg btn-primary" type="button" id="btnLogin">로그인</button>
 			    </div>
-			  </div>
-			  <div class="form-group">
-				<div class="text-center">
-					<button class="btn btn-lg btn-primary btn-block" id="btnSearchId" type="button">아이디 찾기</button>
-			    </div>
-			  </div>
+			  </div>		  
 			</form>
-	  	</div>	
+		</div>
 	  </div>
 	
 	  <!-- footer -->
@@ -95,9 +89,9 @@
 
       $(document).ready(function(){
         
-        //아이디 찾기 버튼
-        $("#btnSearchId").on("click", function(){
-          location.href = "/member/searchId";
+    	//로그인 버튼
+        $("#btnLogin").on("click", function(){
+          location.href = "/member/login";
         });
 
       });

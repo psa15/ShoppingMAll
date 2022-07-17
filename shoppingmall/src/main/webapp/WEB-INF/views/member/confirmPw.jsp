@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 
 <!doctype html>
 <html>
@@ -37,37 +36,46 @@
       }
     </style>
 
+    <script>
+      let msg = "${msg}";
+
+      if(msg == "wrongPw") {
+        alert("입력하신 비밀번화 다릅니다.");
+      } 
+    </script>
     
   </head>
   <body>
     
 	<!-- header -->
-	<%@include file="/WEB-INF/views/include/header.jsp" %>	
+	<%@include file="/WEB-INF/views/include/header.jsp" %>
+	
+	<h3>임시 비밀번호 발급</h3>
 	
 	<div class="container">
-		<c:if test="${m_id != null}">
-		 <h3>아이디 찾기</h3><br><br>
-		 <div class=" mb-3 text-center">	
-			<p>ID : <c:out value="${fn:substring(m_id, 0, fn:length(m_id) - 4)}" /> ****</p><br>
-			전체 아이디는 고객센터로 문의해주세요	  		
-		 </div>
-		 <div class="text-center">
-			<button class="btn btn-lg btn-primary" id="btnLogin" type="button">로그인</button>
-	 		<button class="btn btn-lg btn-primary" id="btnNewPw" type="button">비밀번호 발급</button>
-	     </div>
-     	</c:if>
-     	<c:if test="${mail != null}">
-		 <h3>임시비밀번호 발급 완료</h3><br><br>
-		 <div class=" mb-3 text-center">	
-			<p>임시 비밀번호를 메일로 전송했습니다.</p><br>
-			로그인 하신 후 비밀번호를 변경해 주세요  		
-		 </div>
-		 <div class="text-center">
-			<button class="btn btn-lg btn-primary" id="btnLogin" type="button">로그인</button>
-	     </div>
-     	</c:if>
-     
-     
+	  <div class=" mb-3 text-center">
+	    <div class="col-6">
+	 		<form id="loginForm" method="post" action="confirmPw">
+			  <div class="form-group row">
+			    <label for="m_id" class="col-sm-4 col-form-label">아이디</label>
+			    <div class="col-sm-6">
+			      <input type="text" class="form-control" id="m_id" name="m_id" value="${sessionScope.loginStatus.m_id}">
+			    </div>
+			   </div>		    
+			  <div class="form-group row">
+			    <label for="m_passwd" class="col-sm-4 col-form-label">비밀번호</label>
+			    <div class="col-sm-6">
+			      <input type="password" class="form-control" id="m_passwd" name="m_passwd">
+			    </div>
+			  </div>		  
+			  <div class="form-group">
+			    <div class="text-center">
+					<button class="btn btn-lg btn-primary" type="submit">확인</button>
+			    </div>
+			  </div>		  
+			</form>
+		</div>
+	  </div>
 	
 	  <!-- footer -->
 	  <%@include file="/WEB-INF/views/include/footer.jsp" %>
@@ -79,13 +87,8 @@
     <script>
 
       $(document).ready(function(){
-    	
-    	//비밀번호 찾기 버튼
-        $("#btnNewPw").on("click", function(){
-          location.href = "/member/newPw";
-        });
-    	
-        //로그인 버튼
+        
+    	//로그인 버튼
         $("#btnLogin").on("click", function(){
           location.href = "/member/login";
         });

@@ -44,21 +44,16 @@
 	<!-- header -->
 	<%@include file="/WEB-INF/views/include/header.jsp" %>
 	
-	<h3>회원 가입</h3>
+	<h3>회원 정보 수정</h3>
 	
 	<div class="container">
 	  <div class=" mb-3 text-center">
-	    <form action="join" method="post" id="joinForm">
+	    <form action="modify" method="post" id="modifyForm">
 		  <div class="form-group row">
 		    <label for="m_id" class="col-sm-2 col-form-label">아이디</label>
 		    <div class="col-sm-5">
-		      <input type="text" class="form-control" id="m_id" name="m_id" placeholder="아이디를 8 ~ 15이내로 입력하세요">
+		      <input type="text" class="form-control" id="m_id" name="m_id" value="${memberVO.m_id}" readonly>
 		    </div>
-		    <div class="col-sm-3">
-		      <button type="button" class="btn btn-link" id="btnIdCheck">아이디 중복체크</button>
-		      
-		    </div>
-		    <label for="staticEmail" class="col-form-label col-sm-2" style="display: none;" id="idCheckResult"></label>
 		  </div>
 		  <div class="form-group row">
 		    <label for="m_passwd" class="col-sm-2 col-form-label">비밀번호</label>
@@ -75,13 +70,13 @@
 		  <div class="form-group row">
 		    <label for="m_name" class="col-sm-2 col-form-label">이름</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_name" name="m_name" >
+		      <input type="text" class="form-control" id="m_name" name="m_name" value="${memberVO.m_name}">
 		    </div>
 		  </div>
 		  <div class="form-group row">
 		    <label for="m_email" class="col-sm-2 col-form-label">이메일</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_email" name="m_email" >
+		      <input type="text" class="form-control" id="m_email" name="m_email" value="${memberVO.m_email}">
 		    </div>
 		  </div>
 		  <div class="form-group row">
@@ -99,37 +94,37 @@
 		  <div class="form-group row">
 		    <label for="m_tel" class="col-sm-2 col-form-label">휴대폰 번호</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_tel" name="m_tel" >
+		      <input type="text" class="form-control" id="m_tel" name="m_tel" value="${memberVO.m_tel}">
 		    </div>
 		  </div>
 		  <div class="form-group row">
 		    <label for="m_postnum" class="col-sm-2 col-form-label">우편번호</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_postnum" name="m_postnum" >
+		      <input type="text" class="form-control" id="m_postnum" name="m_postnum" value="${memberVO.m_postnum}">
 		      <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
 		    </div>
 		  </div>
 		  <div class="form-group row">
 		    <label for="m_addr" class="col-sm-2 col-form-label">주소</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_addr" name="m_addr" >
+		      <input type="text" class="form-control" id="m_addr" name="m_addr" value="${memberVO.m_addr}">
 		    </div>
 		  </div>
 		  <div class="form-group row">
 		    <label for="m_addr_d" class="col-sm-2 col-form-label">상세주소</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_addr_d" name="m_addr_d" >
+		      <input type="text" class="form-control" id="m_addr_d" name="m_addr_d" value="${memberVO.m_addr_d}">
 		      <input type="hidden" id="extraAddress" placeholder="참고항목">
 		    </div>
 		  </div>	
 		  <div class="form-group row">
 	      	<label class="form-check-label col-sm-2" for="m_email_accept">메일 수신 동의</label>
 	      	<div class="col-sm-10 text-left">
-		    	<input type="checkbox" class="form-check-input" id="m_email_accept" name="m_email_accept"  >		
+		    	<input type="checkbox" class="form-check-input" id="m_email_accept" name="m_email_accept" value="${memberVO.m_email_accept}" >		
 		    </div>	    		    
 		  </div>
 		  
-	      <button type="button" class="btn btn-dark text-center" id="btnJoinSend">회원가입</button>
+	      <button type="button" class="btn btn-dark text-center" id="btnModify">수정하기</button>
 	      		
 		</form>
 	  </div>
@@ -143,69 +138,28 @@
 
 	<script>
 
-		let joinForm = $("#joinForm");
+		let modifyForm = $("#modifyForm");
 
 		$(document).ready(function(){
 
 			
 			//회원가입 정보 저장
-			$("#btnJoinSend").on("click", function(){
+			$("#btnModify").on("click", function(){
 				//console.log("회원가입 하기");
 
 				//유효성 검사
 				
-				//id중복체크 여부 확인
-				if(!isIDCheck) {
-					alert("아이디 중복체크를 해주세요.");
-					return;
-				}
-				//이메일 인증 여부 확인
+/* 				//이메일 인증 여부 확인
 				if(!isAuthCode) {
 					alert("메일 인증확인을 해주세요.");
 					return;
-				}
+				} */
 
 				//정보 전송
-				joinForm.submit();
+				modifyForm.submit();
 			});
 
-			//아이디 중복체크를 했는지 확인하기 위한 전역변수(상태변수) 선언
-			let isIDCheck = false;
-
-			//ID 중복 체크
-			$("#btnIdCheck").on("click", function(){
-
-				//ID입력됐는지 확인
-				if($("#m_id").val == "") { 
-					//아이디가 공백일 때
-					alert("아이디를 입력하세요.");
-					$("#m_id").focus();
-					return;
-				} 
-
-				//중복확인 결과 출력되는 태그 보이기
-				$("#idCheckResult").css({ 'display' : 'inline', 'color' : 'red'});
-
-				$.ajax ({
-					url: '/member/idCheck',
-					type: 'get',
-					dataType: 'text',
-					data: { m_id : $("#m_id").val() },
-					success: function(result) {
-						console.log(result);
-
-						if(result == "yes") {
-							$("#idCheckResult").html("<b>" + $('#m_id').val() + "사용가능</b>");
-							isIDCheck = true;
-						} else {
-							$("#idCheckResult").html("<b> 해당 아이디는 사용 불가능 </b>");
-							isIDCheck = false;
-						}
-					}
-				});
-			});
-
-			//메일 인증코드 요청 작업
+			/* //메일 인증코드 요청 작업
 			$("#btnAuthcode").on("click", function(){
 
 				//메일 작성됐는지 확인
@@ -253,7 +207,7 @@
 						}
 					}
 				});
-			});
+			}); */
 		});
 	</script>
     

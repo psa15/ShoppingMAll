@@ -1,5 +1,7 @@
 package com.psamall.controller;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,14 +9,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.psamall.domain.MemberVO;
+import com.psamall.dto.EmailDTO;
 import com.psamall.dto.LoginDTO;
+import com.psamall.service.EmailService;
 import com.psamall.service.MemberService;
 
 import lombok.Setter;
@@ -28,6 +34,9 @@ public class MemberController {
 	
 	@Setter(onMethod_ = {@Autowired})  
 	private MemberService memService;
+	
+	@Setter(onMethod_ = {@Autowired})  
+	private EmailService eService;
 	
 	@Setter(onMethod_ = {@Autowired})
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -54,6 +63,11 @@ public class MemberController {
 		if(vo.getM_email_accept().equals("on")) {
 			vo.setM_email_accept("Y");
 		}
+		
+		if(vo.getM_authcode() != null) {
+			vo.setM_authcode("Y");
+		}
+		
 		memService.join(vo);
 		
 		return "/member/login";
@@ -164,6 +178,143 @@ public class MemberController {
 	}
 	
 	//ID 찾기
-	//@PostMapping("/lostId")
+	@GetMapping("/lostId")
+	public void lostId() {
+		
+	}
+	@PostMapping("/searchId")
+	public String searchId(@RequestParam("m_name") String m_name, @RequestParam("m_email") String m_email, 
+							Model model, RedirectAttributes rttr) {
+		
+		log.info("이름: " + m_name);
+		log.info("이메일: " + m_email);
+		
+		String userid = memService.searchId(m_name, m_email);
+		log.info("사용자 아이디: " + userid);
+						
+		String url = "";
+		if(userid != null) {
+			//정보가 있을 경우
+			url = "/member/searchId";
+			model.addAttribute("m_id", userid);
+		} else {
+			//일치하는 정보가 없을 시
+			rttr.addFlashAttribute("msg", "noData");
+			url = "redirect:/member/lostId";
+		}
+		
+		return url;
+		
+	}
 	
+	//임시 비밀번호 발급
+	@GetMapping("/newPw")
+	public void newPw() {
+		
+	}
+	@PostMapping("/sendNewPw")
+	public String sendNewPw(@RequestParam("m_id") String m_id, @RequestParam("m_email") String m_email, 
+							Model model, RedirectAttributes rttr) {
+		
+		String db_m_id = memService.sendNewPw(m_id, m_email);
+		String temp_m_passwd = "";
+		String url = "";
+		
+		if(db_m_id != null) {
+			//정보가 있다면 임시비밀번호 생성
+			UUID uuid = UUID.randomUUID();
+			log.info(uuid);
+			temp_m_passwd = uuid.toString().substring(0, 6);
+			
+			//임시비밀번호를 암호화하여 저장
+			memService.updateTempPw(m_id, bCryptPasswordEncoder.encode(temp_m_passwd));
+			
+			//메일보내기
+			EmailDTO dto = new EmailDTO("PsaMall", "PsaMall", m_email, "PSA Mall 임시비밀번호 입니다.", "");
+			try {
+				
+				eService.sendMail(dto, temp_m_passwd);
+				model.addAttribute("mail", "mail");
+				url = "/member/searchId";
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		} else {
+			url = "redirect:/member/newPw";
+			rttr.addFlashAttribute("msg", "noData");
+		}
+		
+		return url;
+	}
+	
+	//회원정보 수정 전 비밀번호 확인
+	@GetMapping("/confirmPw")
+	public void confirmPw() {
+		
+	}
+	@PostMapping("/confirmPw")
+	public String confirmPw(@RequestParam("m_passwd")String m_passwd, HttpSession session, RedirectAttributes rttr) {
+		
+		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
+		
+		LoginDTO dto = new LoginDTO(m_id, m_passwd);
+		
+		//로그인 정보 인증 작업
+		MemberVO vo = memService.login_ok(dto);
+		
+		//이동할 주소
+		String url = "";
+		String db_m_passwd = vo.getM_passwd();
+					
+		if(bCryptPasswordEncoder.matches(dto.getM_passwd(), db_m_passwd)) {
+			//1) 비번 일치 -> 회원 정보 수정 페이지로 이동
+			url = "/member/modify";
+			
+		} else {
+			//2)비번 불일치 -> 다시 로그인 페이지로
+			url = "/member/confirmPw";
+			rttr.addFlashAttribute("msg", "wrongPw");				
+		}
+			
+
+		return "redirect:" + url;
+	}
+	
+	//회원정보 수정 폼
+	@GetMapping("/modify")
+	public void modify(HttpSession session, Model model) {
+		
+		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
+		
+		LoginDTO dto = new LoginDTO(m_id, ""); //아이디만 사용
+		
+		MemberVO vo = memService.login_ok(dto);
+		
+		model.addAttribute("memberVO", vo);
+	}
+	//회원정보 수정 저장
+	@PostMapping("/modify")
+	public String modify(MemberVO vo, RedirectAttributes rttr) {
+		
+		//비밀번호를 수정했을 시 비밀번호 암호화
+		if(vo.getM_passwd() != null && !vo.getM_passwd().equals("")) {
+			log.info("변경 비밀번호: " + vo.getM_passwd());
+			String cryptEncoderPw = bCryptPasswordEncoder.encode(vo.getM_passwd());
+			vo.setM_passwd(cryptEncoderPw);
+		}
+		
+		//메일 수신 여부
+		if(vo.getM_email_accept().equals("on")) {
+			vo.setM_email_accept("Y");
+		} else {
+			vo.setM_email_accept("N");
+		}
+		
+		memService.updateModify(vo);
+		
+		return "redirect:/";
+	}
+ 	
 }

@@ -70,8 +70,8 @@
 		    </label>
 		  </div>
 		  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-		  <button class="btn btn-lg btn-primary btn-block" id="btnlostId" type="button">아이디 찾기</button>
-		  <button class="btn btn-lg btn-primary btn-block" id="btnNewPw" type="button">비밀번호 발급받기</button>
+		  <a href="/member/lostId">아이디 찾기</a> |
+		  <a href="/member/newPw">비밀번호 발급받기</a>
 		</form>
 	  </div>
 	
@@ -111,7 +111,7 @@
 
         //아이디 찾기 버튼
         $("#btnlostId").on("click", function(){
-          location.href = "/member/lostId";
+          location.href = "member/login";
         });
       	//비밀번호 찾기 버튼
         $("#btnNewPw").on("click", function(){

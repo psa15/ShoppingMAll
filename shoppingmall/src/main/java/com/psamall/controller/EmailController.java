@@ -54,14 +54,5 @@ public class EmailController {
 		
 		return entity;
 	}
-	//인증코드 확인
-	@PostMapping("/confirmAuthCode")
-	public ResponseEntity<String> confirmAuthCode(String userAuthCode, HttpSession session) {
-		
-		ResponseEntity<String> entity = null;
-		
-		String authCode = (String) session.getAttribute("authCode");
-		
-		return entity;
-	}
+	
 }
