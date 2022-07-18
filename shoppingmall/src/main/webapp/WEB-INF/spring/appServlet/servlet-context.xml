@@ -27,6 +27,11 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	<!-- 상품 등록을 위한 빈 설정 -->
+	<beans:bean id="uploadPath" class="java.lang.String">
+		<beans:constructor-arg value="c:\\Dev\\upload\\portfolio\\"></beans:constructor-arg>
+	</beans:bean>
+	
 	<!-- 프로젝트 생성과 함께 자동 추가 -->
 	<context:component-scan base-package="com.psamall.controller" />
 	

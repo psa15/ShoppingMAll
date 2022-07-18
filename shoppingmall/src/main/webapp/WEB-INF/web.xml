@@ -49,8 +49,6 @@
 	</servlet-mapping>
 	
 	
-	
-	
 	<!-- 한글깨짐방지. -->	
 	<filter>		
 		<filter-name>encodingFilter</filter-name>		
