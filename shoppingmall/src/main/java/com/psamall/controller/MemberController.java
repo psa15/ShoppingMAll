@@ -298,6 +298,7 @@ public class MemberController {
 	@PostMapping("/modify")
 	public String modify(MemberVO vo, RedirectAttributes rttr) {
 		
+		log.info("회원수정 정보: " + vo);
 		//비밀번호를 수정했을 시 비밀번호 암호화
 		if(vo.getM_passwd() != null && !vo.getM_passwd().equals("")) {
 			log.info("변경 비밀번호: " + vo.getM_passwd());
@@ -305,7 +306,13 @@ public class MemberController {
 			vo.setM_passwd(cryptEncoderPw);
 		}
 		
-		//메일 수신 여부
+		/*
+		 메일 수신 여부
+		 <input type="checkbox" value="Y"> 라고 value값을 지정해 뒀다면 if(vo.getM_email_accept().equals("Y"))
+		 <input type="checkbox"> value값 지정 안하면 체크박스 선택 안할 시 null로 인식이 됨
+		 	-> if(vo.getM_email_accept() != null)
+		 
+		 */
 		if(vo.getM_email_accept().equals("on")) {
 			vo.setM_email_accept("Y");
 		} else {

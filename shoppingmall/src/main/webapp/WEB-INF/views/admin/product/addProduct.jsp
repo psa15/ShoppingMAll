@@ -252,6 +252,38 @@ desired effect
     }
 
     CKEDITOR.replace("p_detail", ckeditor_config);
+
+    //1차 카테고리 선택 시 2차 카테고리 불러오기
+    $("#firstCategory").on("change", function(){
+
+      //선택된 1차 카테고리 코드
+      let firstCategoryCode = $(this).val();
+      console.log("1차 카테고리 코드: " + firstCategoryCode);
+
+      //2차 카테고리 코드를 불러올 주소
+      let url = "/admin/product/secondCateList/" + firstCategoryCode;
+
+      $.getJSON(url, function(secondCateList){
+        // console.log("첫 번째 카테고리 코드: " + subCateList[0].ct_code);
+        // console.log("첫 번째 카테고리 이름: " + subCateList[0].ct_name);
+        //console.log("두 번째 카테고리 코드: " + subCateList[1].ct_code);
+
+        //2차 카테고리 태그
+        let secondCategory = $("#secondCategory");
+        let optionTag = "";
+        
+        //1차 카테고리를 변경하면 전에 선택했던 카테고리 정보가 지워져야 함
+        secondCategory.find("option").remove();
+        secondCategory.append("<option value =''>2차 카테고리 선택</option>");
+
+         for(let i=0; i<secondCateList.length; i++) {
+          optionTag += "<option value='" + secondCateList[i].ct_code + "'>" + secondCateList[i].ct_name + "</option>";
+        }
+
+        secondCategory.append(optionTag);
+      });
+    });
+
   });
 </script>
 

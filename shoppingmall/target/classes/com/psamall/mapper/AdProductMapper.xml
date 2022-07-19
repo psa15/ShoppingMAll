@@ -11,6 +11,18 @@
 			TBL_CATEGORY
 		WHERE
 			CT_P_CODE is NULL
+			
 	</select>
 	
+	<!-- 2차 카테고리 불러오기 -->
+	<select id="secondCateList" resultType="com.psamall.domain.CatetgoryVO">
+	
+	SELECT
+			Ct_CODE, CT_P_CODE, CT_NAME
+		FROM
+			TBL_CATEGORY
+		WHERE
+			CT_P_CODE = #{firstCategoryCode}
+	
+	</select>
 </mapper>

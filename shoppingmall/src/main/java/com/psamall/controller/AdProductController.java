@@ -1,13 +1,20 @@
 package com.psamall.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.psamall.domain.CatetgoryVO;
 import com.psamall.service.AdProductService;
 
 import lombok.Setter;
@@ -30,6 +37,17 @@ public class AdProductController {
 	@GetMapping("/addProduct")
 	public void addProduct(Model model) {
 		model.addAttribute("firstCateList", adPService.firstCateList());
+	}
+	//2차 카테고리 불러오기
+	@ResponseBody
+	@GetMapping("/secondCateList/{f_CategoryCode}")
+	public ResponseEntity<List<CatetgoryVO>> secondCateList(@PathVariable("f_CategoryCode") Integer firstCategoryCode) {
+		
+		ResponseEntity<List<CatetgoryVO>> entity = null;
+		
+		entity = new ResponseEntity<List<CatetgoryVO>>(adPService.secondCateList(firstCategoryCode), HttpStatus.OK);
+		
+		return entity;
 	}
 	
 	
