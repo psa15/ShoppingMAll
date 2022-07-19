@@ -263,7 +263,7 @@ desired effect
       //2차 카테고리 코드를 불러올 주소
       let url = "/admin/product/secondCateList/" + firstCategoryCode;
 
-      $.getJSON(url, function(secondCateList){
+      $.getJSON(url, function(sec_CateList){
         // console.log("첫 번째 카테고리 코드: " + subCateList[0].ct_code);
         // console.log("첫 번째 카테고리 이름: " + subCateList[0].ct_name);
         //console.log("두 번째 카테고리 코드: " + subCateList[1].ct_code);
@@ -276,8 +276,8 @@ desired effect
         secondCategory.find("option").remove();
         secondCategory.append("<option value =''>2차 카테고리 선택</option>");
 
-         for(let i=0; i<secondCateList.length; i++) {
-          optionTag += "<option value='" + secondCateList[i].ct_code + "'>" + secondCateList[i].ct_name + "</option>";
+         for(let i=0; i<sec_CateList.length; i++) {
+          optionTag += "<option value='" + sec_CateList[i].ct_code + "'>" + sec_CateList[i].ct_name + "</option>";
         }
 
         secondCategory.append(optionTag);
