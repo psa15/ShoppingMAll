@@ -21,6 +21,9 @@
 	<resources mapping="/plugins/**" location="/resources/plugins/" />	
 	<resources mapping="/js/**" location="/resources/js/" />
 	
+	<!-- CKEditor -->
+	<resources mapping="/ckeditor/**" location="/resources/bower_components/ckeditor/" />
+	
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />

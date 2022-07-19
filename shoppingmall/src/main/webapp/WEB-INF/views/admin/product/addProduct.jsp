@@ -228,6 +228,24 @@ desired effect
 <!-- REQUIRED JS SCRIPTS - jQuery 3, Bootstrap 3.3.7, AdminLTE App -->
 <%@include file="/WEB-INF/views/admin/include/script2.jsp" %>
 
+<!-- CKEditor -->
+<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
+<script>
+  $(document).ready(function(){
+    //CKEditor 환경 설정
+    var ckeditor_config = {
+			resize_enabled : false,
+			enterMode : CKEDITOR.ENTER_BR,
+			shiftEnterMode : CKEDITOR.ENTER_P,
+			toolbarCanCollapse : true,
+			removePlugins : "elementspath", 
+			filebrowserUploadUrl: '/admin/product/imageUpload' //업로드 탭기능추가 속성
+    }
+
+    CKEDITOR.replace("p_detail", ckeditor_config);
+  });
+</script>
+
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
