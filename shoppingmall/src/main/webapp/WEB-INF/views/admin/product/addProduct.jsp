@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -65,65 +67,71 @@ desired effect
 
       <div class="row">
       	<div class="col-md-12">
+      	<form id="productForm" method="post" action="">
       		<div class="box box-primary">
       			<div class="box-header">
       				REGISTER PRODUCT
       			</div>
-      			<div class="box-body">
-      				<form id="productForm" method="post" action="">
-					  <div class="form-group row">					  
-					    <div class="col-sm-12">
-					      <select>
+      			<div class="box-body">      				
+					  <div class="form-group row">
+						<label for="category" class="col-sm-2 col-form-label">카테고리</label>					  
+					    <div class="col-sm-10">
+					      <select id="firstCategory" name="f_ct_code">
 					      	<option>1차 카테고리 선택 </option>
+					      	<c:forEach items="${firstCateList}" var="fCateList">
+					      		<option value="${fCateList.ct_code}">${fCateList.ct_name} </option>
+					      	</c:forEach>
 					      </select>
-					      <select>
+					      <select id="secondCategory" name="s_ct_code">
 					      	<option>2차 카테고리 선택 </option>
 					      </select>
 					    </div>					    
 					  </div>
 					  <div class="form-group row">
-					    <label for="m_passwd" class="col-sm-2 col-form-label">상품명</label>
+					    <label for="p_name" class="col-sm-2 col-form-label">상품명</label>
 					    <div class="col-sm-4">
-					      <input type="password" class="form-control" id="m_passwd" name="m_passwd">					     
+					      <input type="text" class="form-control" id="p_name" name="p_name">					     
 					    </div>
-					    <label for="m_passwd" class="col-sm-2 col-form-label">상품가격</label>
+					    <label for="p_cost" class="col-sm-2 col-form-label">상품가격</label>
 					    <div class="col-sm-4">
-					      <input type="password" class="form-control" id="m_passwd" name="m_passwd">					     
-					    </div>
-					  </div>
-					  <div class="form-group row">
-					    <label for="m_passwd" class="col-sm-2 col-form-label">할인율</label>
-					    <div class="col-sm-4">
-					      <input type="password" class="form-control" id="m_passwd" name="m_passwd">					     
-					    </div>
-					    <label for="m_passwd" class="col-sm-2 col-form-label">제조사</label>
-					    <div class="col-sm-4">
-					      <input type="password" class="form-control" id="m_passwd" name="m_passwd">					     
+					      <input type="text" class="form-control" id="p_cost" name="p_cost">					     
 					    </div>
 					  </div>
 					  <div class="form-group row">
-					    <label for="m_passwd" class="col-sm-2 col-form-label">상품 이미지</label>
+					    <label for="p_discount" class="col-sm-2 col-form-label">할인율</label>
+					    <div class="col-sm-4">
+					      <input type="text" class="form-control" id="p_discount" name="p_discount">					     
+					    </div>
+					    <label for="p_company" class="col-sm-2 col-form-label">제조사</label>
+					    <div class="col-sm-4">
+					      <input type="text" class="form-control" id="p_company" name="p_company">					     
+					    </div>
+					  </div>
+					  <div class="form-group row">
+					    <label for="p_image" class="col-sm-2 col-form-label">상품 이미지</label>
 					    <div class="col-sm-10">
-					      <input type="password" class="form-control" id="m_passwd" name="m_passwd">					     
+					      <input type="text" class="form-control" id="p_image" name="p_image">					     
 					    </div>
 					  </div>
 					  <div class="form-group row">  				  
-					    <label for="m_passwd" class="col-sm-2 col-form-label">상품 설명</label>
+					    <label for="p_detail" class="col-sm-2 col-form-label">상품 설명</label>
 					    <div class="col-sm-10">
 					      <textarea class="form-control" name="p_detail" rows="3"></textarea>					     
 					    </div>
 					  </div>
 					  <div class="form-group row">
-					    <label for="m_passwd" class="col-sm-2 col-form-label">수량</label>
+					    <label for="p_amount" class="col-sm-2 col-form-label">수량</label>
 					    <div class="col-sm-4">
-					      <input type="password" class="form-control" id="m_passwd" name="m_passwd">					     
+					      <input type="text" class="form-control" id="p_amount" name="p_amount">					     
 					    </div>
-					    <label for="m_passwd" class="col-sm-2 col-form-label">판매여부</label>
+					    <label for="p_buy_ok" class="col-sm-2 col-form-label">판매여부</label>
 					    <div class="col-sm-4">
-					      <input type="password" class="form-control" id="m_passwd" name="m_passwd">					     
+					      <select id="p_buy_ok" name="p_buy_ok">
+					      	<option value="Y">판매가능</option>
+					      	<option value="N">판매불가</option>
+					      </select>					     
 					    </div>
-					  </div>				      				      		
-					</form>
+					  </div>					
       			</div>
       			<div class="box-footer">
       				<div class="form-group">
@@ -131,11 +139,12 @@ desired effect
       				</div>
       				<div class="form-group row">
       					<div class="col-md-12">
-      						<button type="button" class="btn btn-dark text-center" id="btnProduct">상품등록</button>
+      						<button type="submit" class="btn btn-dark text-center" id="btnProduct">상품등록</button>
       					</div>
       				</div>
       			</div>
       		</div>
+      	</form>
       	</div>      
       </div>
     </section>
