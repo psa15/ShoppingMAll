@@ -67,7 +67,7 @@ desired effect
 
       <div class="row">
       	<div class="col-md-12">
-      	<form id="productForm" method="post" action="">
+      	<form id="productForm" method="post" action="addProduct" enctype="multipart/form-data">
       		<div class="box box-primary">
       			<div class="box-header">
       				REGISTER PRODUCT
@@ -108,9 +108,9 @@ desired effect
 					    </div>
 					  </div>
 					  <div class="form-group row">
-					    <label for="p_image" class="col-sm-2 col-form-label">상품 이미지</label>
+					    <label for="uploadFile" class="col-sm-2 col-form-label">상품 이미지</label>
 					    <div class="col-sm-10">
-					      <input type="text" class="form-control" id="p_image" name="p_image">					     
+					      <input type="file" class="form-control" id="uploadFile" name="uploadFile">					     
 					    </div>
 					  </div>
 					  <div class="form-group row">  				  

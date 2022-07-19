@@ -22,9 +22,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.psamall.domain.CatetgoryVO;
+import com.psamall.domain.ProductVO;
 import com.psamall.service.AdProductService;
+import com.psamall.utils.UploadFileUtils;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -109,7 +112,24 @@ public class AdProductController {
 			}
 		}
 	}
-	
-	
+		
 	//상품 저장
+	@PostMapping("/addProduct")
+	public String addProduct(ProductVO vo, RedirectAttributes rttr) {
+		
+		log.info("상품 등록 정보: " + vo);
+		
+		//1)파일 업로드 작업
+		//날짜 폴더 가져오기
+		String uploadDateFolderPath = UploadFileUtils.getFolder();
+		
+		vo.setP_image_folder(uploadDateFolderPath);
+		vo.setP_image(UploadFileUtils.uploadFile(uploadPath, uploadDateFolderPath, vo.getUploadFile()));
+		//uploadPath : 상품 등록을 위해 주입된 bean
+		
+		//상품 정보 저장
+		adPService.insertProduct(vo);
+		
+		return "redirect:/상품목록주소";
+	}
 }

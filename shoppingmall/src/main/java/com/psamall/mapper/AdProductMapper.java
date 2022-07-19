@@ -3,6 +3,7 @@ package com.psamall.mapper;
 import java.util.List;
 
 import com.psamall.domain.CatetgoryVO;
+import com.psamall.domain.ProductVO;
 
 public interface AdProductMapper {
 
@@ -11,4 +12,7 @@ public interface AdProductMapper {
 	
 	//2차 카테고리 불러오기
 	List<CatetgoryVO> secondCateList(Integer firstCategoryCode);
+	
+	//상품등록 폼의 정보 저장
+	void insertProduct(ProductVO vo);
 }

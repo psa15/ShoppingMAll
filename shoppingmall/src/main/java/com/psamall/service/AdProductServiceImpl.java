@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.psamall.domain.CatetgoryVO;
+import com.psamall.domain.ProductVO;
 import com.psamall.mapper.AdProductMapper;
 
 import lombok.Setter;
@@ -26,6 +27,12 @@ public class AdProductServiceImpl implements AdProductService {
 	@Override
 	public List<CatetgoryVO> secondCateList(Integer firstCategoryCode) {
 		return adPMapper.secondCateList(firstCategoryCode);
+	}
+
+	//상품등록 폼의 정보 저장
+	@Override
+	public void insertProduct(ProductVO vo) {
+		adPMapper.insertProduct(vo);
 	}
 
 }
