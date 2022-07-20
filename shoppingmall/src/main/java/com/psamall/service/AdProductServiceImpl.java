@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.psamall.domain.CatetgoryVO;
 import com.psamall.domain.ProductVO;
+import com.psamall.dto.Criteria;
 import com.psamall.mapper.AdProductMapper;
 
 import lombok.Setter;
@@ -33,6 +34,18 @@ public class AdProductServiceImpl implements AdProductService {
 	@Override
 	public void insertProduct(ProductVO vo) {
 		adPMapper.insertProduct(vo);
+	}
+
+	//상품목록
+	@Override
+	public List<ProductVO> getProductList(Criteria cri) {
+		return adPMapper.getProductList(cri);
+	}
+
+	//페이징을 위한 전체 데이터 수
+	@Override
+	public int getProductTotalCount(Criteria cri) {
+		return adPMapper.getProductTotalCount(cri);
 	}
 
 }

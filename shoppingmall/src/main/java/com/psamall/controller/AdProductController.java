@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.psamall.domain.CatetgoryVO;
 import com.psamall.domain.ProductVO;
+import com.psamall.dto.Criteria;
+import com.psamall.dto.PageDTO;
 import com.psamall.service.AdProductService;
 import com.psamall.utils.UploadFileUtils;
 
@@ -130,6 +133,37 @@ public class AdProductController {
 		//상품 정보 저장
 		adPService.insertProduct(vo);
 		
-		return "redirect:/상품목록주소";
+		return "redirect:/admin/product/productList";
+	}
+	
+	//상품목록
+	@GetMapping("/productList")
+	public void productList(@ModelAttribute("cri") Criteria cri, Model model) {
+		
+		//날짜 폴더의 \를 /로 변환하여 저장
+		List<ProductVO> productList = adPService.getProductList(cri);
+		
+		for(int i=0; i<productList.size(); i++) {
+			String p_image_folder = productList.get(i).getP_image_folder().replace("\\", "/");
+			productList.get(i).setP_image_folder(p_image_folder);
+		}
+		
+		log.info("변환된 날짜 폴더: " + productList.get(0).getP_image_folder());
+		
+		//페이징 쿼리에 의한 상품 목록
+		model.addAttribute("productList", productList);		
+		//페이징
+		int totalCount = adPService.getProductTotalCount(cri);
+		model.addAttribute("pageMaker", new PageDTO(cri, totalCount));
+	}
+	//상품목록 이미지 불러오기
+	@ResponseBody
+	@GetMapping("/displayFile")
+	public ResponseEntity<byte[]> displayFile(String folderName, String fileName) {
+		
+		log.info("파일 이름: " + fileName);
+		
+		//저장된 썸네일 이미지를 byte[]로 읽어오는 작업
+		return UploadFileUtils.getImageFile(uploadPath, folderName + "\\s_" + fileName);
 	}
 }

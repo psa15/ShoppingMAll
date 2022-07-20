@@ -8,6 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.log4j.Log4j;
@@ -97,5 +101,26 @@ public class UploadFileUtils {
 		}
 				
 		return isImage; 
+	}
+	
+	//이미지를 바이트배열로 불러오기 (상품목록)
+	public static ResponseEntity<byte[]> getImageFile(String uploadPath, String fileName) {
+		
+		File file = new File(uploadPath, fileName);
+		
+		ResponseEntity<byte[]> entity = null;
+		
+		HttpHeaders headers = new HttpHeaders();
+		
+		try {
+			//브라우저에게 보낼 데이터의 MIME 정보
+			headers.add("Content-Type", Files.probeContentType(file.toPath()));
+			entity = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file), headers, HttpStatus.OK);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return entity;
 	}
 }
