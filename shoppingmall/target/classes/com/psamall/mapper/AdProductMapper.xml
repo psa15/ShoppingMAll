@@ -67,13 +67,13 @@
 		<![CDATA[
 		SELECT 
 			RN, P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, 
-			P_COMPANY, P_IMAGE, P_IMAGE_DATEFOLDER,  P_AMOUNT,
+			P_COMPANY, P_IMAGE, P_IMAGE_FOLDER,  P_AMOUNT,
 			P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL
 		FROM(
 		    SELECT 
 		    	/*+ INDEX_DESC(tbl_board PK_BOARD) */ 
 		    	ROWNUM RN,  P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, 
-		    	P_COMPANY, P_IMAGE, P_IMAGE_DATEFOLDER, P_AMOUNT,
+		    	P_COMPANY, P_IMAGE, P_IMAGE_FOLDER, P_AMOUNT,
                 P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL
 		    FROM 
 				TBL_PRODUCT
@@ -101,4 +101,41 @@
 			<include refid="criteria"></include>
 			P_NUM > 0		
 	</select>
+	
+	<!-- 상품코드를 통해 상품 정보 가져오기 - 상품 수정 폼 -->
+	<select id="getProductByPNum" resultType="com.psamall.domain.ProductVO">
+	
+		SELECT
+			P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, 
+			P_COMPANY, P_IMAGE, P_IMAGE_FOLDER,  P_AMOUNT,
+			P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL
+		FROM
+			TBL_PRODUCT
+		WHERE 
+			P_NUM = #{p_num}
+	
+	</select>
+	
+	<!-- 상품 수정 저장 -->
+	<update id="updateProduct">
+	
+		UPDATE
+			TBL_PRODUCT
+		SET
+			F_CT_CODE = #{f_ct_code}, 
+			S_CT_CODE = #{s_ct_code}, 
+			P_NAME = #{p_name}, 
+			P_COST = #{p_cost}, 
+			P_DISCOUNT = #{p_discount}, 
+			P_COMPANY = #{p_company}, 
+			P_IMAGE = #{p_image}, 
+			P_IMAGE_FOLDER = #{p_image_folder},  
+			P_AMOUNT = #{p_amount},
+			P_BUY_OK = #{p_buy_ok}, 
+			P_UPDATEDATE = sysdate, 
+			P_DETAIL = #{p_detail}
+		WHERE
+			P_NUM = #{p_num}
+	
+	</update>
 </mapper>

@@ -18,7 +18,6 @@ import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnailator;
 
 //파일 업로드 관련 기능
-@Log4j
 public class UploadFileUtils {
 
 	/* 
@@ -122,5 +121,19 @@ public class UploadFileUtils {
 		}
 		
 		return entity;
+	}
+	
+	//파일 삭제
+	public static void deleteFile(String uploadPath, String fileName) {
+		
+		//fileName을 썸네일 이미지로 가져와서 원본 이미지로 만들기
+		String front = fileName.substring(0, 11); //fileName에 속해있는 uploadPath 분리
+		String end = fileName.substring(13);
+		String originFile = front + end; //원본 이미지 파일
+		
+		//원본 이미지 삭제
+		new File(uploadPath + originFile.replace("/", File.separator)).delete();
+		//썸네일 이미지 삭제
+		new File(uploadPath + fileName.replace("/", File.separator)).delete();
 	}
 }

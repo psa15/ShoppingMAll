@@ -112,8 +112,9 @@ desired effect
 	      <td scope="row"><c:out value="${productVO.p_company}" /></td>
 	      <td scope="row"><c:out value="${productVO.p_amount}" /> / <c:out value="${productVO.p_buy_ok == 'Y' ? '구매가능' : '구매 불가능'}"></c:out> </td>
 	      <td><fmt:formatDate value="${productVO.p_regdate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
-	      <td scope="row">수정</td>
-	      <td scope="row">삭제</td>
+	      <td scope="row"><button type="button" class="btn btn-link" name="btnUpdateProduct" data-p_num="${productVO.p_num}">수정</button></td>
+	      
+	      <td scope="row"><button type="button" class="btn btn-link" name="btnProductDelete" data-p_num="${productVO.p_num}">삭제</button></td>
 	    </tr>
 	   </c:forEach> 
 	   
@@ -249,47 +250,16 @@ desired effect
 <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
 <script>
   $(document).ready(function(){
-    //CKEditor 환경 설정
-    var ckeditor_config = {
-			resize_enabled : false,
-			enterMode : CKEDITOR.ENTER_BR,
-			shiftEnterMode : CKEDITOR.ENTER_P,
-			toolbarCanCollapse : true,
-			removePlugins : "elementspath", 
-			filebrowserUploadUrl: '/admin/product/imageUpload' //업로드 탭기능추가 속성
-    }
+    
+    let actionForm = $("#actionForm");
 
-    CKEDITOR.replace("p_detail", ckeditor_config);
+    //수정 버튼 클릭 시
+    $("button[name='btnUpdateProduct']").on("click", function(){
 
-    //1차 카테고리 선택 시 2차 카테고리 불러오기
-    $("#firstCategory").on("change", function(){
+      actionForm.append("<input type='hidden' name='p_num' value='" + $(this).data("p_num") + "'>");
+      actionForm.attr("action", "/admin/product/updateProduct");
 
-      //선택된 1차 카테고리 코드
-      let firstCategoryCode = $(this).val();
-      console.log("1차 카테고리 코드: " + firstCategoryCode);
-
-      //2차 카테고리 코드를 불러올 주소
-      let url = "/admin/product/secondCateList/" + firstCategoryCode;
-
-      $.getJSON(url, function(sec_CateList){
-        // console.log("첫 번째 카테고리 코드: " + subCateList[0].ct_code);
-        // console.log("첫 번째 카테고리 이름: " + subCateList[0].ct_name);
-        //console.log("두 번째 카테고리 코드: " + subCateList[1].ct_code);
-
-        //2차 카테고리 태그
-        let secondCategory = $("#secondCategory");
-        let optionTag = "";
-        
-        //1차 카테고리를 변경하면 전에 선택했던 카테고리 정보가 지워져야 함
-        secondCategory.find("option").remove();
-        secondCategory.append("<option value =''>2차 카테고리 선택</option>");
-
-         for(let i=0; i<sec_CateList.length; i++) {
-          optionTag += "<option value='" + sec_CateList[i].ct_code + "'>" + sec_CateList[i].ct_name + "</option>";
-        }
-
-        secondCategory.append(optionTag);
-      });
+      actionForm.submit();
     });
 
   });

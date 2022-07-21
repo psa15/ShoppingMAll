@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -165,5 +166,44 @@ public class AdProductController {
 		
 		//저장된 썸네일 이미지를 byte[]로 읽어오는 작업
 		return UploadFileUtils.getImageFile(uploadPath, folderName + "\\s_" + fileName);
+	}
+	
+	//상품 수정 폼
+	@GetMapping("/updateProduct")
+	public void updateProduct(@ModelAttribute("cri") Criteria cri, @RequestParam("p_num") Integer p_num, Model model) {
+		log.info("상품코드: " + p_num);
+		log.info("검색 및 페이징 정보: " + cri);
+		
+		//상품코드를 통해 상품 정보 가져오기
+		ProductVO vo = adPService.getProductByPNum(p_num);
+		model.addAttribute("productVO", vo);
+		
+		//1차 카테고리 정보 가져오기
+		model.addAttribute("firstCateList", adPService.firstCateList());
+		
+		//2차 카테고리 정보 가져오기 - 1차 카테고리 참조
+		Integer firstCategoryCode = vo.getF_ct_code();
+		model.addAttribute("secondCateList", adPService.secondCateList(firstCategoryCode));
+	}
+	//상품 수정 저장
+	@PostMapping("/updateProduct")
+	public String updateProduct(ProductVO vo, Criteria cri, RedirectAttributes rttr) {
+		
+		//이미지 첨부파일이 수정되면 파일 업로드
+		if(!vo.getUploadFile().isEmpty()) {
+			
+			//처음 상품 등록 시 올렸던 이미지 파일 삭제
+			UploadFileUtils.deleteFile(uploadPath, vo.getP_image_folder() + "\\s_" + vo.getP_image());
+			
+			//변경된 이미지 업로드
+			String uploadDateFolderPath = UploadFileUtils.getFolder();			
+			vo.setP_image_folder(uploadDateFolderPath);
+			vo.setP_image(UploadFileUtils.uploadFile(uploadPath, uploadDateFolderPath, vo.getUploadFile()));
+		}
+		
+		//상품 수정
+		adPService.updateProduct(vo);
+		
+		return "redirect:/admin/product/productList" + cri.getListLink();
 	}
 }
