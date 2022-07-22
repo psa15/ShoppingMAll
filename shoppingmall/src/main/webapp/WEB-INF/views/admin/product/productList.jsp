@@ -84,7 +84,7 @@ desired effect
   	<input type="text" name="keyword" value="${pageMaker.cri.keyword}">
   	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
   	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
-  	<button class="btn btn-info">Search</button>
+  	<button type="button" id="btnSearch" class="btn btn-info">Search</button>
   </form>
 
 
@@ -260,6 +260,24 @@ desired effect
       actionForm.attr("action", "/admin/product/updateProduct");
 
       actionForm.submit();
+    });
+    
+    let searchForm = $("#searchForm");
+    
+    //search 클릭 시 페이지번호 1로 돌아가기
+    $("#btnSearch").on("click",function(){
+    	searchForm.find("input[name='pageNum']").val(1);
+        searchForm.submit();
+    });
+    
+    //페이지 번호 
+    $("ul.pagination li a.page-link").on("click", function(e){
+    	e.preventDefault();
+    	
+    	let pageNum = $(this).attr("href");
+    	
+    	actionForm.find("input[name='pageNum']").val(pageNum);
+    	actionForm.submit();
     });
 
   });
