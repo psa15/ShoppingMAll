@@ -149,8 +149,6 @@ public class AdProductController {
 			productList.get(i).setP_image_folder(p_image_folder);
 		}
 		
-		log.info("변환된 날짜 폴더: " + productList.get(0).getP_image_folder());
-		
 		//페이징 쿼리에 의한 상품 목록
 		model.addAttribute("productList", productList);		
 		//페이징
@@ -165,7 +163,7 @@ public class AdProductController {
 		log.info("파일 이름: " + fileName);
 		
 		//저장된 썸네일 이미지를 byte[]로 읽어오는 작업
-		return UploadFileUtils.getImageFile(uploadPath, folderName + "\\s_" + fileName);
+		return UploadFileUtils.getImageFile(uploadPath, folderName + "\\" + fileName);
 	}
 	
 	//상품 수정 폼
@@ -176,6 +174,11 @@ public class AdProductController {
 		
 		//상품코드를 통해 상품 정보 가져오기
 		ProductVO vo = adPService.getProductByPNum(p_num);
+		
+		//첨부했던 이미지 보여주기
+		String p_image_folder = vo.getP_image_folder().replace("\\", "/");
+		vo.setP_image_folder(p_image_folder);
+		
 		model.addAttribute("productVO", vo);
 		
 		//1차 카테고리 정보 가져오기
@@ -202,8 +205,23 @@ public class AdProductController {
 		}
 		
 		//상품 수정
+		log.info("상품 수정 정보: " + vo);
+		
 		adPService.updateProduct(vo);
 		
 		return "redirect:/admin/product/productList" + cri.getListLink();
+	}
+	
+	//상품 삭제
+	@GetMapping("/deleteProduct")
+	public String deleteProduct(@RequestParam("p_num") Integer p_num, String p_image, String p_image_folder) {
+		
+		//이미지 파일 삭제
+		UploadFileUtils.deleteFile(uploadPath, p_image_folder + "\\s_" + p_image);
+		
+		//db정보 삭제
+		adPService.deleteProduct(p_num);
+		
+		return "redirect:/admin/product/productList";
 	}
 }

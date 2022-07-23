@@ -107,6 +107,14 @@ public class UploadFileUtils {
 		
 		File file = new File(uploadPath, fileName);
 		
+		//이미지가 존재하지 않을 경우의 대체 이미지 설정
+		if(!file.exists()) {
+			uploadPath = "C:\\Dev\\img\\";
+			fileName = "no_image_available.png";
+			
+			file = new File(uploadPath, fileName);
+		}
+		
 		ResponseEntity<byte[]> entity = null;
 		
 		HttpHeaders headers = new HttpHeaders();

@@ -79,9 +79,7 @@ desired effect
 	  				    <input type="hidden" name="pageNum" value="${cri.pageNum}">
 						<input type="hidden" name="amount" value="${cri.amount}">
 						<input type="hidden" name="type" value="${cri.type}">
-						<input type="hidden" name="keyword" value="${cri.keyword}">
-						<input type="hidden" name="keyword" value="${cri.keyword}">
-						<input type="hidden" name="keyword" value="${cri.keyword}">							
+						<input type="hidden" name="keyword" value="${cri.keyword}">						
 						
 						<label for="category" class="col-sm-2 col-form-label">카테고리</label>					  
 					    <div class="col-sm-10">
@@ -121,11 +119,22 @@ desired effect
 					    </div>
 					  </div>
 					  <div class="form-group row">
-					    <label for="uploadFile" class="col-sm-2 col-form-label">상품 이미지</label>
-					    <div class="col-sm-10">
+					  	<label for="uploadFile" class="col-sm-2 col-form-label">상품 이미지</label>
+					  	<div class="col-sm-10">
 					      <input type="file" class="form-control" id="uploadFile" name="uploadFile">
-					      <input type="hidden" class="form-control" id="p_image" name="p_image" value="${productVO.p_image }"> 	
-					      <input type="hidden" class="form-control" id="p_image_folder" name="p_image_folder" value="${productVO.p_image_folder }"> 				     
+					      
+					      <input type="hidden" name="p_image" value="${productVO.p_image}">
+					      <input type="hidden" name="p_image_folder" value="${productVO.p_image_folder}">					  	
+					  	</div>
+					  </div>
+					  <div class="form-group row">
+					    <label for="cur_img" class="col-sm-2 col-form-label">현재 이미지</label>
+					    <div class="col-sm-4">
+					    	<img alt="" id="cur_img" style="width: 200px; height: 200px;" src="/admin/product/displayFile?folderName=${productVO.p_image_folder}&fileName=${productVO.p_image}"> 				     
+					    </div>
+					    <label for="change_img" class="col-sm-2 col-form-label">변경 이미지</label>
+					    <div class="col-sm-4">
+					    	<img alt="" id="change_img"> 				     
 					    </div>
 					  </div>
 					  <div class="form-group row">  				  
@@ -256,6 +265,7 @@ desired effect
 <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
 <script>
   $(document).ready(function(){
+	  
     //CKEditor 환경 설정
     var ckeditor_config = {
 			resize_enabled : false,
@@ -298,6 +308,35 @@ desired effect
         secondCategory.append(optionTag);
       });
     });
+    
+  	//이미지 미리보기
+    $("#uploadFile").on("change", function(e){
+
+      let file = e.target.files[0];
+      //.files[0] : 만약 파일이 여러개라면 그 중 첫번재 파일!
+
+      let reader = new FileReader();
+      //FileReader() 객체 : 비동기적으로 데이터를 읽음 (ajax메소드가 다 비동기적인 방식)
+      //동기적 방식 : 질문 하나를 하고 난 후 답변을 받을 때까지 다른 행위를 못함 - 이 코드가 끝날 때까지 다른 코드 동작 X
+      //비동기적 방식 : 질문 하나를 던져놓고 다른 행위 할 수 있음 - 이 코드가 안끝나도 다른 코드 동작 가능
+
+      reader.onload = function(e){
+        //reader.onload : reader객체가 reader.readAsDataURL(file); 이 읽기 동작이 성공적으로 완료 되었을 때마다 발생
+
+        $("#change_img").attr("src", e.target.result);
+        //e.target.result : 읽어들인 이미지 파일 명
+
+        $("#change_img").attr("style", "width: 200px; height: 200px;");
+        //이미지 크기조절
+      }
+      
+      reader.readAsDataURL(file);
+    });
+  	
+  	$("#btnProduct").on("clicl",function(e){
+  		e.preventDefault();
+      console.log("상품 수정하기");
+  	});
 
   });
 </script>

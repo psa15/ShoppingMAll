@@ -27,4 +27,7 @@ public interface AdProductService {
 	
 	//상품 수정 저장
 	void updateProduct(ProductVO vo);
+	
+	//상품 삭제
+	void deleteProduct(Integer p_num);
 }

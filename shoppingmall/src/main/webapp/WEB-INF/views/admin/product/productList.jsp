@@ -75,13 +75,28 @@ desired effect
       			<div class="box-body">      				
 					  <form id="searchForm" action="" method="get">
   <%-- 검색 단추를 누르면  --%>
-    <select name="type">
+    <select name="type" id="selectType">
 		 <option value="" <c:out value="${pageMaker.cri.type == null ? 'selected' : ''}" />>--</option> 
 		 <option value="N" <c:out value="${pageMaker.cri.type eq 'N' ? 'selected' : ''}" />>상품명</option>
 		 <option value="C" <c:out value="${pageMaker.cri.type eq 'C' ? 'selected' : ''}" />>제조사</option>
 		 <option value="NC" <c:out value="${pageMaker.cri.type eq 'NC' ? 'selected' : ''}" />>상품명  or 제조사</option>
+		 <option value="Y" <c:out value="${pageMaker.cri.type eq 'Y' ? 'selected' : ''}" />>판매여부</option>
   	</select>
-  	<input type="text" name="keyword" value="${pageMaker.cri.keyword}">
+  	<c:if test="${pageMaker.cri.keyword == 'Y'}">
+  		<select name="keyword">
+	      <option value="Y" selected>판매가능</option>
+	      <option value="N">판매불가</option>
+	    </select>
+  	</c:if>
+  	<c:if test="${pageMaker.cri.keyword == 'N'}">
+  		<select name="keyword">
+	      <option value="Y">판매가능</option>
+	      <option value="N" selected>판매불가</option>
+	    </select>
+  	</c:if>
+  	<c:if test="${pageMaker.cri.keyword != 'N' and pageMaker.cri.keyword != 'Y'}">
+  		<input type="text" name="keyword" value="${pageMaker.cri.keyword}">
+  	</c:if>
   	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
   	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
   	<button type="button" id="btnSearch" class="btn btn-info">Search</button>
@@ -106,15 +121,19 @@ desired effect
 	    <tr>
 	      <td scope="row"><c:out value="${productVO.p_num}" /></td>
 	      <td>
-	      	<img alt="이미지" src="/admin/product/displayFile?folderName=${productVO.p_image_folder}&fileName=${productVO.p_image}">
+	      	<img alt="" src="/admin/product/displayFile?folderName=${productVO.p_image_folder}&fileName=s_${productVO.p_image}" 
+	      				style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image_found.png'">
 	      	<a class="move" href="${productVO.p_name}"><c:out value="${productVO.p_name}" /></a></td>
 	      <td scope="row"><c:out value="${productVO.p_cost}" /></td>
 	      <td scope="row"><c:out value="${productVO.p_company}" /></td>
-	      <td scope="row"><c:out value="${productVO.p_amount}" /> / <c:out value="${productVO.p_buy_ok == 'Y' ? '구매가능' : '구매 불가능'}"></c:out> </td>
+	      <td scope="row"><c:out value="${productVO.p_amount}" /> / <c:out value="${productVO.p_buy_ok eq 'Y' ? '구매가능' : '구매 불가능'}"></c:out> </td>
 	      <td><fmt:formatDate value="${productVO.p_regdate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
-	      <td scope="row"><button type="button" class="btn btn-link" name="btnUpdateProduct" data-p_num="${productVO.p_num}">수정</button></td>
-	      
-	      <td scope="row"><button type="button" class="btn btn-link" name="btnProductDelete" data-p_num="${productVO.p_num}">삭제</button></td>
+	      <td><button type="button" class="btn btn-link" name="btnUpdateProduct" data-p_num="${productVO.p_num}">수정</button></td>
+	      <td>
+	          <input type="hidden" name="p_image" value="${productVO.p_image}">
+	          <input type="hidden" name="p_image_folder" value="${productVO.p_image_folder}">
+	          <button type="button" class="btn btn-link" name="btnProductDelete" data-p_num="${productVO.p_num}">삭제</button>
+          </td>
 	    </tr>
 	   </c:forEach> 
 	   
@@ -261,13 +280,31 @@ desired effect
 
       actionForm.submit();
     });
+
+    //삭제 버튼 클릭 시
+    $("button[name='btnProductDelete']").on("click", function(){
+
+        if(!confirm($(this).data("p_num") + "번 게시물을 삭제하시겠습니까?")) { return; }
+        
+        //날짜 폴더 및 이미지 파일 이름 참조
+        let p_image_folder = $(this).siblings("input[name='p_image_folder']").val();
+        let p_image = $(this).siblings("input[name='p_image']").val();
+
+        actionForm.append("<input type='hidden' name='p_image' value='" + p_image + "'>");
+        actionForm.append("<input type='hidden' name='p_image_folder' value='" + p_image_folder + "'>");
+        actionForm.append("<input type='hidden' name='p_num' value='" + $(this).data("p_num") + "'>");
+        actionForm.attr("action", "/admin/product/deleteProduct");
+
+        actionForm.submit();
+      });
     
     let searchForm = $("#searchForm");
     
     //search 클릭 시 페이지번호 1로 돌아가기
     $("#btnSearch").on("click",function(){
     	searchForm.find("input[name='pageNum']").val(1);
-        searchForm.submit();
+
+      searchForm.submit();
     });
     
     //페이지 번호 
@@ -279,6 +316,53 @@ desired effect
     	actionForm.find("input[name='pageNum']").val(pageNum);
     	actionForm.submit();
     });
+
+    //검색 판매여부 선택 시 이벤트
+/*     $("#selectType").on("change", function(){
+      let p_buy = $(this).find("option[value='Y']").val();
+      // console.log("판매여부 선택됨: " + p_buy);
+
+      let inputKeyword = $(this).siblings("input[name='keyword']");
+
+      if(p_buy == "Y"){
+
+        $(this).after("<select name='keyword'><option value='Y'>판매가능</option><option value='N'>판매불가</option></select>");
+        inputKeyword.remove();
+      } else {
+        $(this).find("select[name='keyword']").remove();
+        // inputKeyword.show();
+      }
+
+    }); */
+
+   $("#selectType").change(function(){
+      let result = $("#selectType option:selected").val();
+      let inputKeyword = $(this).siblings("input[name='keyword']");
+      let buyYN = "<select id='buyCan' name='keyword'><option value='Y'>판매가능</option><option value='N'>판매불가</option></select>"
+
+      if(result != "Y") {
+        
+        $("#buyCan").remove();
+        $(this).after("<input type='text' name='keyword' value='${pageMaker.cri.keyword}'>");
+        // <input type="text" name="keyword" value="${pageMaker.cri.keyword}">
+        
+      } else {
+        
+        $(this).after(buyYN);
+        inputKeyword.remove();
+        
+      }
+      
+    }); 
+    /*
+    $('#selectBox').change(function() {
+    var result = $('#selectBox option:selected').val();
+    if (result == 'option2') {
+      $('.div1').show();
+    } else {
+      $('.div1').hide();
+    }
+  });  */
 
   });
 </script>
