@@ -94,12 +94,14 @@ desired effect
 	      <option value="N" selected>판매불가</option>
 	    </select>
   	</c:if>
-  	<c:if test="${pageMaker.cri.keyword != 'N' and pageMaker.cri.keyword != 'Y'}">
-  		<input type="text" name="keyword" value="${pageMaker.cri.keyword}">
-  	</c:if>
-  	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
-  	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
-  	<button type="button" id="btnSearch" class="btn btn-info">Search</button>
+  		<!-- <c:if test="${pageMaker.cri.keyword != 'N' and pageMaker.cri.keyword != 'Y'}"> -->
+  			<input type="text" id="keywordTag" name="keyword" value="${pageMaker.cri.keyword}">
+	  	<!-- </c:if> -->
+	  	<input type="hidden" id="pageNumTag" name="pageNum" value="${pageMaker.cri.pageNum}">
+	  	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+	  	<button type="button" id="btnSearch" class="btn btn-info">Search</button>
+  	
+  	
   </form>
 
 
@@ -303,7 +305,7 @@ desired effect
     //search 클릭 시 페이지번호 1로 돌아가기
     $("#btnSearch").on("click",function(){
     	searchForm.find("input[name='pageNum']").val(1);
-
+      // searchForm.find("input[name='keyword']").val("");
       searchForm.submit();
     });
     
@@ -337,21 +339,29 @@ desired effect
 
    $("#selectType").change(function(){
       let result = $("#selectType option:selected").val();
-      let inputKeyword = $(this).siblings("input[name='keyword']");
-      let buyYN = "<select id='buyCan' name='keyword'><option value='Y'>판매가능</option><option value='N'>판매불가</option></select>"
+      console.log(result);
 
-      if(result != "Y") {
+      let buyYN = "<select id='buyCan' name='keyword'><option value='Y'>판매가능</option><option value='N'>판매불가</option></select>"
+      
+      
+      $(this).parent().find("input[name='keyword']").val("");
+      $(this).parent().find("input[name='keyword']").remove();
+
+      $("#buyCan").remove();
+
+      if(result == "Y") {
+        $(this).after(buyYN);  
+       
+        
+      } else  {
+        // $(this).parent().find("input[name='keyword']").val("");
+        $(this).after("<input type='text' id='keywordTag' name='keyword' value='${pageMaker.cri.keyword}'>");
         
         $("#buyCan").remove();
-        $(this).after("<input type='text' name='keyword' value='${pageMaker.cri.keyword}'>");
-        // <input type="text" name="keyword" value="${pageMaker.cri.keyword}">
-        
-      } else {
-        
-        $(this).after(buyYN);
-        inputKeyword.remove();
         
       }
+
+      $(this).parent().find("input[name='keyword']").val("");
       
     }); 
     /*
