@@ -94,9 +94,9 @@ desired effect
 	      <option value="N" selected>판매불가</option>
 	    </select>
   	</c:if>
-  		<!-- <c:if test="${pageMaker.cri.keyword != 'N' and pageMaker.cri.keyword != 'Y'}"> -->
+  		<c:if test="${pageMaker.cri.keyword != 'N' and pageMaker.cri.keyword != 'Y'}">
   			<input type="text" id="keywordTag" name="keyword" value="${pageMaker.cri.keyword}">
-	  	<!-- </c:if> -->
+	  	</c:if>
 	  	<input type="hidden" id="pageNumTag" name="pageNum" value="${pageMaker.cri.pageNum}">
 	  	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
 	  	<button type="button" id="btnSearch" class="btn btn-info">Search</button>
@@ -346,8 +346,10 @@ desired effect
       
       $(this).parent().find("input[name='keyword']").val("");
       $(this).parent().find("input[name='keyword']").remove();
+      
+      //$("#buyCan").remove(); 이게 인식이 안됐음
+      $(this).parent().find("select[name='keyword']").remove();
 
-      $("#buyCan").remove();
 
       if(result == "Y") {
         $(this).after(buyYN);  
