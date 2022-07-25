@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psamall.mapper.UserProductMapper">
+
+	<!-- 1차 카테고리 불러오기 -->
+	<select id="firstCateList" resultType="com.psamall.domain.CatetgoryVO">
+	
+		SELECT
+			Ct_CODE, CT_P_CODE, CT_NAME
+		FROM
+			TBL_CATEGORY
+		WHERE
+			CT_P_CODE is NULL
+			
+	</select>
+	
+	<!-- 2차 카테고리 불러오기 -->
+	<select id="secondCateList" resultType="com.psamall.domain.CatetgoryVO">
+	
+	SELECT
+			Ct_CODE, CT_P_CODE, CT_NAME
+		FROM
+			TBL_CATEGORY
+		WHERE
+			CT_P_CODE = #{firstCateCode}
+	
+	</select>
+
+</mapper>
