@@ -21,12 +21,12 @@
 	      -->
 	      <c:forEach items="${firstCateList}" var="categoryVO">
 		      <li class="nav-item dropdown">	
-		      	<!-- 1차 카테고리 -->	      	
+		      	<!-- 1차 카테고리(Main Category) -->	      	
 		        <a class="nav-link dropdown-toggle" href="${categoryVO.ct_code }" role="button" data-toggle="dropdown" aria-expanded="false">
 		          ${categoryVO.ct_name}
 		        </a>		       
-		        <!-- 2차 카테고리 -->
-		        <div class="dropdown-menu">
+		        <!-- 2차 카테고리(Sub Category) -->
+		        <div class="dropdown-menu subCateList">
 		        	<%-- script로 추가 --%>
 		        </div>
 		      </li>
@@ -49,16 +49,40 @@
 		$(function(){
   
 		  //1차 카테고리 선택 시
-		  $("ul.navbar-nav li").on("clicl", "a", function(){
+		  $("ul.navbar-nav li").on("click", "a", function(){
 
+			// console.log("1차 카테고리 클릭");
 
 			let url = '/product/subCateList/' + $(this).attr("href");
+			// console.log("2차 카테고리 주소: " + url);
+
+			//ajax 안에서 사용할 선택자
+			let selectedMainCategory = $(this);
 
 			//2차 카테고리
 			$.getJSON(url, function(result){
 
+				let subCateList = selectedMainCategory.next();
+				let subCateListStr = '';
+
+				for(let i=0; i<result.length; i++) {
+					subCateListStr += "<a class='dropdown-item' href='" + result[i].ct_code + "''>" + result[i].ct_name +"</a>";
+				}
+
+				subCateList.append(subCateListStr);
 			});
 		  });
+		  
+		  //2차 카테고리 클릭 시
+		  $(".subCateList").on("click", "a", function(e){
+
+			e.preventDefault();
+			// console.log("2차 카테고리 선택");
+
+			let s_ct_code = $(this).attr("href");
+			location.href = "/product/productList/" + s_ct_code;
+		  });
+		  
 		});
   
   

@@ -25,5 +25,68 @@
 			CT_P_CODE = #{firstCateCode}
 	
 	</select>
+	
+	<!-- 검색 조건 쿼리 -->
+	<sql id="criteria">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach collection="cri.typeArr" item="type">
+			 	<trim prefix="OR">
+			 		<choose>
+			 			<when test="type == 'N'.toString()">
+			 				P_NAME LIKE '%' || #{cri.keyword} || '%'
+			 			</when>
+			 			<when test="type == 'C'.toString()">
+			 				P_COMPANY LIKE '%' || #{cri.keyword} || '%'
+			 			</when>
+			 			<when test="type == 'Y'.toString()">
+			 				P_BUY_OK LIKE '%' || #{cri.keyword} || '%'
+			 			</when>
+			 		</choose>
+			 	</trim>
+			</foreach>		
+		</trim>
+	</sql>
+	
+	<!-- 상품목록 -->
+	<select id="productListBySecondCateCode" resultType="com.psamall.domain.ProductVO">
+		<![CDATA[
+		SELECT 
+			RN, P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, 
+			P_COMPANY, P_IMAGE, P_IMAGE_FOLDER,  P_AMOUNT,
+			P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL
+		FROM(
+		    SELECT 
+		    	/*+ INDEX_DESC(TBL_PRODUCT PK_PRODUCT) */ 
+		    	ROWNUM RN,  P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, 
+		    	P_COMPANY, P_IMAGE, P_IMAGE_FOLDER, P_AMOUNT,
+                P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL
+		    FROM 
+				TBL_PRODUCT
+		    WHERE
+		    	S_CT_CODE = #{s_ct_code} AND
+		]]>
+				<include refid="criteria"></include>
+				<!-- <![CDATA[ ]]> 안에 들어가면 태그가 아닌 문자열로 읽게 됨 -->
+		<![CDATA[
+			 ROWNUM <= #{cri.pageNum} * #{cri.amount}
+		)
+		WHERE RN > (#{cri.pageNum}-1) * #{cri.amount}	
+		]]>
+		<!-- <를 문자로 보는 것이 아니라 시작태그 문자로 봐서 오류가 남 - 파싱 이라고 부름
+				어떤 문자든 신경쓰지말고 스킵하게 하는 XML문법이 이씀
+				CDATA 섹션 : <![CDATA[내용]]>  -->
+	</select>
+	
+	<!-- 상품 목록 개수 : 페이징 구현 사용 -->
+	<select id="productTotalCountBySecondCateCode" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			TBL_PRODUCT
+		WHERE
+			S_CT_CODE = #{s_ct_code} AND
+			<include refid="criteria"></include>
+			P_NUM > 0		
+	</select>
 
 </mapper>
