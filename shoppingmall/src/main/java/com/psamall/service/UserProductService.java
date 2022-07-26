@@ -21,4 +21,7 @@ public interface UserProductService {
 	
 	//상품 목록 개수 : 페이징 구현 사용
 	int productTotalCountBySecondCateCode(Integer s_ct_code, Criteria cri);
+	
+	//상품 코드에 맞는 상품 정보
+	ProductVO getProductDetail(Integer p_num);
 }

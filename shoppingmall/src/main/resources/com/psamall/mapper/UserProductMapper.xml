@@ -88,5 +88,19 @@
 			<include refid="criteria"></include>
 			P_NUM > 0		
 	</select>
+	
+	<!-- 상품 코드에 맞는 상품 정보 -->
+	<select id="getProductDetail" resultType="com.psamall.domain.ProductVO">
+	
+		SELECT
+			P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, 
+			P_COMPANY, P_IMAGE, P_IMAGE_DATEFOLDER,  P_AMOUNT,
+			P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL
+		FROM 
+			TBL_PRODUCT
+		WHERE
+			P_NUM = #{p_num}
+		
+	</select>
 
 </mapper>

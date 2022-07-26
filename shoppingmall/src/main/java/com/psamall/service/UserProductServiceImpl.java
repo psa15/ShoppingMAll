@@ -42,4 +42,10 @@ public class UserProductServiceImpl implements UserProductService {
 		return userPMapper.productTotalCountBySecondCateCode(s_ct_code, cri);
 	}
 
+	//상품 코드에 맞는 상품 정보
+	@Override
+	public ProductVO getProductDetail(Integer p_num) {
+		return userPMapper.getProductDetail(p_num);
+	}
+
 }

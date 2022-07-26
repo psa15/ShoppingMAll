@@ -41,7 +41,8 @@
 <header>
 	<%@include file="/WEB-INF/views/include/header.jsp" %>
 	<!-- 카테고리 -->
-	<%@include file="/WEB-INF/views/include/category.jsp" %>
+	<%-- <%@include file="/WEB-INF/views/include/category.jsp" %> --%>
+	
 </header>
 
 <main role="main">

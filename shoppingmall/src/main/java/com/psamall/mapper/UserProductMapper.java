@@ -21,4 +21,7 @@ public interface UserProductMapper {
 	
 	//상품 목록 개수 : 페이징 구현 사용
 	int productTotalCountBySecondCateCode(@Param("s_ct_code") Integer s_ct_code, @Param("cri") Criteria cri);
+	
+	//상품 코드에 맞는 상품 정보
+	ProductVO getProductDetail(Integer p_num);
 }

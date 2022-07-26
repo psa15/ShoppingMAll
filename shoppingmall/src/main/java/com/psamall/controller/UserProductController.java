@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.psamall.domain.CatetgoryVO;
 import com.psamall.domain.ProductVO;
@@ -22,7 +23,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @Controller
-@RequestMapping("/product/*")
+@RequestMapping("/user/product/*")
 @Log4j
 public class UserProductController {
 
@@ -43,8 +44,8 @@ public class UserProductController {
 	}
 	
 	//상품 목록 + 페이징 (REST API)
-	@GetMapping("/productList/{ct_code}")
-	public String productList(@PathVariable("ct_code") Integer ct_code, @ModelAttribute("cri") Criteria cri, Model model) {
+	@GetMapping("/userProductList/{ct_code}")
+	public String userProductList(@PathVariable("ct_code") Integer ct_code, @ModelAttribute("cri") Criteria cri, Model model) {
 		
 		cri.setAmount(9);
 		
@@ -61,8 +62,25 @@ public class UserProductController {
 		int total = userPService.productTotalCountBySecondCateCode(ct_code, cri);
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
 		
-		return "/product/productList";
+		return "/user/product/userProductList";
 	}
+	
+	//상품 상세보기(모달)
+	@ResponseBody
+	@GetMapping("/productDetail/{p_num}")
+	public ResponseEntity<ProductVO> productDetail(@PathVariable("p_num") Integer p_num){
+		
+		ResponseEntity<ProductVO> entity = null;
+		
+		//이미지 날짜 폴더 \ 변환
+		ProductVO vo = userPService.getProductDetail(p_num);
+		vo.setP_image_folder(vo.getP_image_folder().replace("\\", "/"));
+		
+		entity = new ResponseEntity<ProductVO>(vo, HttpStatus.OK);
+		
+		return entity;
+	}
+	
 	
 	
 }

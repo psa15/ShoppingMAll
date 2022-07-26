@@ -53,7 +53,7 @@
 
 			// console.log("1차 카테고리 클릭");
 
-			let url = '/product/subCateList/' + $(this).attr("href");
+			let url = '/user/product/subCateList/' + $(this).attr("href");
 			// console.log("2차 카테고리 주소: " + url);
 
 			//ajax 안에서 사용할 선택자
@@ -79,8 +79,9 @@
 			e.preventDefault();
 			// console.log("2차 카테고리 선택");
 
-			let s_ct_code = $(this).attr("href");
-			location.href = "/product/productList/" + s_ct_code;
+			let ct_name = $(this).text();
+			console.log(ct_name);
+			location.href = "/user/product/userProductList/" + ct_code + "/" + ct_name;
 		  });
 		  
 		});
