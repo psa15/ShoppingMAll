@@ -27,8 +27,10 @@
           font-size: 3.5rem;
         }
       }
-    </style>
+      
 
+    </style>
+    
     
     <!-- Custom styles for this template -->
     <link href="/css/album.css" rel="stylesheet">
@@ -41,11 +43,10 @@
 <header>
 	<%@include file="/WEB-INF/views/include/header.jsp" %>
 	<!-- 카테고리 -->
-	<%-- <%@include file="/WEB-INF/views/include/category.jsp" %> --%>
 	
 </header>
 
-<main role="main">
+<main role="main" style="margin-top: 90px">
 
   <section class="jumbotron text-center">
     <div class="container">

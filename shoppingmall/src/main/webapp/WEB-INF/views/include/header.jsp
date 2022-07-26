@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
-  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm fixed-top">
+  <div id="header" class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white(30px) border-bottom shadow-sm fixed-top">
   	  <!-- 카테고리 -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 	  
@@ -65,3 +65,49 @@
 	    <a class="p-2 text-dark" href="#">장바구니</a>
 	  </nav>
 	</div>
+	
+		<script>
+
+		$(function(){
+  
+		  //1차 카테고리 선택 시
+		  $("ul.navbar-nav li").on("click", "a", function(){
+
+			console.log("1차 카테고리 클릭");
+
+			let url = '/user/product/subCateList/' + $(this).attr("href");
+			console.log("2차 카테고리 주소: " + url);
+
+			//ajax 안에서 사용할 선택자
+			let selectedMainCategory = $(this);
+
+			//2차 카테고리
+			$.getJSON(url, function(result){
+
+				let subCateList = selectedMainCategory.next();
+				let subCateListStr = '';
+
+				for(let i=0; i<result.length; i++) {
+					subCateListStr += "<a class='dropdown-item' href='" + result[i].ct_code + "''>" + result[i].ct_name +"</a>";
+				}
+
+				subCateList.append(subCateListStr);
+			});
+		  });
+		  
+		  //2차 카테고리 클릭 시
+		  $(".subCateList").on("click", "a", function(e){
+
+			e.preventDefault();
+			// console.log("2차 카테고리 선택");
+
+			let ct_code = $(this).attr("href");
+			let ct_name = $(this).text();
+			console.log(ct_name);
+			location.href = "/user/product/userProductList/" + ct_code + "/" + ct_name;
+		  });
+		  
+		});
+  
+  
+	  </script>

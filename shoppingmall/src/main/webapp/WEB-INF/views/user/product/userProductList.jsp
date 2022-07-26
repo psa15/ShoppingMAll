@@ -42,11 +42,9 @@
     
 <header>
 	<%@include file="/WEB-INF/views/include/header.jsp" %>
-	<!-- 카테고리 -->
-	<%@include file="/WEB-INF/views/include/category.jsp" %>
 </header>
 
-<main role="main">
+<main role="main" style="margin-top: 75px">
 
   <section class="jumbotron text-center">
     <div class="container">
@@ -67,8 +65,8 @@
 	          <div class="card mb-4 shadow-sm">
 	            <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
 	            <!-- 상품 이미지 -->
-	            <img src="/user/product/displayFile?folderName=${productVO.p_image_dateFolder}&fileName=s_${productVO.p_image}" 
-					 alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image.png'">
+	            <img src="/user/product/displayFile?folderName=${productVO.p_image_folder}&fileName=s_${productVO.p_image}" 
+					 alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image_found.png'">
 	
 	            <div class="card-body">
 	              <p class="card-text">
@@ -118,16 +116,16 @@
 					<form>
 						<div class="form-group">
 							<label for="p_name" class="col-form-label">상품명</label>
-							<input type="text" class="form-control" id="p_name">
+							<input type="text" class="form-control" id="p_name" readonly>
 							<input type="hidden" class="form-control" id="p_num">
 						</div>
 						<div class="form-group">
 							<label for="p_cost" class="col-form-label">가격</label>
-							<input type="text" class="form-control" id="p_cost">
+							<input type="text" class="form-control" id="p_cost" readonly>
 						</div>
 						<div class="form-group">
 							<label for="p_company" class="col-form-label">제조사</label>
-							<input type="text" class="form-control" id="p_company">
+							<input type="text" class="form-control" id="p_company" readonly>
 						</div>
 						<div class="form-group">
 							<label for="p_amount" class="col-form-label">수량</label>
@@ -139,7 +137,7 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-primary">바로 구매</button>
-	        <button type="button" class="btn btn-primary">장바구니 담기</button>
+	        <button type="button" name="btnAddCart" class="btn btn-primary">장바구니 담기</button>
 	      </div>
 	    </div>
 	  </div>
@@ -165,10 +163,12 @@
 					
 					//모달에 상품정보 표시
 					//상품 이미지
-					let imgUrl = "/user/product/displayFile?folderName=" + result.p_image_dateFolder + "&fileName=" + result.p_image;
-					$("div#modal_productDetail input#modal_product_img").attr("src", imgUrl);
+					let imgUrl = "/user/product/displayFile?folderName=" + result.p_image_folder + "&fileName=" + result.p_image;
+					$("div#modal_productDetail img#modal_product_img").attr("src", imgUrl);
 					//상품명
 					$("div#modal_productDetail input#p_name").val(result.p_name);
+					//상품코드
+					$("div#modal_productDetail input#p_num").val(result.p_num);
 					//상품 가격
 					$("div#modal_productDetail input#p_cost").val(result.p_cost);
 					//상품 제조사
@@ -179,8 +179,9 @@
 			});
 
 			//모달 - 장바구니 담기 클릭
-			$("").on("click", function(){
-
+			$("button[name='btnAddCart']").on("click", function(){
+				console.log("장바구니 담기 클릭");
+				
 				$.ajax({
 					url: "/user/cart/addCart",
 					data: { p_num : $("div#modal_productDetail input#p_num").val(), cart_amount : $("div#modal_productDetail input#p_amount").val()},

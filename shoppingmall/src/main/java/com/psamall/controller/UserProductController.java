@@ -2,6 +2,8 @@ package com.psamall.controller;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import com.psamall.domain.ProductVO;
 import com.psamall.dto.Criteria;
 import com.psamall.dto.PageDTO;
 import com.psamall.service.UserProductService;
+import com.psamall.utils.UploadFileUtils;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -27,6 +30,10 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class UserProductController {
 
+	//상품 이미지를 불러오기 위한 bean
+	@Resource(name = "uploadPath")
+	private String uploadPath;
+	
 	@Setter(onMethod_ = {@Autowired})
 	private UserProductService userPService;
 	
@@ -44,8 +51,8 @@ public class UserProductController {
 	}
 	
 	//상품 목록 + 페이징 (REST API)
-	@GetMapping("/userProductList/{ct_code}")
-	public String userProductList(@PathVariable("ct_code") Integer ct_code, @ModelAttribute("cri") Criteria cri, Model model) {
+	@GetMapping("/userProductList/{ct_code}/{ct_name}")
+	public String userProductList(@PathVariable("ct_code") Integer ct_code,@PathVariable("ct_name") String ct_name, @ModelAttribute("cri") Criteria cri, Model model) {
 		
 		cri.setAmount(9);
 		
@@ -63,6 +70,17 @@ public class UserProductController {
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
 		
 		return "/user/product/userProductList";
+	}
+	
+	//상품목록 이미지 불러오기
+	@ResponseBody
+	@GetMapping("/displayFile")
+	public ResponseEntity<byte[]> displayFile(String folderName, String fileName) {
+		
+		log.info("파일 이름: " + fileName);
+		
+		//저장된 썸네일 이미지를 byte[]로 읽어오는 작업
+		return UploadFileUtils.getImageFile(uploadPath, folderName + "\\" + fileName);
 	}
 	
 	//상품 상세보기(모달)
