@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
-  <div id="header" class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white(30px) border-bottom shadow-sm fixed-top">
+  <div id="header" class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white(30px) border-bottom shadow-sm">
   	  <!-- 카테고리 -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 	  

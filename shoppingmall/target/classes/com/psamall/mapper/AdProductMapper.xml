@@ -34,7 +34,7 @@
 			TBL_PRODUCT(P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT,
 						 P_COMPANY, P_IMAGE, P_AMOUNT, P_DETAIL, P_IMAGE_FOLDER)
 						 
-		VALUES(SEQ_PRODUCT.nextval, #{f_ct_code}, #{s_ct_code}, #{p_name}, #{p_cost}, #{p_discount}, 
+		VALUES(SEQ_PRODUCT_NUM.nextval, #{f_ct_code}, #{s_ct_code}, #{p_name}, #{p_cost}, #{p_discount}, 
 				#{p_company}, #{p_image}, #{p_amount}, #{p_detail}, #{p_image_folder})
 	
 	</insert>

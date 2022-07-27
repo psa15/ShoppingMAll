@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     -->
     
+    	
+	<!-- bootstrap 버전 및 여러 파일들 -->
+	<%@include file="/WEB-INF/views/include/common.jsp" %>
+	
 	<meta name="theme-color" content="#563d7c">
 
 
@@ -137,9 +141,7 @@
 	  <!-- footer -->
 	  <%@include file="/WEB-INF/views/include/footer.jsp" %>
 	</div>
-	
-	<!-- bootstrap 버전 및 여러 파일들 -->
-	<%@include file="/WEB-INF/views/include/common.jsp" %>
+
 
 	<script>
 
@@ -160,10 +162,10 @@
 					return;
 				}
 				//이메일 인증 여부 확인
-				if(!isAuthCode) {
+/* 				if(!isAuthCode) {
 					alert("메일 인증확인을 해주세요.");
 					return;
-				}
+				} */
 
 				//정보 전송
 				joinForm.submit();
