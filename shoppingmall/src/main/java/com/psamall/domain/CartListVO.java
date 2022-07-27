@@ -1,8 +1,8 @@
 package com.psamall.domain;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class CartListVO {
 	/*
 	 C.CART_CODE, C.M_ID, C.P_NUM, C.CART_AMOUNT, 

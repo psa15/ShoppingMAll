@@ -52,17 +52,17 @@
 	    </c:if>
 	    
 	    <!-- 공통 -->
-	    <a class="p-2 text-dark" href="#">마이페이지</a>
-	    <a class="p-2 text-dark" href="#">주문목록</a>
+	    
 	    
 	    <!-- 로그인 후 -->
-	  	<c:if test="${sessionScope.loginStatus != null}">
-	  		<a class="p-2 text-dark" href="/member/logout">로그아웃</a>
+	  	<c:if test="${sessionScope.loginStatus != null}">	  		
+  			<a class="p-2 text-dark" href="/member/logout">로그아웃</a>
+  			<a class="p-2 text-dark" href="#">마이페이지</a>
 		    <a class="p-2 text-dark" href="/member/confirmPw">수정하기</a>
+	    	<a class="p-2 text-dark" href="#">주문목록</a>
+		    <a class="p-2 text-dark" href="/user/cart/cartList">장바구니</a>
 	    </c:if>
 	    
-	    <!-- 공통 -->
-	    <a class="p-2 text-dark" href="#">장바구니</a>
 	  </nav>
 	</div>
 	

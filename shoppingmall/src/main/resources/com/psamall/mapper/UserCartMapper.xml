@@ -27,5 +27,17 @@
 			C.M_ID = #{m_id}
 	
 	</select>
+	
+	<!-- 장바구니 수량변경 -->
+	<update id="updateCartAmount">
+	
+		UPDATE
+			TBL_CART
+		SET
+			CART_AMOUNT = #{cart_amount}
+		WHERE
+			CART_CODE = #{cart_code}
+	
+	</update>
 
 </mapper>

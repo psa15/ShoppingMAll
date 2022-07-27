@@ -74,105 +74,103 @@ desired effect
       			</div>
       			<div class="box-body">      				
 					  <form id="searchForm" action="" method="get">
-  <%-- 검색 단추를 누르면  --%>
-    <select name="type" id="selectType">
-		 <option value="" <c:out value="${pageMaker.cri.type == null ? 'selected' : ''}" />>--</option> 
-		 <option value="N" <c:out value="${pageMaker.cri.type eq 'N' ? 'selected' : ''}" />>상품명</option>
-		 <option value="C" <c:out value="${pageMaker.cri.type eq 'C' ? 'selected' : ''}" />>제조사</option>
-		 <option value="NC" <c:out value="${pageMaker.cri.type eq 'NC' ? 'selected' : ''}" />>상품명  or 제조사</option>
-		 <option value="Y" <c:out value="${pageMaker.cri.type eq 'Y' ? 'selected' : ''}" />>판매여부</option>
-  	</select>
-  	<c:if test="${pageMaker.cri.keyword == 'Y'}">
-  		<select name="keyword">
-	      <option value="Y" selected>판매가능</option>
-	      <option value="N">판매불가</option>
-	    </select>
-  	</c:if>
-  	<c:if test="${pageMaker.cri.keyword == 'N'}">
-  		<select name="keyword">
-	      <option value="Y">판매가능</option>
-	      <option value="N" selected>판매불가</option>
-	    </select>
-  	</c:if>
-  		<c:if test="${pageMaker.cri.keyword != 'N' and pageMaker.cri.keyword != 'Y'}">
-  			<input type="text" id="keywordTag" name="keyword" value="${pageMaker.cri.keyword}">
-	  	</c:if>
-	  	<input type="hidden" id="pageNumTag" name="pageNum" value="${pageMaker.cri.pageNum}">
-	  	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
-	  	<button type="button" id="btnSearch" class="btn btn-info">Search</button>
-  	
-  	
-  </form>
+						  <%-- 검색 단추를 누르면  --%>
+						    <select name="type" id="selectType">
+								 <option value="" <c:out value="${pageMaker.cri.type == null ? 'selected' : ''}" />>--</option> 
+								 <option value="N" <c:out value="${pageMaker.cri.type eq 'N' ? 'selected' : ''}" />>상품명</option>
+								 <option value="C" <c:out value="${pageMaker.cri.type eq 'C' ? 'selected' : ''}" />>제조사</option>
+								 <option value="NC" <c:out value="${pageMaker.cri.type eq 'NC' ? 'selected' : ''}" />>상품명  or 제조사</option>
+								 <option value="Y" <c:out value="${pageMaker.cri.type eq 'Y' ? 'selected' : ''}" />>판매여부</option>
+						  	</select>
+						  	<c:if test="${pageMaker.cri.keyword == 'Y'}">
+						  		<select name="keyword">
+							      <option value="Y" selected>판매가능</option>
+							      <option value="N">판매불가</option>
+							    </select>
+						  	</c:if>
+						  	<c:if test="${pageMaker.cri.keyword == 'N'}">
+						  		<select name="keyword">
+							      <option value="Y">판매가능</option>
+							      <option value="N" selected>판매불가</option>
+							    </select>
+						  	</c:if>
+						  		<c:if test="${pageMaker.cri.keyword != 'N' and pageMaker.cri.keyword != 'Y'}">
+						  			<input type="text" id="keywordTag" name="keyword" value="${pageMaker.cri.keyword}">
+							  	</c:if>
+							  	<input type="hidden" id="pageNumTag" name="pageNum" value="${pageMaker.cri.pageNum}">
+							  	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+							  	<button type="button" id="btnSearch" class="btn btn-info">Search</button>  							  	
+						  </form>
 
 
-  <table class="table table-hover">
-	  <thead>
-	    <tr>
-	      <th scope="col">번호</th>
-	      <th scope="col">상품명</th>
-	      <th scope="col">가격</th>
-	      <th scope="col">제조사</th>
-	      <th scope="col">수량 / 구매 가능 여부</th>
-	      <th scope="col">등록일</th>
-	      <th scope="col">수정</th>
-	      <th scope="col">삭제</th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	  <c:forEach items="${productList}" var="productVO">
-	    <tr>
-	      <td scope="row"><c:out value="${productVO.p_num}" /></td>
-	      <td>
-	      	<img alt="" src="/admin/product/displayFile?folderName=${productVO.p_image_folder}&fileName=s_${productVO.p_image}" 
-	      				style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image_found.png'">
-	      	<a class="move" href="${productVO.p_name}"><c:out value="${productVO.p_name}" /></a></td>
-	      <td scope="row"><c:out value="${productVO.p_cost}" /></td>
-	      <td scope="row"><c:out value="${productVO.p_company}" /></td>
-	      <td scope="row"><c:out value="${productVO.p_amount}" /> / <c:out value="${productVO.p_buy_ok eq 'Y' ? '구매가능' : '구매 불가능'}"></c:out> </td>
-	      <td><fmt:formatDate value="${productVO.p_regdate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
-	      <td><button type="button" class="btn btn-link" name="btnUpdateProduct" data-p_num="${productVO.p_num}">수정</button></td>
-	      <td>
-	          <input type="hidden" name="p_image" value="${productVO.p_image}">
-	          <input type="hidden" name="p_image_folder" value="${productVO.p_image_folder}">
-	          <button type="button" class="btn btn-link" name="btnProductDelete" data-p_num="${productVO.p_num}">삭제</button>
-          </td>
-	    </tr>
-	   </c:forEach> 
-	   
-	  </tbody>
-	</table>
-	<nav aria-label="...">
-	  <ul class="pagination justify-content-center">
-	  
-	  	<%-- 이전표시 --%>
-	  	<c:if test="${pageMaker.prev}">
-		    <li class="page-item">
-		      <a class="page-link" href="${pageMaker.startPage-1}">이전</a>
-		    </li>
-	    </c:if>
-	    
-	    <%-- 페이지 번호 표시 ( 1 2 3 4 5) --%>
-	    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
-	    	<li class='page-item ${pageMaker.cri.pageNum == num ? "active" : ""}'><a class="page-link" href="${num}">${num}</a></li>
-	    </c:forEach>
-	    
-	    <%-- 다음표시 --%>
-	    <c:if test="${pageMaker.next}">
-		    <li class="page-item">
-		      <a class="page-link" href="${pageMaker.endPage +1}">다음</a>
-		    </li>
-	    </c:if>   
-	  </ul>
-	  
-	  <form id="actionForm" action="/admin/product/productList" method="get">
-			<%-- 페이지 번호 클릭시 list주소로 보낼 파라미터 작업 - @ModelAttribute("cri") 덕분에 ${pageMaker.cri.___} 사용 가능 --%>
-			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
-			<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
-			<input type="hidden" name="type" value="${pageMaker.cri.type}">
-			<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
-			<%-- 한 번 검색하면 list()메소드에 Criteria cri 에 값이 들어가게 되어 위 사용 가능 --%>
-		</form>
-	</nav>					
+				  <table class="table table-hover">
+					  <thead>
+					    <tr>
+					      <th scope="col">번호</th>
+					      <th scope="col">상품명</th>
+					      <th scope="col">가격</th>
+					      <th scope="col">제조사</th>
+					      <th scope="col">수량 / 구매 가능 여부</th>
+					      <th scope="col">등록일</th>
+					      <th scope="col">수정</th>
+					      <th scope="col">삭제</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					  <c:forEach items="${productList}" var="productVO">
+					    <tr>
+					      <td scope="row"><c:out value="${productVO.p_num}" /></td>
+					      <td>
+					      	<img alt="" src="/admin/product/displayFile?folderName=${productVO.p_image_folder}&fileName=s_${productVO.p_image}" 
+					      				style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image_found.png'">
+					      	<a class="move" href="${productVO.p_name}"><c:out value="${productVO.p_name}" /></a></td>
+					      <td scope="row"><c:out value="${productVO.p_cost}" /></td>
+					      <td scope="row"><c:out value="${productVO.p_company}" /></td>
+					      <td scope="row"><c:out value="${productVO.p_amount}" /> / <c:out value="${productVO.p_buy_ok eq 'Y' ? '구매가능' : '구매 불가능'}"></c:out> </td>
+					      <td><fmt:formatDate value="${productVO.p_regdate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
+					      <td><button type="button" class="btn btn-link" name="btnUpdateProduct" data-p_num="${productVO.p_num}">수정</button></td>
+					      <td>
+					          <input type="hidden" name="p_image" value="${productVO.p_image}">
+					          <input type="hidden" name="p_image_folder" value="${productVO.p_image_folder}">
+					          <button type="button" class="btn btn-link" name="btnProductDelete" data-p_num="${productVO.p_num}">삭제</button>
+				          </td>
+					    </tr>
+					   </c:forEach> 
+					   
+					  </tbody>
+					</table>
+					<nav aria-label="...">
+					  <ul class="pagination justify-content-center">
+					  
+					  	<%-- 이전표시 --%>
+					  	<c:if test="${pageMaker.prev}">
+						    <li class="page-item">
+						      <a class="page-link" href="${pageMaker.startPage-1}">이전</a>
+						    </li>
+					    </c:if>
+					    
+					    <%-- 페이지 번호 표시 ( 1 2 3 4 5) --%>
+					    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
+					    	<li class='page-item ${pageMaker.cri.pageNum == num ? "active" : ""}'><a class="page-link" href="${num}">${num}</a></li>
+					    </c:forEach>
+					    
+					    <%-- 다음표시 --%>
+					    <c:if test="${pageMaker.next}">
+						    <li class="page-item">
+						      <a class="page-link" href="${pageMaker.endPage +1}">다음</a>
+						    </li>
+					    </c:if>   
+					  </ul>
+					  
+					  <form id="actionForm" action="/admin/product/productList" method="get">
+							<%-- 페이지 번호 클릭시 list주소로 보낼 파라미터 작업 - @ModelAttribute("cri") 덕분에 ${pageMaker.cri.___} 사용 가능 --%>
+							<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+							<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+							<input type="hidden" name="type" value="${pageMaker.cri.type}">
+							<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
+							<%-- 한 번 검색하면 list()메소드에 Criteria cri 에 값이 들어가게 되어 위 사용 가능 --%>
+						</form>
+					</nav>					
       			</div>
       		</div>
       	</div>      

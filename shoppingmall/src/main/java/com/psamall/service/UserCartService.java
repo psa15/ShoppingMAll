@@ -12,4 +12,7 @@ public interface UserCartService {
 	
 	//장바구니 목록
 	List<CartListVO> getCartList(String m_id);
+	
+	//장바구니 수량변경
+	void updateCartAmount(Long cart_code, int cart_amount);
 }

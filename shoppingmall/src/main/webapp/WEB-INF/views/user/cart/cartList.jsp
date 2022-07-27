@@ -48,156 +48,143 @@
 
   <section class="jumbotron text-center">
     <div class="container">
-      <h1>Album example</h1>
-      <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
-      <p>
-        <a href="#" class="btn btn-primary my-2">Main call to action</a>
-        <a href="#" class="btn btn-secondary my-2">Secondary action</a>
-      </p>
+      <h1>CART</h1>
     </div>
   </section>
 
-  <div class="album py-5 bg-light">
-    <div class="container">
-      <div class="row">
-      	<c:forEach items="${productList }" var="productVO">
-	        <div class="col-md-4"> <%-- col-md-4가 3개여서 한 페이지에 세 줄의 사진이 보여짐 --%>
-	          <div class="card mb-4 shadow-sm">
-	            <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-	            <!-- 상품 이미지 -->
-	            <img src="/user/product/displayFile?folderName=${productVO.p_image_folder}&fileName=s_${productVO.p_image}" 
-					 alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image_found.png'">
-	
-	            <div class="card-body">
-	              <p class="card-text">
-	              	${productVO.p_name}<br>
-	              	${productVO.p_company}<br>
-	              	<fmt:setLocale value="ko_kr"/><fmt:formatNumber type="number" maxFractionDigits="3" value="${productVO.p_cost}"></fmt:formatNumber>
-	              	<%-- maxFractionDigits="3" : 3자리마다 ,(콤마) 삽입 --%>
-	              </p>
-	              <div class="d-flex justify-content-between align-items-center">
-	                <div class="btn-group">
-	                  <button type="button" data-p_num="${productVO.p_num}" name="btnBuyCart" class="btn btn-sm btn-outline-secondary">구매 & 장바구니</button>
-	                </div>
-	                <small class="text-muted">후기</small>
-	              </div>
-	            </div>
-	          </div>
-	        </div>
-        </c:forEach>          
-      </div>
-    </div>
-  </div>
-
+ <div class="container">
+		<div class="row">
+	      	<div class="col-md-12">      	
+	      		<div class="box box-primary">
+	      			<div class="box-header">
+	      				LIST CART     
+	      			</div>	
+	      			<div class="box-body">	      				
+					  <table class="table table-hover" id="tblCartList">
+						  <thead>
+						    <tr>
+						      <th scope="col">제품</th>
+						      <th scope="col">수량</th>
+						      <th scope="col">배송비</th>
+						      <th scope="col">가격</th>						      
+						      <th scope="col">적립</th>
+						      <th scope="col">취소</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						  <c:forEach items="${cartList}" var="cartVO">
+						  <c:set var="price" value="${cartVO.cart_amount * cartVO.p_cost}"></c:set>
+						    <tr>	
+						      <!-- 제품 : 이미지 및 상품이름 -->				      
+						      <td>						      	
+						      	<a class="move" href="${cartVO.p_num}">
+						      		<img src="/user/product/displayFile?folderName=${cartVO.p_image_folder}&fileName=s_${cartVO.p_image}" 
+						      		alt="" style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image.png'">
+						      		<c:out value="${cartVO.p_name}" />
+						      	</a>
+						      </td>
+						      <!-- 수량 -->
+						      <td>
+						      	<input type="number" name="cart_amount" value='<c:out value="${cartVO.cart_amount}" />'>
+								<input type="hidden" name="p_cost" value="${cartVO.p_cost}">
+						      	<button type="button" name="btnCartAmountChange" data-cart_code="${cartVO.cart_code}" class="btn btn-link">수량변경</button>
+						 
+						      </td>
+						      <!-- 배송비 -->	
+						      <td>
+						      	[기본배송]
+						      </td>	
+								<!-- 상품 가격 * 수량 -->				      
+							  <td>
+								<span class="unitPrice">						      	
+									<fmt:formatNumber type="number" maxFractionDigits="3" value="${price}" />
+								</span>
+							  </td>						  
+						      <!-- 적립 -->
+						      <td>
+						      	<c:out value="${cartVO.m_point}" />
+						      </td>
+						      <!-- 삭제 -->
+						      <td>
+			                    <input type="hidden" name="p_image_dateFolder" value="${cartVO.p_image_folder}">
+			                    <input type="hidden" name="p_image" value="${cartVO.p_image}">
+			                    <button type="button" name="btnCartDelete" data-cart_code="${cartVO.cart_code}" class="btn btn-link">삭제</button></td>
+						    </tr>
+						    <c:set var="sum" value="${sum + price}"></c:set>
+						   </c:forEach>					   
+						  </tbody>
+						  <tfoot>
+							<tr>
+								<td colspan="6" style="text-align: right"> 
+									총 구매 금액: <span id="cartTotalPrice"><fmt:formatNumber type="number" maxFractionDigits="3" value="${sum}" /></span>
+								</td>
+							</tr>
+						  </tfoot>
+						</table>							
+	      			</div>		
+	      		</div>     
+	      	</div>      
+	      </div>
+		</div>
 </main>
 
 <footer class="text-muted">
   <%@include file="/WEB-INF/views/include/footer.jsp" %>
 </footer>
 
-	<!-- 상품상세보기(바로구매 + 장바구니) 모달 -->
-	<div class="modal fade" id="modal_productDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-			<div class="row">
-				<div class="col-md-6">
-					<img src="" id="modal_product_img"
-					 alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image.png'">
-	
-				</div>
-				<div class="col-md-6">
-					<form>
-						<div class="form-group">
-							<label for="p_name" class="col-form-label">상품명</label>
-							<input type="text" class="form-control" id="p_name" readonly>
-							<input type="hidden" class="form-control" id="p_num">
-						</div>
-						<div class="form-group">
-							<label for="p_cost" class="col-form-label">가격</label>
-							<input type="text" class="form-control" id="p_cost" readonly>
-						</div>
-						<div class="form-group">
-							<label for="p_company" class="col-form-label">제조사</label>
-							<input type="text" class="form-control" id="p_company" readonly>
-						</div>
-						<div class="form-group">
-							<label for="p_amount" class="col-form-label">수량</label>
-							<input type="number" class="form-control" id="p_amount" min="1" value="1">
-						</div>
-					</form>
-				</div>
-			</div>	        
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-primary">바로 구매</button>
-	        <button type="button" name="btnAddCart" class="btn btn-primary">장바구니 담기</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-
 	<script>
 
 		$(function(){
 
-			//구매&장바구니 버튼 클릭 시 모달창 띄우기
-			$("button[name='btnBuyCart']").on("click", function(){
-				console.log(" 구매 & 장바구니 클릭");
+			//장바구니 페이지에서 상품 수량 변경
+			$("button[name='btnCartAmountChange']").on("click", function(){
+				console.log("수량 변경 버튼 클릭");
 
-				$("#modal_productDetail").modal('show');
+				let btnCartAmountChange = $(this);
 
-				//상품 번호 참조
-				let p_num = $(this).data("p_num");
+				let cart_code = $(this).data("cart_code");
+				let cart_amount = $(this).parent().find("input[name='cart_amount']").val();
 
-				let url = "/user/product/productDetail/" + p_num;
-				console.log("상품 상세보기 주소: " + url);
-
-				$.getJSON(url, function(result){
-					
-					//모달에 상품정보 표시
-					//상품 이미지
-					let imgUrl = "/user/product/displayFile?folderName=" + result.p_image_folder + "&fileName=" + result.p_image;
-					$("div#modal_productDetail img#modal_product_img").attr("src", imgUrl);
-					//상품명
-					$("div#modal_productDetail input#p_name").val(result.p_name);
-					//상품코드
-					$("div#modal_productDetail input#p_num").val(result.p_num);
-					//상품 가격
-					$("div#modal_productDetail input#p_cost").val(result.p_cost);
-					//상품 제조사
-					$("div#modal_productDetail input#p_company").val(result.p_company);
-					//상품 수량
-					$("div#modal_productDetail input#p_amount").val(result.p_amount);
-				});
-			});
-
-			//모달 - 장바구니 담기 클릭
-			$("button[name='btnAddCart']").on("click", function(){
-				console.log("장바구니 담기 클릭");
-				
 				$.ajax({
-					url: "/user/cart/addCart",
-					data: { p_num : $("div#modal_productDetail input#p_num").val(), cart_amount : $("div#modal_productDetail input#p_amount").val()},
+					url: '/user/cart/changeCartAmount',
+					data: {cart_code : cart_code, cart_amount : cart_amount},
 					dataType: 'text',
 					success: function(result) {
-					
 						if(result == "success") {
-							alert("장바구니가 추가되었습니다.");
-							if(confirm("장바구니로 이동하시겠습니까?")) {
-								location.href = "장바구니 주소"
-							}
+							alert("선택하신 상품의 수량이 변경되었습니다.");
+							
+							//개별 상품 금액 변경
+							//상품 가격 참조
+							let p_cost = btnCartAmountChange.parent().find("input[name='p_cost']").val();
+							btnCartAmountChange.parents("tr").find("span.unitPrice").html($.numberWithCommas(p_cost * cart_amount));
+
+							//총 구매금액 변경
+							let totalPrice = 0;
+							$("table#tblCartList tr td span.unitPrice").each(function(index, item){
+								console.log("단위가격: " + $(item).html());
+								// console.log("단위가격: " + $(item).text());
+
+								totalPrice += parseInt($.withoutCommas($(item).text())); //무언갈 읽어오는 데이터는 전부 text(String)
+								$("table#tblCartList tr td span#cartTotalPrice").text($.numberWithCommas(totalPrice));
+							});
 						}
 					}
 				});
+
+
 			});
+			
 		});
+
+		//숫자값을 천단위 마다 콤마 찍기
+		$.numberWithCommas = function(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+
+		//3자리마다 콤마 제거하기
+		$.withoutCommas = function (x) {
+			return x.toString().replace(",", '');
+		}
 	</script>
 
 <!-- bootstrap에 포함되어 있던 스크립트, 없어도 영향이 없어서 주석처리 

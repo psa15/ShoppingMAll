@@ -28,5 +28,11 @@ public class UserCartServiceImpl implements UserCartService {
 	public List<CartListVO> getCartList(String m_id) {
 		return cartMapper.getCartList(m_id);
 	}
+
+	//장바구니 수량변경
+	@Override
+	public void updateCartAmount(Long cart_code, int cart_amount) {
+		cartMapper.updateCartAmount(cart_code, cart_amount);
+	}
 	
 }

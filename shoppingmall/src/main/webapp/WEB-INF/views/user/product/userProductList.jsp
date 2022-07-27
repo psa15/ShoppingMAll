@@ -174,7 +174,7 @@
 					//상품 제조사
 					$("div#modal_productDetail input#p_company").val(result.p_company);
 					//상품 수량
-					$("div#modal_productDetail input#p_amount").val(result.p_amount);
+					$("div#modal_productDetail input#p_amount").val(1);
 				});
 			});
 
@@ -191,7 +191,7 @@
 						if(result == "success") {
 							alert("장바구니가 추가되었습니다.");
 							if(confirm("장바구니로 이동하시겠습니까?")) {
-								location.href = "장바구니 주소"
+								location.href = "/user/cart/cartList"
 							}
 						}
 					}
