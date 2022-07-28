@@ -44,16 +44,14 @@
 	<%@include file="/WEB-INF/views/include/header.jsp" %>
 </header>
 
-<main role="main" style="margin-top: 75px">
+<main role="main">
 
   <section class="jumbotron text-center">
     <div class="container">
-      <h1>Album example</h1>
-      <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
-      <p>
-        <a href="#" class="btn btn-primary my-2">Main call to action</a>
-        <a href="#" class="btn btn-secondary my-2">Secondary action</a>
-      </p>
+      <h1>${ct_name}</h1>
+      <c:forEach items="${cateName}" var="category">
+      	<a href="/user/product/userProductList/${category.ct_p_code}/${category.ct_code}/${category.ct_name}" class="btn btn-light">${category.ct_name}</a> 	
+	  </c:forEach>
     </div>
   </section>
 
@@ -87,6 +85,40 @@
         </c:forEach>          
       </div>
     </div>
+  </div>
+  
+  <!-- 페이징 -->
+  <div class="container">
+  	<nav>
+	  <ul class="pagination justify-content-center">
+	  
+	  	<%-- 이전표시 --%>
+	  	<c:if test="${pageMaker.prev}">
+		    <li class="page-item">
+		      <a class="page-link" href="${pageMaker.startPage-1}">이전</a>
+		    </li>
+	    </c:if>
+	    
+	    <%-- 페이지 번호 표시 ( 1 2 3 4 5) --%>
+	    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
+	    	<li class='page-item ${pageMaker.cri.pageNum == num ? "active" : ""}'><a class="page-link" href="${num}">${num}</a></li>
+	    </c:forEach>
+	    
+	    <%-- 다음표시 --%>
+	    <c:if test="${pageMaker.next}">
+		    <li class="page-item">
+		      <a class="page-link" href="${pageMaker.endPage +1}">다음</a>
+		    </li>
+	    </c:if>   
+	  </ul>
+	  
+	  <form id="actionForm" action="/user/product/userProductList" method="get">
+		<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+		<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+		<input type="hidden" name="type" value="${pageMaker.cri.type}">
+		<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
+	 </form>
+	</nav>  
   </div>
 
 </main>
@@ -156,7 +188,7 @@
 				//상품 번호 참조
 				let p_num = $(this).data("p_num");
 
-				let url = "/user/product/productDetail/" + p_num;
+				let url = "/user/product/modalProductDetail/" + p_num;
 				console.log("상품 상세보기 주소: " + url);
 
 				$.getJSON(url, function(result){
@@ -197,6 +229,21 @@
 					}
 				});
 			});
+			
+		    //페이지 번호 이동 
+		    let actionForm = $("#actionForm");
+		    $("ul.pagination li a.page-link").on("click", function(e){
+		    	e.preventDefault();
+		    	
+		    	let pageNum = $(this).attr("href");
+		    	
+		    	actionForm.find("input[name='pageNum']").val(pageNum);
+		    	
+		    	let url = "/user/product/userProductList/${ct_code}/${ct_name}";
+		    	actionForm.attr("action", url);
+		    	
+		    	actionForm.submit();
+		    });
 		});
 	</script>
 

@@ -49,10 +49,11 @@ public class UserProductController {
 		
 		return entity;
 	}
+	//2차 카테고리 
 	
 	//상품 목록 + 페이징 (REST API)
-	@GetMapping("/userProductList/{ct_code}/{ct_name}")
-	public String userProductList(@PathVariable("ct_code") Integer ct_code,@PathVariable("ct_name") String ct_name, @ModelAttribute("cri") Criteria cri, Model model) {
+	@GetMapping("/userProductList/{f_ct_code}/{s_ct_code}/{ct_name}")
+	public String userProductList(@PathVariable("s_ct_code") Integer ct_code,@PathVariable("ct_name") String ct_name, @PathVariable("f_ct_code") Integer f_ct_code, @ModelAttribute("cri") Criteria cri, Model model) {
 		
 		cri.setAmount(9);
 		
@@ -63,6 +64,8 @@ public class UserProductController {
 			String p_image_folder = productList.get(i).getP_image_folder().replace("\\", "/");
 			productList.get(i).setP_image_folder(p_image_folder);
 		}
+		
+		model.addAttribute("cateName", userPService.secondCateList(f_ct_code));
 		
 		model.addAttribute("productList", productList);
 		
@@ -85,7 +88,7 @@ public class UserProductController {
 	
 	//상품 상세보기(모달)
 	@ResponseBody
-	@GetMapping("/productDetail/{p_num}")
+	@GetMapping("/modalProductDetail/{p_num}")
 	public ResponseEntity<ProductVO> productDetail(@PathVariable("p_num") Integer p_num){
 		
 		ResponseEntity<ProductVO> entity = null;

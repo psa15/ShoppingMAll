@@ -13,14 +13,7 @@
 	
 	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    <ul class="navbar-nav mr-auto">
-	      <!--  
-	      <li class="nav-item active">
-	        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-	      </li>
-	      <li class="nav-item">
-	        <a class="nav-link" href="#">Link</a>
-	      </li>
-	      -->
+	    
 	      <c:forEach items="${firstCateList}" var="categoryVO">
 		      <li class="nav-item dropdown">	
 		      	<!-- 1차 카테고리(Main Category) -->	      	
@@ -33,11 +26,6 @@
 		        </div>
 		      </li>
 	       </c:forEach>
-	      <!--  
-	      <li class="nav-item">
-	        <a class="nav-link disabled">Disabled</a>
-	      </li>
-	      -->
 	    </ul>
 	  </div>
 	
@@ -75,6 +63,9 @@
 
 			console.log("1차 카테고리 클릭");
 
+			let fcode = $(this).attr("href")
+			console.log(fcode);
+			
 			let url = '/user/product/subCateList/' + $(this).attr("href");
 			console.log("2차 카테고리 주소: " + url);
 
@@ -88,7 +79,7 @@
 				let subCateListStr = '';
 
 				for(let i=0; i<result.length; i++) {
-					subCateListStr += "<a class='dropdown-item' href='" + result[i].ct_code + "''>" + result[i].ct_name +"</a>";
+					subCateListStr += "<a class='dropdown-item' data-ct_p_code='" + result[i].ct_p_code + "' href='" + result[i].ct_code + "''>" + result[i].ct_name +"</a>";
 				}
 
 				subCateList.append(subCateListStr);
@@ -101,10 +92,11 @@
 			e.preventDefault();
 			// console.log("2차 카테고리 선택");
 
-			let ct_code = $(this).attr("href");
+			let f_ct_code = $(this).data("ct_p_code");
+			let s_ct_code = $(this).attr("href");
 			let ct_name = $(this).text();
 			console.log(ct_name);
-			location.href = "/user/product/userProductList/" + ct_code + "/" + ct_name;
+			location.href = "/user/product/userProductList/" + f_ct_code + "/" + s_ct_code + "/" + ct_name;
 		  });
 		  
 		});
