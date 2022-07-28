@@ -48,4 +48,11 @@ public class UserProductServiceImpl implements UserProductService {
 		return userPMapper.getProductDetail(p_num);
 	}
 
+	
+	//상품목록(전체 상품)
+	@Override
+	public List<ProductVO> getAllProduct() {
+		return userPMapper.getAllProduct();
+	}
+
 }

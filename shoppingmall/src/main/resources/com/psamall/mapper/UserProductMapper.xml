@@ -47,7 +47,24 @@
 		</trim>
 	</sql>
 	
-	<!-- 상품목록 -->
+	<!-- 전체 상품 목록 -->
+	<select id="getAllProduct" resultType="com.psamall.domain.ProductVO">
+	
+	<![CDATA[
+		SELECT 
+	    	/*+ INDEX_DESC(TBL_PRODUCT PK_PRODUCT) */ 
+	    	ROWNUM RN,  P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, 
+	    	P_COMPANY, P_IMAGE, P_IMAGE_FOLDER, P_AMOUNT,
+               P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL
+	    FROM 
+			TBL_PRODUCT
+	    WHERE
+		 	 ROWNUM <= 9
+	]]>
+	
+	</select>
+	
+	<!-- 상품목록(카테고리 별) -->
 	<select id="productListBySecondCateCode" resultType="com.psamall.domain.ProductVO">
 		<![CDATA[
 		SELECT 

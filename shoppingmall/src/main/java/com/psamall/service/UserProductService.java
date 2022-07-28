@@ -16,6 +16,9 @@ public interface UserProductService {
 	//2차 카테고리
 	List<CatetgoryVO> secondCateList(Integer firstCateCode);
 	
+	//상품목록(전체 상품)
+	List<ProductVO> getAllProduct();
+	
 	//상품목록
 	List<ProductVO> productListBySecondCateCode(Integer s_ct_code, Criteria cri);
 	

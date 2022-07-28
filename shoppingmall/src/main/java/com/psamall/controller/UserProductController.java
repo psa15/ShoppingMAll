@@ -50,7 +50,6 @@ public class UserProductController {
 		
 		return entity;
 	}
-	//2차 카테고리 
 	
 	//상품 목록 + 페이징 (REST API)
 	@GetMapping("/userProductList/{f_ct_code}/{s_ct_code}/{ct_name}")

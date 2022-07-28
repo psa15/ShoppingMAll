@@ -130,44 +130,14 @@
 
 		$(function(){
 
-			//구매&장바구니 버튼 클릭 시 모달창 띄우기
-			$("button[name='btnBuyCart']").on("click", function(){
-				console.log(" 구매 & 장바구니 클릭");
-
-				$("#modal_productDetail").modal('show');
-
-				//상품 번호 참조
-				let p_num = $(this).data("p_num");
-
-				let url = "/user/product/modalProductDetail/" + p_num;
-				console.log("상품 상세보기 주소: " + url);
-
-				$.getJSON(url, function(result){
-					
-					//모달에 상품정보 표시
-					//상품 이미지
-					let imgUrl = "/user/product/displayFile?folderName=" + result.p_image_folder + "&fileName=" + result.p_image;
-					$("div#modal_productDetail img#modal_product_img").attr("src", imgUrl);
-					//상품명
-					$("div#modal_productDetail input#p_name").val(result.p_name);
-					//상품코드
-					$("div#modal_productDetail input#p_num").val(result.p_num);
-					//상품 가격
-					$("div#modal_productDetail input#p_cost").val(result.p_cost);
-					//상품 제조사
-					$("div#modal_productDetail input#p_company").val(result.p_company);
-					//상품 수량
-					$("div#modal_productDetail input#p_amount").val(1);
-				});
-			});
 
 			//모달 - 장바구니 담기 클릭
-			$("button[name='btnAddCart']").on("click", function(){
+			$("#btnCart").on("click", function(){
 				console.log("장바구니 담기 클릭");
 				
 				$.ajax({
 					url: "/user/cart/addCart",
-					data: { p_num : $("div#modal_productDetail input#p_num").val(), cart_amount : $("div#modal_productDetail input#p_amount").val()},
+					data: { p_num : $("input#p_num").val(), cart_amount : $("input#p_amount").val()},
 					dataType: 'text',
 					success: function(result) {
 					

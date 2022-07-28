@@ -16,7 +16,10 @@ public interface UserProductMapper {
 	//2차 카테고리 - 1차 카테고리별 2차 카테고리 불러오기
 	List<CatetgoryVO> secondCateList(Integer firstCateCode);
 	
-	//상품목록
+	//상품목록(전체 상품)
+	List<ProductVO> getAllProduct();
+	
+	//상품목록 - 카테고리별
 	List<ProductVO> productListBySecondCateCode(@Param("s_ct_code") Integer s_ct_code, @Param("cri") Criteria cri);
 	
 	//상품 목록 개수 : 페이징 구현 사용
