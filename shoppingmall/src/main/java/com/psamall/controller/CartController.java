@@ -78,4 +78,25 @@ public class CartController {
 		
 		return entity;
 	}
+	
+	//장바구니 상품 삭제
+	@GetMapping("/deleteCart")
+	public String deleteCart(@RequestParam("cart_code") Long cart_code) {
+		
+		cartService.deleteCart(cart_code);
+		
+		return  "/user/cart/cartList";
+	}
+	
+	//장바구니 비우기
+	@GetMapping("/clearCart")
+	public String clearCart(HttpSession session) {
+		
+		//로그인 정보
+		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
+		
+		cartService.clearCart(m_id);
+		
+		return "/user/cart/cartList";
+	}
 }

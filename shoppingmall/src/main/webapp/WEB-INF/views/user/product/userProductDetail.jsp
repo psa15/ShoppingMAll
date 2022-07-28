@@ -46,81 +46,31 @@
 
 <main role="main">
 
-  <section class="jumbotron text-center">
-    <div class="container">
-      <h1>${ct_name}</h1>
-      <c:forEach items="${cateName}" var="category">
-      	<a href="/user/product/userProductList/${category.ct_p_code}/${category.ct_code}/${category.ct_name}" class="btn btn-light">${category.ct_name}</a> 	
-	  </c:forEach>
-    </div>
-  </section>
-
-  <div class="album py-5 bg-light">
-    <div class="container">
-      <div class="row">
-      	<c:forEach items="${productList }" var="productVO">
-	        <div class="col-md-4"> <%-- col-md-4가 3개여서 한 페이지에 세 줄의 사진이 보여짐 --%>
-	          <div class="card mb-4 shadow-sm">
-	            <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-	            <!-- 상품 이미지 -->
-				  <a class="move" href="${productVO.p_num}">
-				    <img src="/user/product/displayFile?folderName=${productVO.p_image_folder}&fileName=s_${productVO.p_image}" 
-							 alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image.png'">
-					</a>
-	            <div class="card-body">
-	              <p class="card-text">
-	              	${productVO.p_name}<br>
-	              	${productVO.p_company}<br>
-	              	<fmt:setLocale value="ko_kr"/><fmt:formatNumber type="number" maxFractionDigits="3" value="${productVO.p_cost}"></fmt:formatNumber>
-	              	<%-- maxFractionDigits="3" : 3자리마다 ,(콤마) 삽입 --%>
-	              </p>
-	              <div class="d-flex justify-content-between align-items-center">
-	                <div class="btn-group">
-	                  <button type="button" data-p_num="${productVO.p_num}" name="btnBuyCart" class="btn btn-sm btn-outline-secondary">구매 & 장바구니</button>
-	                </div>
-	                <small class="text-muted">후기</small>
-	              </div>
-	            </div>
-	          </div>
-	        </div>
-        </c:forEach>          
-      </div>
-    </div>
-  </div>
-  
-  <!-- 페이징 -->
   <div class="container">
-  	<nav>
-	  <ul class="pagination justify-content-center">
-	  
-	  	<%-- 이전표시 --%>
-	  	<c:if test="${pageMaker.prev}">
-		    <li class="page-item">
-		      <a class="page-link" href="${pageMaker.startPage-1}">이전</a>
-		    </li>
-	    </c:if>
-	    
-	    <%-- 페이지 번호 표시 ( 1 2 3 4 5) --%>
-	    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
-	    	<li class='page-item ${pageMaker.cri.pageNum == num ? "active" : ""}'><a class="page-link" href="${num}">${num}</a></li>
-	    </c:forEach>
-	    
-	    <%-- 다음표시 --%>
-	    <c:if test="${pageMaker.next}">
-		    <li class="page-item">
-		      <a class="page-link" href="${pageMaker.endPage +1}">다음</a>
-		    </li>
-	    </c:if>   
-	  </ul>
-	  
-	  <form id="actionForm" action="/user/product/userProductList" method="get">
-		<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
-		<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
-		<input type="hidden" name="type" value="${pageMaker.cri.type}">
-		<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
-	 </form>
-	</nav>  
-  </div>
+      <div class="row">          
+       	<div class = "col-6">
+  			<!-- 상품 이미지 -->
+      		<img src="/user/product/displayFile?folderName=${productVO.p_image_folder}&fileName=${productVO.p_image}" 
+					alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image.png'">
+      	</div>
+      	<div class = "col-6">
+      		<!-- 상품 이미지 필드 정보 -->
+      		<h5>${productVO.p_name}</h5>
+      		<p>판매가격: <fmt:formatNumber type="number" maxFractionDigits="3" value="${productVO.p_cost}" /></p>
+      		<p>
+      			<input type="hidden" id="p_num" value="${productVO.p_num}">
+      			수량: <input type="number" id="p_amount" min="1" value="1">
+      		</p>
+      		<button type="button" id="btnOrder"  class="btn btn-primary">구매하기</button>
+			<button type="button" id="btnCart"  class="btn btn-primary">장바구니</button>
+      	</div>
+      </div>
+      <div class="row">
+      	<div class="col text-center">     	
+      	</div>
+      
+      </div>
+    </div>  
 
 </main>
 
@@ -229,30 +179,6 @@
 						}
 					}
 				});
-			});
-			
-		    //페이지 번호 이동 
-		    let actionForm = $("#actionForm");
-		    $("ul.pagination li a.page-link").on("click", function(e){
-		    	e.preventDefault();
-		    	
-		    	let pageNum = $(this).attr("href");
-		    	
-		    	actionForm.find("input[name='pageNum']").val(pageNum);
-		    	
-		    	let url = "/user/product/userProductList/${ct_code}/${ct_name}";
-		    	actionForm.attr("action", url);
-		    	
-		    	actionForm.submit();
-		    });
-
-			//상품 이미지 클릭 시 상세 페이지로 이동
-			$("a.move").on("click", function(e){
-				e.preventDefault();
-				console.log("이미지 클릭");
-
-				let p_num = $(this).attr("href");
-				location.href = "/user/product/userProductDetail?p_num=" + p_num;
 			});
 		});
 	</script>

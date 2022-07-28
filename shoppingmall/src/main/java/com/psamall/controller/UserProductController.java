@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.psamall.domain.CatetgoryVO;
@@ -102,6 +103,18 @@ public class UserProductController {
 		return entity;
 	}
 	
-	
+	//상품 상세보기
+	@GetMapping("/userProductDetail")
+	public String userProductDetail(@RequestParam("p_num") Integer p_num, Model model){
+		
+		
+		//이미지 날짜 폴더 \ 변환
+		ProductVO vo = userPService.getProductDetail(p_num);
+		vo.setP_image_folder(vo.getP_image_folder().replace("\\", "/"));
+		
+		model.addAttribute("productVO", vo);
+		
+		return "/user/product/userProductDetail";
+	}
 	
 }

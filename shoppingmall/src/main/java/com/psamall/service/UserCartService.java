@@ -15,4 +15,10 @@ public interface UserCartService {
 	
 	//장바구니 수량변경
 	void updateCartAmount(Long cart_code, int cart_amount);
+	
+	//장바구니 상품 삭제
+	void deleteCart(Long cart_code);
+	
+	//장바구니 비우기
+	void clearCart(String m_id);
 }

@@ -115,13 +115,30 @@
 						  </tbody>
 						  <tfoot>
 							<tr>
-								<td colspan="6" style="text-align: right"> 
-									총 구매 금액: <span id="cartTotalPrice"><fmt:formatNumber type="number" maxFractionDigits="3" value="${sum}" /></span>
-								</td>
+								<c:if test="${!empty cartList}">
+									<td colspan="6" style="text-align: right"> 
+										총 구매 금액: <span id="cartTotalPrice"><fmt:formatNumber type="number" maxFractionDigits="3" value="${sum}" /></span>
+									</td>
+								</c:if>
+								<c:if test="${empty cartList}">
+									<td colspan="6" style="text-align: right"> 
+										장바구니가 비었습니다.
+									</td>
+								</c:if>
 							</tr>
 						  </tfoot>
 						</table>							
-	      			</div>		
+	      			</div>
+	      			<div class="box-footer text-center">
+	      				<c:if test="${!empty cartList}">
+							<button type="button" name="btnClearCart" class="btn btn-primary">장바구니 비우기</button>
+							<button type="button" name="btnShopping"  class="btn btn-primary">계속 쇼핑하기</button>
+							<button type="button" name="btnOrder"  class="btn btn-primary">주문하기</button>
+						</c:if>
+						<c:if test="${empty cartList}">
+							<button type="button" name="btnShopping"  class="btn btn-primary">쇼핑하기</button>
+						</c:if>
+				    </div>		
 	      		</div>     
 	      	</div>      
 	      </div>
@@ -172,6 +189,29 @@
 				});
 
 
+			});
+
+			//상품 삭제
+			$("button[name='btnCartDelete']").on("click", function(){
+				console.log("상품삭제");
+
+				if(!confirm("선택하신 상품을 삭제하시겠습니까?")){
+					return;
+				}
+
+				let cart_code = $(this).data("cart_code");
+				location.href = "/user/cart/deleteCart?cart_code=" + cart_code;
+			});
+
+			//장바구니 비우기
+			$("button[name='btnClearCart']").on("click", function(){
+				console.log("장바구니 비우기");
+
+				if(!confirm("장바구니를 비우시겠습니까?")){
+					return;
+				}
+
+				location.href = "/user/cart/clearCart";
 			});
 			
 		});

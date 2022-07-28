@@ -34,5 +34,17 @@ public class UserCartServiceImpl implements UserCartService {
 	public void updateCartAmount(Long cart_code, int cart_amount) {
 		cartMapper.updateCartAmount(cart_code, cart_amount);
 	}
+
+	//장바구니 상품 삭제
+	@Override
+	public void deleteCart(Long cart_code) {
+		cartMapper.deleteCart(cart_code);
+	}
+
+	//장바구니 비우기
+	@Override
+	public void clearCart(String m_id) {
+		cartMapper.clearCart(m_id);
+	}
 	
 }
