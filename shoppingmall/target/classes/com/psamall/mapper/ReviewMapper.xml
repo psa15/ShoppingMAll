@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psamall.mapper.ReviewMapper">
+
+	<!-- 리뷰 등록 -->
+	<insert id="insertReview">
+	
+		INSERT INTO
+			TBL_REVIEW
+				(R_NUM, M_ID, P_NUM, R_CONTENT, R_SCORE)
+			VALUES
+				(SEQ_REVIEW_NUM.nextval, #{m_id}, #{p_num}, #{r_content}, #{r_score})
+	
+	</insert>
+
+</mapper>

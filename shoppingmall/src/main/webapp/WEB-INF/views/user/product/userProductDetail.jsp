@@ -12,8 +12,7 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.88.1">
     <title>PsaMall</title>
-
-
+    
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -29,6 +28,19 @@
           font-size: 3.5rem;
         }
       }
+      
+	/*상품 후기 별 평점*/	
+	/*별점 기본 스타일*/  
+	#star_r_score a.r_score {
+		font-size: 22px;
+		text-decoration: none;
+		color: lightgray;
+	}
+	/*별점 클릭 시 jquery의 addClass(), removeClass()메소드를 이용하여 사용하여 색 변경
+	.on을 클래스로! */
+	#star_r_score a.r_score.on {
+		color: black;
+	}
     </style>
 
     
@@ -37,6 +49,13 @@
     
     <!-- bootstrap 버전 및 여러 파일들 -->
 	<%@include file="/WEB-INF/views/include/common.jsp" %>
+	
+	<!-- Tab 기능 -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
+	<!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+	
   </head>
   <body>
     
@@ -67,8 +86,35 @@
       </div>
       <div class="row">
       	<div class="col text-center">     	
-      	</div>
+      	</div>      
+      </div>
       
+      <!-- 상품 상세정보 및 리뷰 탭 -->
+      <div class="row">
+      	<div class="col-12">
+      		<div id="productDetailTabs">
+			  <ul>
+			    <li><a href="#productDetailInfo">상세정보</a></li>
+			    <li><a href="#productDetailReview">상품리뷰</a></li>
+			    <li><a href="#tabs-3">QnA</a></li>
+			  </ul>
+			  <div id="productDetailInfo">
+			    <p>${productVO.p_detail}</p>
+			  </div>
+			  <div id="productDetailReview">
+			    <div class="col-6">
+			    	REVIEW
+			    </div>
+			    <div class="col-6">
+			    	<button type="button" id="btnReview" class="btn btn-info">상품 리뷰 쓰기</button>
+			    </div>
+			  </div>
+			  <div id="tabs-3">
+			    <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
+			    <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+			  </div>
+			</div>
+      	</div>
       </div>
     </div>  
 
@@ -125,6 +171,42 @@
 	    </div>
 	  </div>
 	</div>
+	
+	<!-- 리뷰 작성할 모달 -->
+	<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">상품 후기</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <form>
+	          <div class="form-group">
+	            <label for="recipient-name" class="col-form-label">상품평점:</label>
+	            <p id="star_r_score">
+	            	<a href="r_score">★</a>
+	            	<a href="r_score">★</a>
+	            	<a href="r_score">★</a>
+	            	<a href="r_score">★</a>
+	            	<a href="r_score">★</a>
+	            </p>
+	          </div>
+	          <div class="form-group">
+	            <label for="r_content" class="col-form-label">리뷰내용:</label>
+	            <textarea class="form-control" id="r_content"></textarea>
+	          </div>
+	        </form>
+	      </div>
+	      <div class="modal-footer">		        
+	        <button type="button" id="btnReviewWrite" class="btn btn-primary btnReview">상품 리뷰 저장</button>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 	<script>
 
@@ -149,6 +231,26 @@
 						}
 					}
 				});
+			});
+			
+			//jQuery-ui 탭기능
+			$("#productDetailTabs").tabs();
+			
+			//상품 리뷰 쓰기 버튼 클릭
+			$("button#btnReview").on("click", function(){
+
+				$("#reviewModal").modal('show');
+			});
+			
+			//평점 별 클릭시 색상 변경
+			$("#star_r_score a.r_score").on("click", function(e){
+				
+				e.preventDefault();
+	
+				$(this).parent().children().removeClass("on"); 
+				//별 선택시 클래스에 추가되어 있던 on 선택자를 제거(처음에는 제거할 on선택자가 없지만 다시 별을 선택하게 되면 on선택자 제거해야 함)
+				$(this).addClass("on").prevAll("a").addClass("on"); 
+				//제거된 on선택자를 선택한 별의 태그에 on선택자를 추가하고, 그 이전 a태그에 on선택자를 다시 추가
 			});
 		});
 	</script>
