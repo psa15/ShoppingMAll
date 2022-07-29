@@ -187,11 +187,11 @@
 	          <div class="form-group">
 	            <label for="recipient-name" class="col-form-label">상품평점:</label>
 	            <p id="star_r_score">
-	            	<a href="r_score">★</a>
-	            	<a href="r_score">★</a>
-	            	<a href="r_score">★</a>
-	            	<a href="r_score">★</a>
-	            	<a href="r_score">★</a>
+	            	<a class="r_score" href="#">★</a>
+	            	<a class="r_score" href="#">★</a>
+	            	<a class="r_score" href="#">★</a>
+	            	<a class="r_score" href="#">★</a>
+	            	<a class="r_score" href="#">★</a>
 	            </p>
 	          </div>
 	          <div class="form-group">
@@ -251,6 +251,61 @@
 				//별 선택시 클래스에 추가되어 있던 on 선택자를 제거(처음에는 제거할 on선택자가 없지만 다시 별을 선택하게 되면 on선택자 제거해야 함)
 				$(this).addClass("on").prevAll("a").addClass("on"); 
 				//제거된 on선택자를 선택한 별의 태그에 on선택자를 추가하고, 그 이전 a태그에 on선택자를 다시 추가
+			});
+
+			//상품 리뷰 저장 버튼 클릭
+			$("#btnReviewWrite").on("click", function(){
+				
+				//리뷰 저장할 때 필요한 정보들 - r_score, r_content, p_num, m_id
+				let r_score = 0;
+				let r_content = $("#r_content").val();
+				let p_num = $("#p_num").val();
+
+				$("#star_r_score a.r_score").each(function(index, item){
+
+					if($(this).attr("class") == 'r_score on') {
+						r_score += 1;
+					}
+				});
+				console.log("별 평점: " + r_score);
+
+				if(r_score == 0) {
+					alert("별점을 선택해 주세요");
+					return;
+				}
+
+				if(r_content == "") {
+					alert("상품 후기를 작성해 주세요.");
+					return;
+				}
+
+				let data = JSON.stringify({ r_score : r_score, r_content : r_content, p_num : p_num });
+				$.ajax({
+					url: '/user/review/addReview',
+					data: data,
+					dataType: 'text',
+					method: 'post',
+					headers: {
+						"Content-type" : "application/json", "X-HTTP-Method_Override" : "POST"
+					},
+					success: function(result){
+						if(result == "success") {
+							alert("상품 후기가 등록되었습니다.");
+
+							let url = "/user/review/reviewList/" + $("#p_num").val() + "/1";
+							//상품 후기 목록
+							$.getJSON(url, function(data){
+								console.log("목록: " + data.list[0].r_num);
+								console.log("페이지 정보: " + data.pageMaker.startPage);
+							});
+
+							//후기가 등록되고 초기화
+							$("#reviewModal").modal('hide');
+							$("#star_r_score a.r_score").parent().children().removeClass("on"); 
+							$("#r_content").val("");
+						}
+					}
+				});
 			});
 		});
 	</script>

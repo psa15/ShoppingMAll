@@ -12,5 +12,37 @@
 				(SEQ_REVIEW_NUM.nextval, #{m_id}, #{p_num}, #{r_content}, #{r_score})
 	
 	</insert>
+	
+	<!-- 리뷰 목록 불러오기 + 페이징(검색은 X) -->
+	<select id="getReviewList" resultType="com.psamall.domain.ReviewVO">
+	
+	<![CDATA[
+		SELECT 
+			RN, R_NUM, M_ID, P_NUM, R_CONTENT, R_SCORE, R_REGDATE
+		FROM(
+		    SELECT 
+		    	/*+ INDEX_DESC(TBL_REVIEW PK_REVIEW) */ 
+		    	ROWNUM RN,  R_NUM, M_ID, P_NUM, R_CONTENT, R_SCORE, R_REGDATE
+		    FROM 
+				TBL_REVIEW
+		    WHERE
+				P_NUM = #{p_num} AND ROWNUM <= #{cri.pageNum} * #{cri.amount}
+		)
+		WHERE RN > (#{cri.pageNum}-1) * #{cri.amount}	
+		]]>
+	
+	</select>
+	
+	<!-- 총 리뷰 개수 -->
+	<select id="totalReviewCount" resultType="int">
+	
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_REVIEW
+		WHERE
+			P_NUM = #{p_num}
+	
+	</select>
 
 </mapper>
