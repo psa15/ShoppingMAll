@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -28,10 +29,8 @@
           font-size: 3.5rem;
         }
       }
-      
-
     </style>
-    
+
     
     <!-- Custom styles for this template -->
     <link href="/css/album.css" rel="stylesheet">
@@ -43,52 +42,85 @@
     
 <header>
 	<%@include file="/WEB-INF/views/include/header.jsp" %>
-	<!-- 카테고리 -->
-	
 </header>
 
-<main role="main" style="margin-top: 90px">
+<main role="main">
 
   <section class="jumbotron text-center">
     <div class="container">
-      <h1>슬라이드 이미지</h1>
+      <h1>질문</h1>
     </div>
   </section>
 
+  <!-- Main content -->
+    <section class="content container-fluid">
 
-  <div class="album py-5 bg-light">
-    <div class="container">
-      <h4 class="text-center">New</h4>
       <div class="row">
-      	<c:forEach items="${productList }" var="productVO">
-	        <div class="col-md-4"> <%-- col-md-4가 3개여서 한 페이지에 세 줄의 사진이 보여짐 --%>
-	          <div class="card mb-4 shadow-sm">
-	            <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-	            <!-- 상품 이미지 -->
-				  <a class="move" href="${productVO.p_num}">
-				    <img src="/user/product/displayFile?folderName=${productVO.p_image_folder}&fileName=s_${productVO.p_image}" 
-							 alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image.png'">
-					</a>
-	            <div class="card-body">
-	              <p class="card-text">
-	              	${productVO.p_name}<br>
-	              	${productVO.p_company}<br>
-	              	<fmt:setLocale value="ko_kr"/><fmt:formatNumber type="number" maxFractionDigits="3" value="${productVO.p_cost}"></fmt:formatNumber>
-	              	<%-- maxFractionDigits="3" : 3자리마다 ,(콤마) 삽입 --%>
-	              </p>
-	              <div class="d-flex justify-content-between align-items-center">
-	                <div class="btn-group">
-	                  <button type="button" data-p_num="${productVO.p_num}" name="btnBuyCart" class="btn btn-sm btn-outline-secondary">구매 & 장바구니</button>
-	                </div>
-	                <small class="text-muted">후기</small>
-	              </div>
-	            </div>
-	          </div>
-	        </div>
-        </c:forEach>          
+      	<div class="col-md-12">
+      	<form id="productForm" method="post" action="addProduct" enctype="multipart/form-data">
+      		<div class="box box-primary">
+      			<div class="box-header">
+      				
+      			</div>
+      			<div class="box-body">      				
+					 <div class="form-group row">
+						<label for="category" class="col-sm-2 col-form-label">문의 주제</label>					  
+					    <div class="col-sm-10">
+					      <select id="firstCategory" name="f_ct_code">
+					      	<option>상품 문의 </option>
+					      	<option>기타 문의 </option>
+					      	<option>배송 전 취소 및 변경 문의 </option>
+					      	<option>교환 및 환불 문의 </option>
+					      </select>
+					    </div>					    
+					  </div>
+					  <div class="form-group row">  				  
+					    <label for="p_detail" class="col-sm-2 col-form-label">질문 내용</label>
+					    <div class="col-sm-10">
+					      <textarea class="form-control" name="p_detail" rows="3"></textarea>					     
+					    </div>
+					  </div>					  
+					  <div class="form-group row">
+					    <label for="uploadFile" class="col-sm-2 col-form-label">상품 이미지1</label>
+					    <div class="col-sm-10">
+					      <input type="file" class="form-control" id="uploadFile1" name="uploadFile">					     
+					    </div>
+					  </div>
+					  <div class="form-group row">
+					    <label for="uploadFile" class="col-sm-2 col-form-label">상품 이미지2</label>
+					    <div class="col-sm-10">
+					      <input type="file" class="form-control" id="uploadFile2" name="uploadFile">					     
+					    </div>
+					  </div>
+					  <div class="form-group row">
+					    <label for="uploadFile" class="col-sm-2 col-form-label">상품 이미지3</label>
+					    <div class="col-sm-10">
+					      <input type="file" class="form-control" id="uploadFile3" name="uploadFile">					     
+					    </div>
+					  </div>					  
+					  <div class="form-group row">
+					    <label for="pw" class="col-sm-2 col-form-label">비밀번호</label>
+					    <div class="col-sm-10">
+					      <input type="password" class="form-control" id="uploadFile3" name="pw">					     
+					    </div>
+					  </div>
+				</div>					
+      		</div>
+      		<div class="box-footer">
+				<div class="form-group">
+					<ul class="uploadedList"></ul>
+				</div>
+				<div class="form-group">
+					<div class="text-center">
+						<button type="submit" class="btn btn-dark text-center" id="btnProduct">취소</button>
+						<button type="submit" class="btn btn-dark text-center" id="btnProduct">저장</button>
+					</div>
+				</div> 
+			</div>     			
+      	</form>
+      	</div>      
       </div>
-    </div>
-  </div>
+    </section>
 
 </main>
 
@@ -143,7 +175,7 @@
 	    </div>
 	  </div>
 	</div>
-	
+
 	<script>
 
 		$(function(){
@@ -225,7 +257,8 @@
 		});
 	</script>
 
-<!--     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<!-- bootstrap에 포함되어 있던 스크립트, 없어도 영향이 없어서 주석처리 
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="/docs/4.6/assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
     --> <!-- <script src="/docs/4.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script> -->
 
