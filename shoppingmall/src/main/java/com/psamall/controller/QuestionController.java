@@ -18,4 +18,10 @@ public class QuestionController {
 	public void userQuestion(HttpSession session) {
 		
 	}
+	
+	//질문 리스트
+	@GetMapping("/userQuestionList")
+	public void userQuestionList() {
+		
+	}
 }

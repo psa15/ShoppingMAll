@@ -48,101 +48,30 @@
 
   <section class="jumbotron text-center">
     <div class="container">
-      <h1>CART</h1>
+      <h1>질문</h1>
     </div>
   </section>
 
  <div class="container">
-		<div class="row">
-	      	<div class="col-md-12">      	
-	      		<div class="box box-primary">
-	      			<div class="box-header">
-	      				LIST CART     
-	      			</div>	
-	      			<div class="box-body">	      				
-					  <table class="table table-hover" id="tblCartList">
-						  <thead>
-						    <tr>
-						      <th scope="col">제품</th>
-						      <th scope="col">수량</th>
-						      <th scope="col">배송비</th>
-						      <th scope="col">가격</th>						      
-						      <th scope="col">적립</th>
-						      <th scope="col">취소</th>
-						    </tr>
-						  </thead>
-						  <tbody>
-						  <c:forEach items="${cartList}" var="cartVO">
-						  <c:set var="price" value="${cartVO.cart_amount * cartVO.p_cost}"></c:set>
-						    <tr>	
-						      <!-- 제품 : 이미지 및 상품이름 -->				      
-						      <td>						      	
-						      	<a class="move" href="${cartVO.p_num}">
-						      		<img src="/user/product/displayFile?folderName=${cartVO.p_image_folder}&fileName=s_${cartVO.p_image}" 
-						      		alt="" style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image.png'">
-						      		<c:out value="${cartVO.p_name}" />
-						      	</a>
-						      </td>
-						      <!-- 수량 -->
-						      <td>
-						      	<input type="number" name="cart_amount" value='<c:out value="${cartVO.cart_amount}" />'>
-								<input type="hidden" name="p_cost" value="${cartVO.p_cost}">
-						      	<button type="button" name="btnCartAmountChange" data-cart_code="${cartVO.cart_code}" class="btn btn-link">수량변경</button>
-						 
-						      </td>
-						      <!-- 배송비 -->	
-						      <td>
-						      	[기본배송]
-						      </td>	
-								<!-- 상품 가격 * 수량 -->				      
-							  <td>
-								<span class="unitPrice">						      	
-									<fmt:formatNumber type="number" maxFractionDigits="3" value="${price}" />
-								</span>
-							  </td>						  
-						      <!-- 적립 -->
-						      <td>
-						      	<c:out value="${cartVO.m_point}" />
-						      </td>
-						      <!-- 삭제 -->
-						      <td>
-			                    <input type="hidden" name="p_image_dateFolder" value="${cartVO.p_image_folder}">
-			                    <input type="hidden" name="p_image" value="${cartVO.p_image}">
-			                    <button type="button" name="btnCartDelete" data-cart_code="${cartVO.cart_code}" class="btn btn-link">삭제</button></td>
-						    </tr>
-						    <c:set var="sum" value="${sum + price}"></c:set>
-						   </c:forEach>					   
-						  </tbody>
-						  <tfoot>
-							<tr>
-								<c:if test="${!empty cartList}">
-									<td colspan="6" style="text-align: right"> 
-										총 구매 금액: <span id="cartTotalPrice"><fmt:formatNumber type="number" maxFractionDigits="3" value="${sum}" /></span>
-									</td>
-								</c:if>
-								<c:if test="${empty cartList}">
-									<td colspan="6" style="text-align: right"> 
-										장바구니가 비었습니다.
-									</td>
-								</c:if>
-							</tr>
-						  </tfoot>
-						</table>							
-	      			</div>
-	      			<div class="box-footer text-center">
-	      				<c:if test="${!empty cartList}">
-							<button type="button" name="btnClearCart" class="btn btn-primary">장바구니 비우기</button>
-							<button type="button" name="btnShopping"  class="btn btn-primary">계속 쇼핑하기</button>
-							<button type="button" name="btnOrder"  class="btn btn-primary">주문하기</button>
-						</c:if>
-						<c:if test="${empty cartList}">
-							<button type="button" name="btnShopping"  class="btn btn-primary">쇼핑하기</button>
-						</c:if>
-				    </div>		
-	      		</div>     
-	      	</div>      
-	      </div>
-		</div>
+	<div class="row">          
+       	<div class = "col-6">
+  			<!-- 상품 이미지 -->
+      		<img src="/user/product/displayFile?folderName=${productVO.p_image_folder}&fileName=${productVO.p_image}" 
+					alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image.png'">
+      	</div>
+      	<div class = "col-6">
+      		<!-- 상품 이미지 필드 정보 -->
+      		<h5>${productVO.p_name}</h5>
+      		<p>판매가격: <fmt:formatNumber type="number" maxFractionDigits="3" value="${productVO.p_cost}" /></p>
+      		<p>
+      			<input type="hidden" id="p_num" value="${productVO.p_num}">
+      			수량: <input type="number" id="p_amount" min="1" value="1">
+      		</p>
+      		<button type="button" id="btnOrder"  class="btn btn-primary">구매하기</button>
+			<button type="button" id="btnCart"  class="btn btn-primary">장바구니</button>
+      	</div>
+      </div>
+	</div>
 </main>
 
 <footer class="text-muted">

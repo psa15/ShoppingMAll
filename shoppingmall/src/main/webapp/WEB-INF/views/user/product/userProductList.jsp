@@ -65,7 +65,7 @@
 	            <!-- 상품 이미지 -->
 				  <a class="move" href="${productVO.p_num}">
 				    <img src="/user/product/displayFile?folderName=${productVO.p_image_folder}&fileName=s_${productVO.p_image}" 
-							 alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image.png'">
+							 alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image_found.png'">
 					</a>
 	            <div class="card-body">
 	              <p class="card-text">
