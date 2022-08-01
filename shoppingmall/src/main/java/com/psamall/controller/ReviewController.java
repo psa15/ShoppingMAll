@@ -56,9 +56,11 @@ public class ReviewController {
 		ResponseEntity<Map<String, Object>> entity = null;
 		
 		Map<String, Object> map = new HashMap<String, Object>();
+				
+		Criteria cri = new Criteria();
+		cri.setPageNum(page);
 		
 		//목록 불러오기
-		Criteria cri = new Criteria();
 		List<ReviewVO> list = reviewSerice.getReviewList(p_num, cri);
 		map.put("list", list);
 		
