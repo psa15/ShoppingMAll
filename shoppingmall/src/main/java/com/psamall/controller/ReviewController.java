@@ -9,7 +9,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,6 +71,35 @@ public class ReviewController {
 		map.put("pageMaker", pageMaker);
 		
 		entity = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+		
+		return entity;
+	}
+	
+	//리뷰 수정하기
+	@PatchMapping("/updateReview")
+	public ResponseEntity<String> updateReview(@RequestBody ReviewVO vo, HttpSession session){
+		
+		ResponseEntity<String> entity = null;
+		
+		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
+		vo.setM_id(m_id);
+		
+		reviewSerice.updateReview(vo);
+		
+		entity = new ResponseEntity<String>("success", HttpStatus.OK);
+		
+		return entity;
+	}
+	
+	//리뷰 삭제하기
+	@DeleteMapping("/deleteReview/{r_num}")
+	public ResponseEntity<String> deleteReview(@PathVariable("r_num") Integer r_num){
+		
+		ResponseEntity<String> entity = null;
+				
+		reviewSerice.deleteReview(r_num);
+		
+		entity = new ResponseEntity<String>("success", HttpStatus.OK);
 		
 		return entity;
 	}

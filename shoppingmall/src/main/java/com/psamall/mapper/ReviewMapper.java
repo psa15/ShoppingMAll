@@ -17,4 +17,10 @@ public interface ReviewMapper {
 	
 	//총 리뷰 개수
 	int totalReviewCount(Integer p_num);
+	
+	//리뷰 수정
+	void updateReview(ReviewVO vo);
+	
+	//리뷰 삭제
+	void deleteReview(Integer r_num);
 }

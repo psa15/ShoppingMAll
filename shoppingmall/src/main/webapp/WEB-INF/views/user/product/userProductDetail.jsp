@@ -63,11 +63,20 @@
 		{{#each .}}
 		<div class="list-group">    
 			<div class="d-flex w-100 justify-content-between">
-				<h6 class="mb-1">{{idfourdisplay m_id}}</h6>
-				<small>평점: {{displayStar r_score}}</small>
+				<h6 class="mb-1">{{idDisplay m_id}}</h6>
+				<p>
+					<small>평점: {{displayStar r_score}}</small>
+					{{reviewModify m_id r_num}}
+					<input type="hidden" name="r_score" value="{{r_score}}">
+				</p>
 			</div>
-			<p class="mb-1">{{r_content}}</p>
-			<small>{{prettifyDate r_regdate}}</small>				   
+			<div class="d-flex w-100 justify-content-between">
+				<p class="mb-1"><span class="r_content">{{r_content}}</span></p>
+				<p>
+					<small>{{prettifyDate r_regdate}}</small>
+					{{reviewDelete m_id r_num}}
+				</p>
+			</div>								   
 		</div>
 		<hr>
 		{{/each}}
@@ -225,11 +234,13 @@
 	          <div class="form-group">
 	            <label for="r_content" class="col-form-label">리뷰내용:</label>
 	            <textarea class="form-control" id="r_content"></textarea>
+				<input type="hidden" name="r_num" id="r_num">
 	          </div>
 	        </form>
 	      </div>
 	      <div class="modal-footer">		        
 	        <button type="button" id="btnReviewWrite" class="btn btn-primary btnReview">상품 리뷰 저장</button>
+			<button type="button" id="btnReviewModify" class="btn btn-primary btnReview">상품 리뷰 수정</button>
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
@@ -266,6 +277,9 @@
 			
 			//상품 리뷰 쓰기 버튼 클릭
 			$("button#btnReview").on("click", function(){
+
+				$(".btnReview").hide();
+				$("#btnReviewWrite").show();
 
 				$("#reviewModal").modal('show');
 			});
@@ -335,6 +349,129 @@
 					}
 				});
 			});
+
+			//상품 후기 수정 버튼
+			$("div#reviewListResult").on("click", "p a.reviewModify", function(e){
+				e.preventDefault();
+
+				//상품 후기 수정 모달상자 버튼
+				$(".btnReview").hide();
+				$("#btnReviewModify").show();
+
+				//상품 후기 수정하기로 변경
+				$(".modal-title").html("상품 후기 수정하기");
+
+				//후기 불러오기
+				let r_score = $(this).parents("div.list-group").find("p input[name='r_score']").val();
+				let r_content = $(this).parents("div.list-group").find("p span.r_content").html();
+				let r_num = $(this).attr("href");
+
+				$("textarea#r_content").val(r_content);
+				$("input#r_num").val(r_num);
+
+				$("#star_r_score a.r_score").each(function(index, item){
+					
+					if(index < r_score) {
+						//r_score보다 index가 작으면 $("#star_r_score a.r_score")의 class속성에 on 추가
+						$(item).addClass('on');
+					} else {
+						$(item).removeClass('on');
+					}
+				});
+
+				$("#reviewModal").modal('show');
+
+			});
+
+			//상품 후기 수정 모달에서 '상품 리뷰 수정' 버튼 클릭시
+			$("#btnReviewModify").on("click", function(){
+				
+				//리뷰 저장할 때 필요한 정보들 - r_score, r_content, p_num, m_id
+				let r_score = 0;
+				let r_content = $("#r_content").val();
+				let r_num = $("#r_num").val();
+
+				$("#star_r_score a.r_score").each(function(index, item){
+
+					if($(this).attr("class") == 'r_score on') {
+						r_score += 1;
+					}
+				});
+				// console.log("별 평점: " + r_score);
+
+				if(r_score == 0) {
+					alert("별점을 선택해 주세요");
+					return;
+				}
+
+				if(r_content == "") {
+					alert("상품 후기를 작성해 주세요.");
+					return;
+				}
+
+				let data = JSON.stringify({ r_score : r_score, r_content : r_content, r_num : r_num });
+				$.ajax({
+					url: '/user/review/updateReview',
+					data: data,
+					dataType: 'text',
+					method: 'patch',
+					headers: {
+						"Content-type" : "application/json", "X-HTTP-Method_Override" : "PATCH"
+					},
+					success: function(result){
+						if(result == "success") {
+							alert("상품 후기가 수정되었습니다.");
+
+							//상품 후기 목록
+							url = "/user/review/reviewList/" + $("#p_num").val() + "/" + reviewPage;
+
+							getPage(url);
+
+							//후기가 수정되고 초기화
+							$("#reviewModal").modal('hide');
+							$("#star_r_score a.r_score").parent().children().removeClass("on"); 
+							$("#r_content").val("");
+						}
+					}
+				});
+			});
+
+			//상품 후기 삭제
+			$("div#reviewDelete").on("click", "p a.reviewModify", function(e){
+				e.preventDefault();
+
+				if(!confirm("상품 후기를 삭제하시겠습니까?")) {
+					return;
+				}
+
+				let r_num = $("#r_num").val();
+
+				$.ajax({
+					url: '/user/review/deleteReview/' + r_num,
+					dataType: 'text',
+					method: 'patch',
+					headers: {
+						"Content-type" : "application/json", "X-HTTP-Method_Override" : "PATCH"
+					},
+					success: function(result){
+						if(result == "success") {
+							alert("상품 후기가 삭제되었습니다.");
+
+							//상품 후기 목록
+							url = "/user/review/reviewList/" + $("#p_num").val() + "/" + reviewPage;
+
+							getPage(url);
+
+							//후기가 수정되고 초기화
+							$("#star_r_score a.r_score").parent().children().removeClass("on"); 
+							$("#r_content").val("");
+						}
+					}
+				});
+				
+
+			});
+
 		});
 
 		let reviewPage = 1;
@@ -417,9 +554,33 @@
 		});
 
 		// 아이디 4글자만 보여주기
-		Handlebars.registerHelper("idfourdisplay", function(userid){
+		Handlebars.registerHelper("idDisplay", function(userid){
 
 			return userid.substring(0, 4) + "*****";
+		});
+
+		//후기를 작성한 사용자만 후기를 수정 및 삭제할 수 있게
+		//수정
+		Handlebars.registerHelper("reviewModify", function(reviewWriter, r_num){
+			let result = "";
+			let loginId = "${sessionScope.loginStatus.m_id}";
+
+			if(reviewWriter == loginId) {
+				result = "<a class='reviewModify' href='" + r_num + "'>[수정하기]</a>";
+			}
+
+			return new Handlebars.SafeString(result);
+		});
+		//삭제
+		Handlebars.registerHelper("reviewDelete", function(reviewWriter, r_num){
+			let result = "";
+			let loginId = "${sessionScope.loginStatus.m_id}";
+
+			if(reviewWriter == loginId) {
+				result = "<a class='reviewDelete' href='" + r_num + "'>[삭제하기]</a>";
+			}
+
+			return new Handlebars.SafeString(result);
 		});
 
 		//상품후기 페이징 함수

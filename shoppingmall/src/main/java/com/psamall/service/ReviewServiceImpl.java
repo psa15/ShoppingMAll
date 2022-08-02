@@ -34,6 +34,19 @@ public class ReviewServiceImpl implements ReviewService {
 	public int totalReviewCount(Integer p_num) {
 		return reviewMapper.totalReviewCount(p_num);
 	}
+
+	//리뷰 수정
+	@Override
+	public void updateReview(ReviewVO vo) {
+		reviewMapper.updateReview(vo);
+	}
+
+	//리뷰 삭제
+	@Override
+	public void deleteReview(Integer r_num) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }
