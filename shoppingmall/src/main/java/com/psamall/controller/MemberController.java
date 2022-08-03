@@ -33,10 +33,10 @@ public class MemberController {
 
 	
 	@Setter(onMethod_ = {@Autowired})  
-	private MemberService memService;
+	private MemberService memberService;
 	
 	@Setter(onMethod_ = {@Autowired})  
-	private EmailService eService;
+	private EmailService emailService;
 	
 	@Setter(onMethod_ = {@Autowired})
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -68,7 +68,7 @@ public class MemberController {
 			vo.setM_authcode("Y");
 		}
 		
-		memService.join(vo);
+		memberService.join(vo);
 		
 		return "/member/login";
 	}
@@ -83,7 +83,7 @@ public class MemberController {
 		//아이디 존재 여부 작업(중복확인)
 		String isUsedID = "";
 		
-		if(memService.idCheck(m_id) != null) {
+		if(memberService.idCheck(m_id) != null) {
 			
 			isUsedID = "no"; //중복되는 아이디가 없으므로 사용 가능
 			
@@ -131,7 +131,7 @@ public class MemberController {
 		//throws Exception : db작업이 들어가므로
 		
 		//로그인 정보 인증 작업
-		MemberVO vo = memService.login_ok(dto); //vo에는 사용자가 입력한 아이디에 해당하는 회원정보들이 저장
+		MemberVO vo = memberService.login_ok(dto); //vo에는 사용자가 입력한 아이디에 해당하는 회원정보들이 저장
 		
 		//이동할 주소
 		String url = "";
@@ -189,7 +189,7 @@ public class MemberController {
 		log.info("이름: " + m_name);
 		log.info("이메일: " + m_email);
 		
-		String userid = memService.searchId(m_name, m_email);
+		String userid = memberService.searchId(m_name, m_email);
 		log.info("사용자 아이디: " + userid);
 						
 		String url = "";
@@ -216,7 +216,7 @@ public class MemberController {
 	public String sendNewPw(@RequestParam("m_id") String m_id, @RequestParam("m_email") String m_email, 
 							Model model, RedirectAttributes rttr) {
 		
-		String db_m_id = memService.sendNewPw(m_id, m_email);
+		String db_m_id = memberService.sendNewPw(m_id, m_email);
 		String temp_m_passwd = "";
 		String url = "";
 		
@@ -227,13 +227,13 @@ public class MemberController {
 			temp_m_passwd = uuid.toString().substring(0, 6);
 			
 			//임시비밀번호를 암호화하여 저장
-			memService.updateTempPw(m_id, bCryptPasswordEncoder.encode(temp_m_passwd));
+			memberService.updateTempPw(m_id, bCryptPasswordEncoder.encode(temp_m_passwd));
 			
 			//메일보내기
 			EmailDTO dto = new EmailDTO("PsaMall", "PsaMall", m_email, "PSA Mall 임시비밀번호 입니다.", "");
 			try {
 				
-				eService.sendMail(dto, temp_m_passwd);
+				emailService.sendMail(dto, temp_m_passwd);
 				model.addAttribute("mail", "mail");
 				url = "/member/searchId";
 				
@@ -262,7 +262,7 @@ public class MemberController {
 		LoginDTO dto = new LoginDTO(m_id, m_passwd);
 		
 		//로그인 정보 인증 작업
-		MemberVO vo = memService.login_ok(dto);
+		MemberVO vo = memberService.login_ok(dto);
 		
 		//이동할 주소
 		String url = "";
@@ -290,7 +290,7 @@ public class MemberController {
 		
 		LoginDTO dto = new LoginDTO(m_id, ""); //아이디만 사용
 		
-		MemberVO vo = memService.login_ok(dto);
+		MemberVO vo = memberService.login_ok(dto);
 		
 		model.addAttribute("memberVO", vo);
 	}
@@ -319,7 +319,7 @@ public class MemberController {
 			vo.setM_email_accept("N");
 		}
 		
-		memService.updateModify(vo);
+		memberService.updateModify(vo);
 		
 		return "redirect:/";
 	}

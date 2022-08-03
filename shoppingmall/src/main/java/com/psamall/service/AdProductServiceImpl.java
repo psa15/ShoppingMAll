@@ -16,54 +16,54 @@ import lombok.Setter;
 public class AdProductServiceImpl implements AdProductService {
 
 	@Setter(onMethod_ = {@Autowired})
-	private AdProductMapper adPMapper;
+	private AdProductMapper adProductMapper;
 	
 	//1차 카테고리 불러오기
 	@Override
 	public List<CatetgoryVO> firstCateList() {
-		return adPMapper.firstCateList();
+		return adProductMapper.firstCateList();
 	}
 
 	//2차 카테고리 불러오기
 	@Override
 	public List<CatetgoryVO> secondCateList(Integer firstCategoryCode) {
-		return adPMapper.secondCateList(firstCategoryCode);
+		return adProductMapper.secondCateList(firstCategoryCode);
 	}
 
 	//상품등록 폼의 정보 저장
 	@Override
 	public void insertProduct(ProductVO vo) {
-		adPMapper.insertProduct(vo);
+		adProductMapper.insertProduct(vo);
 	}
 
 	//상품목록
 	@Override
 	public List<ProductVO> getProductList(Criteria cri) {
-		return adPMapper.getProductList(cri);
+		return adProductMapper.getProductList(cri);
 	}
 
 	//페이징을 위한 전체 데이터 수
 	@Override
 	public int getProductTotalCount(Criteria cri) {
-		return adPMapper.getProductTotalCount(cri);
+		return adProductMapper.getProductTotalCount(cri);
 	}
 
 	//상품코드를 통해 상품 정보 가져오기 - 상품 수정 폼
 	@Override
 	public ProductVO getProductByPNum(Integer p_num) {
-		return adPMapper.getProductByPNum(p_num);
+		return adProductMapper.getProductByPNum(p_num);
 	}
 
 	//상품 수정 저장
 	@Override
 	public void updateProduct(ProductVO vo) {
-		adPMapper.updateProduct(vo);
+		adProductMapper.updateProduct(vo);
 	}
 
 	//상품 삭제
 	@Override
 	public void deleteProduct(Integer p_num) {
-		adPMapper.deleteProduct(p_num);
+		adProductMapper.deleteProduct(p_num);
 	}
 
 }

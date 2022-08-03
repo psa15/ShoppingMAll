@@ -17,13 +17,13 @@ public class EmailServiceImpl implements EmailService {
 
 	//메일 보내기 위한 객체 생성
 	@Setter(onMethod_ = {@Autowired})
-	private JavaMailSender mailSender;
+	private JavaMailSender emailSender;
 	
 	@Override
 	public void sendMail(EmailDTO dto, String message) {
 		
 		//메일 구성 정보를 답당하는 객체
-		MimeMessage msg = mailSender.createMimeMessage();
+		MimeMessage msg = emailSender.createMimeMessage();
 		
 		try {
 			
@@ -40,7 +40,7 @@ public class EmailServiceImpl implements EmailService {
 			msg.setText(message, "utf-8");
 			
 			//메일 전송
-			mailSender.send(msg);
+			emailSender.send(msg);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -4,11 +4,13 @@
 
 	<!-- 회원가입 정보 저장 -->
 	<insert id="join">
-		INSERT INTO TBL_MEMBER(M_ID, M_NAME, M_PASSWD, M_POSTNUM, M_ADDR, 
-							M_ADDR_D, M_TEL, M_EMAIL, M_EMAIL_ACCEPT, M_AUTHCODE)
-							
-		VALUES(#{m_id}, #{m_name}, #{m_passwd}, #{m_postnum}, #{m_addr}, 
-				#{m_addr_d}, #{m_tel}, #{m_email}, #{m_email_accept}, #{m_authcode})
+		INSERT INTO 
+			TBL_MEMBER
+				(M_ID, M_NAME, M_PASSWD, M_POSTCODE, M_ADDR, 
+					M_ADDR_D, M_TEL, M_EMAIL, M_EMAIL_ACCEPT, M_AUTHCODE)
+			VALUES
+				(#{m_id}, #{m_name}, #{m_passwd}, #{m_postncode}, #{m_addr}, 
+					#{m_addr_d}, #{m_tel}, #{m_email}, #{m_email_accept}, #{m_authcode})
 	</insert>
 	
 	<!-- id 존재 여부 확인 -> 중복확인 -->
@@ -23,7 +25,7 @@
 	<!-- 로그인 정보 인증 작업 -->
 	<select id="login_ok" resultType="com.psamall.domain.MemberVO">
 		
-		SELECT M_ID, M_NAME, M_PASSWD, M_POSTNUM, M_ADDR, 
+		SELECT M_ID, M_NAME, M_PASSWD, M_POSTCODE, M_ADDR, 
 				M_ADDR_D, M_TEL, M_EMAIL, M_EMAIL_ACCEPT, M_POINT, 
 				M_REGDATE, M_UPDATEDATE, M_LASTDATE, M_AUTHCODE
 		FROM TBL_MEMBER
@@ -67,11 +69,7 @@
 	
 	</update>
 	
-	<!-- 회원정보 수정 저장
-		M_ID, M_NAME, M_PASSWD, M_POSTNUM, M_ADDR, M_ADDR_D, M_TEL, M_EMAIL, 
-		M_EMAIL_ACCEPT, M_POINT, M_REGDATE, M_UPDATEDATE, M_LASTDATE, M_AUTHCODE
-		m_id, m_name, m_passwd, m_postnum, m_addr, m_addr_d, m_tel, m_email, 
-		m_email_accept, m_point, m_regdate, m_updatedate, m_lastdate, m_authcode -->
+	<!-- 회원정보 수정 저장 -->
 	<update id="updateModify">
 	
 		UPDATE
@@ -81,7 +79,7 @@
 			<if test="m_passwd != null and !m_passwd.equals('')">
 				M_PASSWD = #{m_passwd},
 			</if>
-			M_POSTNUM = #{m_postnum},
+			M_POSTCODE = #{m_postcode},
 			M_ADDR = #{m_addr},
 			M_ADDR_D = #{m_addr_d},
 			M_TEL = #{m_tel},

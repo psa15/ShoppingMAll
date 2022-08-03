@@ -44,8 +44,7 @@ public class ReviewServiceImpl implements ReviewService {
 	//리뷰 삭제
 	@Override
 	public void deleteReview(Integer r_num) {
-		// TODO Auto-generated method stub
-		
+		reviewMapper.deleteReview(r_num);
 	}
 	
 	

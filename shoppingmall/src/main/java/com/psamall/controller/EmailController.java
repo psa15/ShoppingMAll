@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +21,7 @@ import lombok.extern.log4j.Log4j;
 public class EmailController {
 
 	@Setter(onMethod_ = {@Autowired})
-	private EmailService service;
+	private EmailService emailService;
 	
 	//메일 보내기
 	@GetMapping("/send")
@@ -42,7 +41,7 @@ public class EmailController {
 		//메일 보내기 기능
 		try {
 			
-			service.sendMail(dto, authCode);
+			emailService.sendMail(dto, authCode);
 			entity = new ResponseEntity<String>("success", HttpStatus.OK);
 						
 		} catch (Exception e) {

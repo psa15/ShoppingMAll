@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psamall.mapper.OrderMapper">
+
+	<!-- 주문 페이지 주문 상품 목록 -->
+	<select id="orderCartList" resultType="com.psamall.domain.OrderCartListVO">
+	
+		SELECT
+	        C.CART_CODE, C.P_NUM, C.M_ID, C.CART_AMOUNT,
+	        P. P_NAME, P.P_COST, P.P_DISCOUNT, P.P_COMPANY, P.P_IMAGE, P.P_IMAGE_FOLDER
+		FROM 
+			TBL_CART C INNER JOIN TBL_PRODUCT P
+		ON 
+			C.P_NUM = P.P_NUM
+		WHERE 
+		    C.M_ID = #{m_id}
+	
+	</select>
+
+</mapper>

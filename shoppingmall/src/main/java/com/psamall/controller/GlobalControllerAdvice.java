@@ -17,7 +17,7 @@ import lombok.extern.log4j.Log4j;
 public class GlobalControllerAdvice {
 
 	@Setter(onMethod_ = {@Autowired})
-	private UserProductService userPService;
+	private UserProductService userProductService;
 	//카테고리 메뉴 DB에서 불러오기
 	
 	//1차 카테고리
@@ -26,6 +26,6 @@ public class GlobalControllerAdvice {
 		
 		log.info("1차 카테고리 불러옴");
 		
-		model.addAttribute("firstCateList", userPService.firstCateList());
+		model.addAttribute("firstCateList", userProductService.firstCateList());
 	}
 }

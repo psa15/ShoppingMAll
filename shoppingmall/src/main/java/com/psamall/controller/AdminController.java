@@ -23,7 +23,7 @@ import lombok.extern.log4j.Log4j;
 public class AdminController {
 
 	@Setter(onMethod_ = {@Autowired})
-	private AdminService adService;
+	private AdminService adminService;
 	
 	@Setter(onMethod_ = {@Autowired})
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -37,10 +37,10 @@ public class AdminController {
 	@PostMapping("/adLogin")
 	public String adLogin(AdminVO vo, HttpSession session, RedirectAttributes rttr) {
 		
-		AdminVO db_vo = adService.adLogin(vo);
+		AdminVO db_vo = adminService.adLogin(vo);
 		
 		//관리자 최근 접속 날짜 업데이트
-		adService.updateDate(db_vo.getAdmin_id());
+		adminService.updateDate(db_vo.getAdmin_id());
 		
 		String url = "";
 		

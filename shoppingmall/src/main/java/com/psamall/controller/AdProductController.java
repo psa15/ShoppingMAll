@@ -47,12 +47,12 @@ public class AdProductController {
 	private String uploadPath;
 	
 	@Setter(onMethod_ = {@Autowired})
-	private AdProductService adPService;
+	private AdProductService adProductService;
 	
 	//상품 등록 폼 + 1차 카테고리 불러오기
 	@GetMapping("/addProduct")
 	public void addProduct(Model model) {
-		model.addAttribute("firstCateList", adPService.firstCateList());
+		model.addAttribute("firstCateList", adProductService.firstCateList());
 	}
 	//2차 카테고리 불러오기
 	@ResponseBody
@@ -61,7 +61,7 @@ public class AdProductController {
 		
 		ResponseEntity<List<CatetgoryVO>> entity = null;
 		
-		entity = new ResponseEntity<List<CatetgoryVO>>(adPService.secondCateList(firstCategoryCode), HttpStatus.OK);
+		entity = new ResponseEntity<List<CatetgoryVO>>(adProductService.secondCateList(firstCategoryCode), HttpStatus.OK);
 		
 		return entity;
 	}
@@ -132,7 +132,7 @@ public class AdProductController {
 		//uploadPath : 상품 등록을 위해 주입된 bean
 		
 		//상품 정보 저장
-		adPService.insertProduct(vo);
+		adProductService.insertProduct(vo);
 		
 		return "redirect:/admin/product/productList";
 	}
@@ -142,7 +142,7 @@ public class AdProductController {
 	public void productList(@ModelAttribute("cri") Criteria cri, Model model) {
 		
 		//날짜 폴더의 \를 /로 변환하여 저장
-		List<ProductVO> productList = adPService.getProductList(cri);
+		List<ProductVO> productList = adProductService.getProductList(cri);
 		
 		for(int i=0; i<productList.size(); i++) {
 			String p_image_folder = productList.get(i).getP_image_folder().replace("\\", "/");
@@ -152,7 +152,7 @@ public class AdProductController {
 		//페이징 쿼리에 의한 상품 목록
 		model.addAttribute("productList", productList);		
 		//페이징
-		int totalCount = adPService.getProductTotalCount(cri);
+		int totalCount = adProductService.getProductTotalCount(cri);
 		model.addAttribute("pageMaker", new PageDTO(cri, totalCount));
 	}
 	//상품목록 이미지 불러오기
@@ -173,7 +173,7 @@ public class AdProductController {
 		log.info("검색 및 페이징 정보: " + cri);
 		
 		//상품코드를 통해 상품 정보 가져오기
-		ProductVO vo = adPService.getProductByPNum(p_num);
+		ProductVO vo = adProductService.getProductByPNum(p_num);
 		
 		//첨부했던 이미지 보여주기
 		String p_image_folder = vo.getP_image_folder().replace("\\", "/");
@@ -182,11 +182,11 @@ public class AdProductController {
 		model.addAttribute("productVO", vo);
 		
 		//1차 카테고리 정보 가져오기
-		model.addAttribute("firstCateList", adPService.firstCateList());
+		model.addAttribute("firstCateList", adProductService.firstCateList());
 		
 		//2차 카테고리 정보 가져오기 - 1차 카테고리 참조
 		Integer firstCategoryCode = vo.getF_ct_code();
-		model.addAttribute("secondCateList", adPService.secondCateList(firstCategoryCode));
+		model.addAttribute("secondCateList", adProductService.secondCateList(firstCategoryCode));
 	}
 	//상품 수정 저장
 	@PostMapping("/updateProduct")
@@ -207,7 +207,7 @@ public class AdProductController {
 		//상품 수정
 		log.info("상품 수정 정보: " + vo);
 		
-		adPService.updateProduct(vo);
+		adProductService.updateProduct(vo);
 		
 		return "redirect:/admin/product/productList" + cri.getListLink();
 	}
@@ -220,7 +220,7 @@ public class AdProductController {
 		UploadFileUtils.deleteFile(uploadPath, p_image_folder + "\\s_" + p_image);
 		
 		//db정보 삭제
-		adPService.deleteProduct(p_num);
+		adProductService.deleteProduct(p_num);
 		
 		return "redirect:/admin/product/productList";
 	}

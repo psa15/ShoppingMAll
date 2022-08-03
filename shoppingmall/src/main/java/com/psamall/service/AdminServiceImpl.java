@@ -13,18 +13,18 @@ import lombok.Setter;
 public class AdminServiceImpl implements AdminService {
 
 	@Setter(onMethod_ = {@Autowired})
-	private AdminMapper adMapper;
+	private AdminMapper adminMapper;
 	
 	//관리자 로그인
 	@Override
 	public AdminVO adLogin(AdminVO vo) {
-		return adMapper.adLogin(vo);
+		return adminMapper.adLogin(vo);
 	}
 
 	//관리자 최근 접속 날짜 업데이트
 	@Override
 	public void updateDate(String admin_id) {
-		adMapper.updateDate(admin_id);
+		adminMapper.updateDate(admin_id);
 	}
 
 }

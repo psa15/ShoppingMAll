@@ -36,7 +36,7 @@ public class UserProductController {
 	private String uploadPath;
 	
 	@Setter(onMethod_ = {@Autowired})
-	private UserProductService userPService;
+	private UserProductService userProductService;
 	
 	//1차 카테고리 : GlobalControllerAdvice에서 작업함 -> 생략
 	
@@ -46,7 +46,7 @@ public class UserProductController {
 		
 		ResponseEntity<List<CatetgoryVO>> entity = null;
 		
-		entity = new ResponseEntity<List<CatetgoryVO>>(userPService.secondCateList(ct_code), HttpStatus.OK);
+		entity = new ResponseEntity<List<CatetgoryVO>>(userProductService.secondCateList(ct_code), HttpStatus.OK);
 		
 		return entity;
 	}
@@ -57,7 +57,7 @@ public class UserProductController {
 		
 		cri.setAmount(9);
 		
-		List<ProductVO> productList = userPService.productListBySecondCateCode(ct_code, cri);
+		List<ProductVO> productList = userProductService.productListBySecondCateCode(ct_code, cri);
 		
 		//날짜폴더 \ 변환 작업
 		for(int i=0; i<productList.size(); i++) {
@@ -65,11 +65,11 @@ public class UserProductController {
 			productList.get(i).setP_image_folder(p_image_folder);
 		}
 		
-		model.addAttribute("cateName", userPService.secondCateList(f_ct_code));
+		model.addAttribute("cateName", userProductService.secondCateList(f_ct_code));
 		
 		model.addAttribute("productList", productList);
 		
-		int total = userPService.productTotalCountBySecondCateCode(ct_code, cri);
+		int total = userProductService.productTotalCountBySecondCateCode(ct_code, cri);
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
 		
 		return "/user/product/userProductList";
@@ -94,7 +94,7 @@ public class UserProductController {
 		ResponseEntity<ProductVO> entity = null;
 		
 		//이미지 날짜 폴더 \ 변환
-		ProductVO vo = userPService.getProductDetail(p_num);
+		ProductVO vo = userProductService.getProductDetail(p_num);
 		vo.setP_image_folder(vo.getP_image_folder().replace("\\", "/"));
 		
 		entity = new ResponseEntity<ProductVO>(vo, HttpStatus.OK);
@@ -108,7 +108,7 @@ public class UserProductController {
 		
 		
 		//이미지 날짜 폴더 \ 변환
-		ProductVO vo = userPService.getProductDetail(p_num);
+		ProductVO vo = userProductService.getProductDetail(p_num);
 		vo.setP_image_folder(vo.getP_image_folder().replace("\\", "/"));
 		
 		model.addAttribute("productVO", vo);

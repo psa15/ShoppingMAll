@@ -1,0 +1,253 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>PsaMall</title>
+    
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      
+	/*상품 후기 별 평점*/	
+	/*별점 기본 스타일*/  
+	#star_r_score a.r_score {
+		font-size: 22px;
+		text-decoration: none;
+		color: lightgray;
+	}
+	/*별점 클릭 시 jquery의 addClass(), removeClass()메소드를 이용하여 사용하여 색 변경
+	.on을 클래스로! */
+	#star_r_score a.r_score.on {
+		color: black;
+	}
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="/css/album.css" rel="stylesheet">
+    
+    <!-- bootstrap 버전 및 여러 파일들 -->
+	<%@include file="/WEB-INF/views/include/common.jsp" %>
+	
+	<!-- Tab 기능 -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
+	<!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+	
+
+  </head>
+  <body>
+    
+<header>
+	<%@include file="/WEB-INF/views/include/header.jsp" %>
+</header>
+
+<main role="main">
+
+  <div class="container">
+           
+      <!-- 상품 상세정보 및 리뷰 탭 -->
+      <div class="row">
+      	<div class="col-12">
+      		<div id="productDetailTabs">
+			  <ul>
+			    <li><a href="#recentAddr">최근 배송지</a></li>
+			    <li><a href="#newAddr">직접 입력</a></li>
+			  </ul>
+			  <div id="recentAddr">
+			    <!-- 최근 배송지 불러오기 -->
+			    <c:out value="${sessionScope.loginStatus.m_name }" /><br>
+			    [<c:out value="${sessionScope.loginStatus.m_postcode }" />]
+			    <c:out value="${sessionScope.loginStatus.m_addr} " /> 
+			    <c:out value="${sessionScope.loginStatus.m_addr_d}" /><br>
+			    <c:out value="${sessionScope.loginStatus.m_tel}" />
+			  </div>
+			  <div id="newAddr" class="row">
+			  	<!-- 배송지 목록 -->
+			  	<form action="" method="post" id="">
+			  	  <div class="form-group row">
+			  	  	<input type="radio" name="shipment" value="userInfo">
+					<label for="html">회원 정보와 동일</label>
+					<input type="radio" name="shipment" value="new">
+					<label for="css">새로운 배송지</label>
+			  	  </div>			  	  
+				  <div class="form-group row">
+				    <label for="ord_name" class="col-sm-2 col-form-label">받는 사람</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="ord_name" name="ord_name" value="${sessionScope.loginStatus.m_name }" >
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="ord_tel" class="col-sm-2 col-form-label">휴대폰 번호</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="ord_tel" name="ord_tel" value="${sessionScope.loginStatus.m_tel }" >
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="ord_postcode" class="col-sm-2 col-form-label">주소</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="ord_postcode" name="ord_postcode" value="${sessionScope.loginStatus.m_postcode }" >
+				      <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="ord_addr" class="col-sm-2 col-form-label"></label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="ord_addr" name="ord_addr" value="${sessionScope.loginStatus.m_addr }" >
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="ord_addr_d" class="col-sm-2 col-form-label"></label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="ord_addr_d" name="ord_addr_d" value="${sessionScope.loginStatus.m_addr_d }" >
+				      <input type="hidden" id="extraAddress" placeholder="참고항목">
+				    </div>
+				  </div>				  
+				  <div class="form-group row">
+				    <label for="ord_email" class="col-sm-2 col-form-label">이메일</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="ord_email" name="ord_email" value="${sessionScope.loginStatus.m_email }" >
+				    </div>
+				  </div>	
+				</form>
+				
+				<!-- 메시지 선택 - select태그 -->
+				
+				<!-- 주문 상품 -->
+				<h5>주문 상품</h5>
+				<hr>
+				<c:forEach items="${orderCartList }" var="orderCartListVO">
+					<div class="row">         
+				       	<div class = "col-5">
+				  			<!-- 상품 이미지 -->
+				      		<img src="/user/order/displayFile?folderName=${orderCartListVO.p_image_folder}&fileName=${orderCartListVO.p_image}" 
+									alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image.png'">
+				      	</div>
+				      	<div class = "col-5">
+				      		<!-- 상품 이미지 필드 정보 -->
+				      		<h5>${orderCartListVO.p_name}</h5>
+				      		<p>판매가격: <fmt:formatNumber type="number" maxFractionDigits="3" value="${orderCartListVO.p_cost}" /></p>
+				      		<p>
+				      			<input type="hidden" id="p_num" value="${orderCartListVO.p_num}">
+				      			수량: <c:out value="${orderCartListVO.cart_amount}" />개
+				      		</p>
+				      	</div>
+				      	<!-- x 클릭 시 상품 삭제 -->
+				      	<div class = "col-5">
+				      		<span>X</span>
+				      	</div>
+				      </div>
+			      </c:forEach>
+			  	
+			  </div>
+			</div>
+      	</div>
+      </div>
+    </div>  
+
+</main>
+
+<footer class="text-muted">
+  <%@include file="/WEB-INF/views/include/footer.jsp" %>
+</footer>
+
+	
+
+	<script>
+
+		$(function(){
+
+
+			//jQuery-ui 탭기능
+			$("#productDetailTabs").tabs();			
+
+		});
+
+		
+
+	</script>
+	
+	<%-- 우편번호와 주소 입력 폼 - kakao 우편번호 api 사용 (함수이름이나 id값 변경함)
+    		https://postcode.map.daum.net/guide --%>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+	    function execDaumPostcode() {
+	        new daum.Postcode({
+	            oncomplete: function(data) {
+	                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+	
+	                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+	                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	                var addr = ''; // 주소 변수
+	                var extraAddr = ''; // 참고항목 변수
+	
+	                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+	                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+	                    addr = data.roadAddress;
+	                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+	                    addr = data.jibunAddress;
+	                }
+	
+	                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+	                if(data.userSelectedType === 'R'){
+	                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+	                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+	                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+	                        extraAddr += data.bname;
+	                    }
+	                    // 건물명이 있고, 공동주택일 경우 추가한다.
+	                    if(data.buildingName !== '' && data.apartment === 'Y'){
+	                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	                    }
+	                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+	                    if(extraAddr !== ''){
+	                        extraAddr = ' (' + extraAddr + ')';
+	                    }
+	                    // 조합된 참고항목을 해당 필드에 넣는다.
+	                    document.getElementById("extraAddress").value = extraAddr;
+	                
+	                } else {
+	                    document.getElementById("extraAddress").value = '';
+	                }
+	
+	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+	                document.getElementById('ord_postcode').value = data.zonecode;
+	                document.getElementById("ord_addr").value = addr;
+	                // 커서를 상세주소 필드로 이동한다.
+	                document.getElementById("ord_addr_d").focus();
+	            }
+	        }).open();
+	    }
+	</script>
+
+<!-- bootstrap에 포함되어 있던 스크립트, 없어도 영향이 없어서 주석처리 
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="/docs/4.6/assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+    --> <!-- <script src="/docs/4.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script> -->
+
+
+      
+  </body>
+</html>

@@ -9,13 +9,13 @@ import lombok.Data;
 public class MemberVO {
 	
 	/*
-	 m_id, m_name, m_passwd, m_postnum, m_addr, m_addr_d, m_tel, 
+	 m_id, m_name, m_passwd, m_postcode, m_addr, m_addr_d, m_tel, 
 	 m_email, m_email_accept, m_point, m_regdate, m_updatedate, m_lastdate, m_authcode
 	 */
 	private String m_id; //회원 id
 	private String m_name; //회원 이름
 	private String m_passwd; //회원 비밀번호
-	private String m_postnum; //우편번호(5)
+	private String m_postcode; //우편번호(5)
 	private String m_addr; //기본 주소
 	private String m_addr_d; //상세 주소
 	private String m_tel; //전화번호

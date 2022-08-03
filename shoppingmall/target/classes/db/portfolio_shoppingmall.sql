@@ -1,117 +1,117 @@
 /*
-юш╪╨юз : ╧з╪Ж╬ф
-фМаЩюо : 2022-07-11
-га╥на╖ф╝╦М : ╪Нгн╦Т(╟Ёюн)
-07.07 - бЭа╤е╟ ╪Ёа╓
-07.11 - TBL_MEMBER евюл╨Мюг M_AUTHCODE дц╥Ё цъ╟║
+О©╫ш╪О©╫О©╫О©╫ : О©╫з╪О©╫О©╫О©╫
+О©╫О©╫О©╫О©╫О©╫О©╫ : 2022-07-11
+О©╫О©╫О©╫О©╫О©╫О©╫ф╝О©╫О©╫ : О©╫О©╫О©╫н╦О©╫(О©╫О©╫О©╫О©╫)
+07.07 - О©╫О©╫О©╫О©╫е╟ О©╫О©╫О©╫О©╫
+07.11 - TBL_MEMBER О©╫О©╫О©╫л╨О©╫О©╫О©╫ M_AUTHCODE О©╫ц╥О©╫ О©╫ъ╟О©╫
 */
 
---1. х╦©Ьевюл╨М (MEMBER)
+--1. х╦О©╫О©╫О©╫О©╫О©╫л╨О©╫ (MEMBER)
 CREATE TABLE TBL_MEMBER (
-    M_ID                   VARCHAR2(15)                 CONSTRAINT PK_MEMBER PRIMARY KEY, -- х╦©Ь id
-    M_NAME              VARCHAR2(30)                NOT NULL, -- х╦©Ь юл╦╖
-    M_PASSWD           VARCHAR2(60)                 NOT NULL, --х╦©Ь ╨Я╧п╧Ьхё
-    M_POSTNUM         CHAR(5)                           NOT NULL, --©ЛфМ╧Ьхё
-    M_ADDR               VARCHAR2(100)                NOT NULL, --╠Б╨╩аж╪р
-    M_ADDR_D             VARCHAR2(100)              NOT NULL, --╩С╪╪ аж╪р
-    M_TEL                    VARCHAR2(15)                   NOT NULL, --юЭх╜╧Ьхё
-    M_EMAIL                VARCHAR2(50)                 UNIQUE NOT NULL, --юл╦чюо
-    M_EMAIL_ACCEPT    CHAR(1)                               NOT NULL, --юл╦чюо ╪Ж╫е ©╘╨н
-    M_POINT                 NUMBER  DEFAULT 0           NOT NULL, --юШ╦Ё╠щ
-    M_REGDATE             DATE    DEFAULT SYSDATE    NOT NULL, --╟║ютюо
-    M_UPDATEDATE       DATE    DEFAULT SYSDATE     NOT NULL, --╪Жа╓юо
-    M_LASTDATE            DATE    DEFAULT SYSDATE    NOT NULL, --цж╠ы а╒╪с╫ц╟ё
+    M_ID                   VARCHAR2(15)                 CONSTRAINT PK_MEMBER PRIMARY KEY, -- х╦О©╫О©╫ id
+    M_NAME              VARCHAR2(30)                NOT NULL, -- х╦О©╫О©╫ О©╫л╦О©╫
+    M_PASSWD           VARCHAR2(60)                 NOT NULL, --х╦О©╫О©╫ О©╫О©╫п╧О©╫хё
+    M_POSTCODE         CHAR(5)                           NOT NULL, --О©╫О©╫О©╫О©╫О©╫хё
+    M_ADDR               VARCHAR2(100)                NOT NULL, --О©╫Б╨╩О©╫ж╪О©╫
+    M_ADDR_D             VARCHAR2(100)              NOT NULL, --О©╫О©╫ О©╫ж╪О©╫
+    M_TEL                    VARCHAR2(15)                   NOT NULL, --О©╫О©╫х╜О©╫О©╫хё
+    M_EMAIL                VARCHAR2(50)                 UNIQUE NOT NULL, --О©╫л╦О©╫О©╫О©╫
+    M_EMAIL_ACCEPT    CHAR(1)                               NOT NULL, --О©╫л╦О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+    M_POINT                 NUMBER  DEFAULT 0           NOT NULL, --О©╫О©╫О©╫О©╫О©╫О©╫
+    M_REGDATE             DATE    DEFAULT SYSDATE    NOT NULL, --О©╫О©╫О©╫О©╫О©╫О©╫
+    M_UPDATEDATE       DATE    DEFAULT SYSDATE     NOT NULL, --О©╫О©╫О©╫О©╫О©╫О©╫
+    M_LASTDATE            DATE    DEFAULT SYSDATE    NOT NULL, --О©╫ж╠О©╫ О©╫О©╫О©╫с╫ц╟О©╫
     M_AUTHCODE      CHAR(1) DEFAULT 'N'
 );
---M_ID, M_NAME, M_PASSWD, M_POSTNUM, M_ADDR, M_ADDR_D, M_TEL, M_EMAIL, M_EMAIL_ACCEPT, M_POINT, M_REGDATE, M_UPDATEDATE, M_LASTDATE, M_AUTHCODE
---m_id, m_name, m_passwd, m_postnum, m_addr, m_addr_d, m_tel, m_email, m_email_accept, m_point, m_regdate, m_updatedate, m_lastdate, m_authcode
+--M_ID, M_NAME, M_PASSWD, M_POSTCODE, M_ADDR, M_ADDR_D, M_TEL, M_EMAIL, M_EMAIL_ACCEPT, M_POINT, M_REGDATE, M_UPDATEDATE, M_LASTDATE, M_AUTHCODE
+--m_id, m_name, m_passwd, m_postncode, m_addr, m_addr_d, m_tel, m_email, m_email_accept, m_point, m_regdate, m_updatedate, m_lastdate, m_authcode
 
---2. д╚ев╟М╦╝ евюл╨М(CATEGORY)
+--2. д╚О©╫в╟О©╫ О©╫О©╫О©╫л╨О©╫(CATEGORY)
 CREATE TABLE TBL_CATEGORY(
-    CT_CODE     NUMBER  CONSTRAINT PK_CATEGORY  PRIMARY KEY, --гЖюГ д╚ев╟М╦╝дз╣Е
-    CT_P_CODE   NUMBER, --╨н╦П д╚ев╟М╦╝ дз╣Е
-    CT_NAME     VARCHAR2(50)    NOT NULL --д╚ев╟М╦╝╦М
+    CT_CODE     NUMBER  CONSTRAINT PK_CATEGORY  PRIMARY KEY, --О©╫О©╫О©╫О©╫ д╚О©╫в╟О©╫О©╫з╣О©╫
+    CT_P_CODE   NUMBER, --О©╫н╦О©╫ д╚О©╫в╟О©╫ О©╫з╣О©╫
+    CT_NAME     VARCHAR2(50)    NOT NULL --д╚О©╫в╟О©╫О©╫О©╫
 );
 ALTER TABLE TBL_CATEGORY ADD CONSTRAINT FK_CT_P_CODE FOREIGN KEY(CT_P_CODE) REFERENCES TBL_CATEGORY(CT_CODE);
 --ct_code, ct_p_code, ct_name
 --ACBF
---1бВ д╚ев╟М╦╝ : ╩Сюг(1), гоюг(2), ╬ф©Лем(3), ╬г╪╪╩Г╦╝(4), ╪Жф╝(5), х╗©Ч╬Н(6), ╩Щх╟гя╨╧(7), ©Н╣©╨╧(8)
+--1О©╫О©╫ д╚О©╫в╟О©╫ : О©╫О©╫О©╫О©╫(1), О©╫О©╫О©╫О©╫(2), О©╫ф©О©╫О©╫О©╫(3), О©╫г╪О©╫О©╫Г╦╝(4), О©╫О©╫ф╝(5), х╗О©╫О©╫О©╫О©╫(6), О©╫О©╫х╟О©╫я╨О©╫(7), О©╫Н╣©О©╫О©╫(8)
 
---╩Сюг 
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1, NULL, '╩Сюг');
---╩Сюг 2бВ д╚ев╟М╦╝ : ф╪╪ецВ, ╢оф╝, ╪ецВ, ╟э©О©К, ©╘╦╖©К, х╞юЩ╠Б©К
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1001, 1, 'ф╪╪ецВ');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1002, 1, '╢оф╝');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1003, 1, '╪ецВ');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1004, 1, '╟э©О©К');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1005, 1, '©╘╦╖©К');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1006, 1, 'х╞юЩ╠Б©К');
+--О©╫О©╫О©╫О©╫ 
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1, NULL, 'О©╫О©╫О©╫О©╫');
+--О©╫О©╫О©╫О©╫ 2О©╫О©╫ д╚О©╫в╟О©╫ : ф╪О©╫О©╫О©╫О©╫, О©╫О©╫ф╝, О©╫О©╫О©╫О©╫, О©╫э©О©╫О©╫, О©╫О©╫О©╫О©╫О©╫О©╫, х╞О©╫О©╫О©╫О©╫О©╫
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1001, 1, 'ф╪О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1002, 1, 'О©╫О©╫ф╝');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1003, 1, 'О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1004, 1, 'О©╫э©О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1005, 1, 'О©╫О©╫О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (1006, 1, 'х╞О©╫О©╫О©╫О©╫О©╫');
 
---гоюг
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2, NULL, 'гоюг');
---гоюг 2бВ д╚ев╟М╦╝ : фрцВ, ╧щ╧ыаЖ, ╣╔╢т, ╫╫╥╒╫╨, ╟э©О©К, ©╘╦╖©К, х╞юЩ╠Б©К
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2001, 2, 'фрцВ');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2002, 2, '╧щ╧ыаЖ');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2003, 2, '╣╔╢т');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2004, 2, '╫╫╥╒╫╨');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2005, 2, '╟э©О©К');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2006, 2, '©╘╦╖©К');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2007, 2, 'х╞юЩ╠Б©К');
+--О©╫О©╫О©╫О©╫
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2, NULL, 'О©╫О©╫О©╫О©╫');
+--О©╫О©╫О©╫О©╫ 2О©╫О©╫ д╚О©╫в╟О©╫ : О©╫О©╫О©╫О©╫, О©╫щ╧О©╫О©╫О©╫, О©╫О©╫О©╫О©╫, О©╫О©╫О©╫О©╫О©╫О©╫, О©╫э©О©╫О©╫, О©╫О©╫О©╫О©╫О©╫О©╫, х╞О©╫О©╫О©╫О©╫О©╫
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2001, 2, 'О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2002, 2, 'О©╫щ╧О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2003, 2, 'О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2004, 2, 'О©╫О©╫О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2005, 2, 'О©╫э©О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2006, 2, 'О©╫О©╫О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (2007, 2, 'х╞О©╫О©╫О©╫О©╫О©╫');
 
---╬ф©Лем
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (3, NULL, '╬ф©Лем');
---╬ф©Лем 2бВ д╚ев╟М╦╝ : юздо, дзф╝, ╟║╣П╟г, а║фш
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (3001, 3, 'юздо');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (3002, 3, 'дзф╝');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (3003, 3, '╟║╣П╟г');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (3004, 3, 'а║фш');
+--О©╫ф©О©╫О©╫О©╫
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (3, NULL, 'О©╫ф©О©╫О©╫О©╫');
+--О©╫ф©О©╫О©╫О©╫ 2О©╫О©╫ д╚О©╫в╟О©╫ : О©╫О©╫О©╫О©╫, О©╫О©╫ф╝, О©╫О©╫О©╫О©╫О©╫, О©╫О©╫О©╫О©╫
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (3001, 3, 'О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (3002, 3, 'О©╫О©╫ф╝');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (3003, 3, 'О©╫О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (3004, 3, 'О©╫О©╫О©╫О©╫');
 
---╬г╪╪╩Г╦╝
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4, NULL, '╬г╪╪╩Г╦╝');
--- ╬г╪╪╩Г╦╝ 2бВ д╚ев╟М╦╝ : ╦Пюз, ╟║╧Ф, ╨╖ф╝, ╠Бе╦, ╫е╧ъ, ╬х╟Ф
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4001, 4, '╦Пюз');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4002, 4, '╟║╧Ф');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4003, 4, '╨╖ф╝');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4004, 4, '╠Бе╦');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4005, 4, '╫е╧ъ');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4006, 4, '╬х╟Ф');
+--О©╫г╪О©╫О©╫Г╦╝
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4, NULL, 'О©╫г╪О©╫О©╫Г╦╝');
+-- О©╫г╪О©╫О©╫Г╦╝ 2О©╫О©╫ д╚О©╫в╟О©╫ : О©╫О©╫О©╫О©╫, О©╫О©╫О©╫О©╫, О©╫О©╫ф╝, О©╫О©╫е╦, О©╫е╧О©╫, О©╫х╟О©╫
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4001, 4, 'О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4002, 4, 'О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4003, 4, 'О©╫О©╫ф╝');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4004, 4, 'О©╫О©╫е╦');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4005, 4, 'О©╫е╧О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (4006, 4, 'О©╫х╟О©╫');
 
---╪Жф╝
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (5, NULL, '╪Жф╝');
---╪Жф╝ 2бВ д╚ев╟М╦╝ : юздо, фрцВ, ╪ецВ, ╠Бе╦
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (5001, 5, 'юздо');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (5002, 5, 'фрцВ');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (5003, 5, '╪ецВ');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (5004, 5, '╠Бе╦');
+--О©╫О©╫ф╝
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (5, NULL, 'О©╫О©╫ф╝');
+--О©╫О©╫ф╝ 2О©╫О©╫ д╚О©╫в╟О©╫ : О©╫О©╫О©╫О©╫, О©╫О©╫О©╫О©╫, О©╫О©╫О©╫О©╫, О©╫О©╫е╦
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (5001, 5, 'О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (5002, 5, 'О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (5003, 5, 'О©╫О©╫О©╫О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (5004, 5, 'О©╫О©╫е╦');
 
---х╗©Ч╬Н
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (6, NULL, 'х╗©Ч╬Н');
---х╗©Ч╬Н 2бВ д╚ев╟М╦╝ : фдюз╦╤, ╪с©й
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (6001, 6, 'фдюз╦╤');
-INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (6002, 6, '╪с©й');
+--х╗О©╫О©╫О©╫О©╫
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (6, NULL, 'х╗О©╫О©╫О©╫О©╫');
+--х╗О©╫О©╫О©╫О©╫ 2О©╫О©╫ д╚О©╫в╟О©╫ : О©╫О©╫О©╫з╦О©╫, О©╫с©О©╫
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (6001, 6, 'О©╫О©╫О©╫з╦О©╫');
+INSERT INTO TBL_CATEGORY (CT_CODE, CT_P_CODE, CT_NAME) VALUES (6002, 6, 'О©╫с©О©╫');
 
---╩Щх╟гя╨╧ 2бВ д╚ев╟М╦╝ : X ╣╔юлем цъ╟║ x
---©Н╣©╨╧ 2бВ д╚ев╟М╦╝ : X ╣╔юлем цъ╟║ x
+--О©╫О©╫х╟О©╫я╨О©╫ 2О©╫О©╫ д╚О©╫в╟О©╫ : X О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ъ╟О©╫ x
+--О©╫Н╣©О©╫О©╫ 2О©╫О©╫ д╚О©╫в╟О©╫ : X О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ъ╟О©╫ x
 SELECT * FROM TBL_CATEGORY;
 COMMIT;
 
 
---3. ╩Сг╟ евюл╨М(PRODUCT)
+--3. О©╫О©╫г╟ О©╫О©╫О©╫л╨О©╫(PRODUCT)
 CREATE TABLE TBL_PRODUCT(
-    P_NUM               NUMBER                      CONSTRAINT PK_PRODUCT   PRIMARY KEY, --╩Сг╟ ╧Ьхё
-    F_CT_CODE           NUMBER,                                         --1бВ д╚ев╟М╦╝ дз╣Е
-    S_CT_CODE           NUMBER,                                          --2бВ д╚ев╟М╦╝ дз╣Е
-    P_NAME              VARCHAR2(50)                NOT NULL,    --╩Сг╟╦М
-    P_COST              NUMBER                          NOT NULL,     --╩Сг╟╟║╟щ
-    P_DISCOUNT       NUMBER                          NOT NULL,    --╩Сг╟юг грюню╡
-    P_COMPANY       VARCHAR2(20)                  NOT NULL,     --╩Сг╟ ╟Ё╧ъ╩Г
-    P_DETAIL            VARCHAR2(4000)               NOT NULL,    --╩Сг╟ ╩С╪╪а╓╨╦
-    P_IMAGE              VARCHAR2(100)                   NOT NULL, --╩Сг╟ юл╧лаЖ
-    P_IMAGE_FOLDER              VARCHAR2(50)        NOT NULL, --╩Сг╟ юл╧лаЖ юЗюЕ фЗ╢У(Ё╞б╔)
-    P_AMOUNT          NUMBER                            NOT NULL, --╩Сг╟ Ё╡ю╨ ╪Ж╥╝
-    P_BUY_OK             CHAR(1) DEFAULT 'Y'         NOT NULL,   --╩Сг╟ ╠╦╦е ╟║╢и ©╘╨н
-    P_REGDATE           DATE    DEFAULT SYSDATE     NOT NULL,   --╩Сг╟ ╣Н╥оЁ╞б╔
-    P_UPDATEDATE      DATE    DEFAULT SYSDATE     NOT NULL  --╩Сг╟а╓╨╦ ╪Жа╓Ё╞б╔
+    P_NUM               NUMBER                      CONSTRAINT PK_PRODUCT   PRIMARY KEY, --О©╫О©╫г╟ О©╫О©╫хё
+    F_CT_CODE           NUMBER,                                         --1О©╫О©╫ д╚О©╫в╟О©╫ О©╫з╣О©╫
+    S_CT_CODE           NUMBER,                                          --2О©╫О©╫ д╚О©╫в╟О©╫ О©╫з╣О©╫
+    P_NAME              VARCHAR2(50)                NOT NULL,    --О©╫О©╫г╟О©╫О©╫
+    P_COST              NUMBER                          NOT NULL,     --О©╫О©╫г╟О©╫О©╫О©╫О©╫
+    P_DISCOUNT       NUMBER                          NOT NULL,    --О©╫О©╫г╟О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫
+    P_COMPANY       VARCHAR2(20)                  NOT NULL,     --О©╫О©╫г╟ О©╫О©╫О©╫ъ╩О©╫
+    P_DETAIL            VARCHAR2(4000)               NOT NULL,    --О©╫О©╫г╟ О©╫О©╫О©╫О©╫О©╫О©╫
+    P_IMAGE              VARCHAR2(100)                   NOT NULL, --О©╫О©╫г╟ О©╫л╧О©╫О©╫О©╫
+    P_IMAGE_FOLDER              VARCHAR2(50)        NOT NULL, --О©╫О©╫г╟ О©╫л╧О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫(О©╫О©╫б╔)
+    P_AMOUNT          NUMBER                            NOT NULL, --О©╫О©╫г╟ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+    P_BUY_OK             CHAR(1) DEFAULT 'Y'         NOT NULL,   --О©╫О©╫г╟ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+    P_REGDATE           DATE    DEFAULT SYSDATE     NOT NULL,   --О©╫О©╫г╟ О©╫О©╫оЁО©╫б╔
+    P_UPDATEDATE      DATE    DEFAULT SYSDATE     NOT NULL  --О©╫О©╫г╟О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫б╔
 );
 CREATE SEQUENCE SEQ_PRODUCT;
 drop sequence SEQ_PRODUCT;
@@ -121,80 +121,81 @@ INSERT INTO TBL_PRODUCT(p_num, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT,
     SELECT SEQ_PRODUCT.NEXTVAL, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, P_COMPANY, P_DETAIL, P_IMAGE, P_IMAGE_FOLDER, P_AMOUNT, P_BUY_OK, SYSDATE, SYSDATE
         FROM TBL_PRODUCT;
 
---4. юЕ╧ы╠╦╢о(CART)
+--4. О©╫О©╫ы╠О©╫О©╫О©╫(CART)
 CREATE TABLE TBL_CART(
-    CART_CODE              NUMBER             CONSTRAINT PK_CART  PRIMARY KEY, --юЕ╧ы╠╦╢о дз╣Е
-    P_NUM                     NUMBER            NOT NULL,   --╩Сг╟╧Ьхё
-    M_ID                        VARCHAR2(15)    NOT NULL,   --х╦©Ь ID 
-    CART_AMOUNT           NUMBER            NOT NULL    --╠╦╦е╪Ж╥╝
+    CART_CODE              NUMBER             CONSTRAINT PK_CART  PRIMARY KEY, --О©╫О©╫ы╠О©╫О©╫О©╫ О©╫з╣О©╫
+    P_NUM                     NUMBER            NOT NULL,   --О©╫О©╫г╟О©╫О©╫хё
+    M_ID                        VARCHAR2(15)    NOT NULL,   --х╦О©╫О©╫ ID 
+    CART_AMOUNT           NUMBER            NOT NULL    --О©╫О©╫О©╫е╪О©╫О©╫О©╫
 
 );
 CREATE SEQUENCE SEQ_CART;
 --cart_code, p_num, m_id, cart_amount?
 
---5. аж╧╝ евюл╨М (T_ORDER)
+--5. О©╫ж╧О©╫ О©╫О©╫О©╫л╨О©╫ (T_ORDER)
 CREATE TABLE TBL_ORDER (
-    ORD_CODE              NUMBER              CONSTRAINT  PK_T_ORDER    PRIMARY KEY, -- аж╧╝╧Ьхё
-    M_ID                    VARCHAR2(15)       NOT NULL,   --х╦©Ь ID 
-    ORD_NAME              VARCHAR2(30)        NOT NULL,   --╧ч╢б ╩Г╤В юл╦╖
-    ORD_POST               CHAR(5)                  NOT NULL,     --╧ч╢б ╩Г╤В ©ЛфМ╧Ьхё
-    ORD_ADDR              VARCHAR2(100)       NOT NULL,       --╧ч╢б ╩Г╤В ╠Б╨╩аж╪р
-    ORD_ADDR_D            VARCHAR2(100)       NOT NULL,       --╧ч╢б ╩Г╤В ╩С╪╪аж╪р
-    ORD_TEL                   VARCHAR2(15)                  NOT NULL,       --╧ч╢б ╩Г╤В юЭх╜╧Ьхё
-    ORD_TOTALCOST         NUMBER                  NOT NULL,       --ця аж╧╝ ╠щ╬в
-    ORD_DATE                  DATE    DEFAULT SYSDATE,                 --аж╧╝гя Ё╞б╔
-    CONSTRAINT FK_ORD_M_ID FOREIGN KEY(M_ID) REFERENCES TBL_MEMBER(M_ID)
+    ORD_CODE              NUMBER              CONSTRAINT  PK_T_ORDER    PRIMARY KEY, -- О©╫ж╧О©╫О©╫О©╫хё
+    M_ID                    VARCHAR2(15)       NOT NULL,   --х╦О©╫О©╫ ID 
+    ORD_NAME              VARCHAR2(30)        NOT NULL,   --К╟╟Л├║К╟⌡К┼■ Л┌╛К·▄ Л²╢К╕└
+    ORD_POSTCODE               CHAR(5)                  NOT NULL,     --К╟╟Л├║К╟⌡К┼■ Л┌╛К·▄ Л ╟М▌╦К╡┬М≤╦
+    ORD_ADDR              VARCHAR2(100)       NOT NULL,       --О©╫ч╢О©╫ О©╫О©╫О©╫ О©╫Б╨╩О©╫ж╪О©╫
+    ORD_ADDR_D            VARCHAR2(100)       NOT NULL,       --О©╫ч╢О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫ж╪О©╫
+    ORD_TEL                   VARCHAR2(15)                  NOT NULL,       --К╟╟Л├║К╟⌡К┼■ Л┌╛К·▄ Л═└М≥■К╡┬М≤╦
+    ORD_TOTALCOST         NUMBER                  NOT NULL,       --Лё╪К╛╦ Л╢² Й╦┬Л∙║
+    ORD_DATE                  DATE    DEFAULT SYSDATE,               --О©╫ж╧О©╫О©╫О©╫ О©╫О©╫б╔
+    ORD_DEFAULT_ADDR    CHAR(1) DEFAULT 'N'         --Й╦╟КЁ╦ К╟╟Л├║Л╖─К║° Л═─Л·╔ Л°═К╛╢
 );
---ord_code, m_id, ord_name, ord_post, ord_addr, ord_addr_d, ord_tel, ord_totalcost, ord_date
+--ord_code, m_id, ord_name, ord_post, ord_addr, ord_addr_d, ord_tel, ord_totalcost, ord_date, ORD_DEFAULT_ADDR
+--ORD_CODE, M_ID, ORD_NAME, ORD_POST, ORD_ADDR, ORD_ADDR_D, ORD_TEL, ORD_TOTALCOST, ORD_DATE, ORD_DEFAULT_ADDR
 
---6. аж╧╝ ╩С╪╪ евюл╨М(T_ORDER_D)
+--6. О©╫ж╧О©╫ О©╫О©╫ О©╫О©╫О©╫л╨О©╫(T_ORDER_D)
 CREATE TABLE TBL_ORDER_D(
-    ORD_CODE              NUMBER,                         --аж╧╝╧Ьхё
-    P_NUM               NUMBER,                             --╩Сг╟╧Ьхё
-    ORD_AMOUNT        NUMBER          NOT NULL,   --аж╧╝╪Ж╥╝
-    ORD_COST              NUMBER          NOT NULL,   --аж╧╝ ╟║╟щ
+    ORD_CODE              NUMBER,                         --О©╫ж╧О©╫О©╫О©╫хё
+    P_NUM               NUMBER,                             --О©╫О©╫г╟О©╫О©╫хё
+    ORD_AMOUNT        NUMBER          NOT NULL,   --О©╫ж╧О©╫О©╫О©╫О©╫О©╫
+    ORD_COST              NUMBER          NOT NULL,   --О©╫ж╧О©╫ О©╫О©╫О©╫О©╫
     PRIMARY KEY(ORD_CODE, P_NUM),
     CONSTRAINT FK_ORD_P_NUM FOREIGN KEY(P_NUM) REFERENCES TBL_PRODUCT(P_NUM)
 );
 ALTER TABLE TBL_ORDER_D ADD CONSTRAINT FK_ORD_CODE FOREIGN KEY(ORD_CODE) REFERENCES TBL_ORDER(ORD_CODE);
 --ord_code, p_num, ord_amount, ord_cost?
 
---7. ╟т╫цфг(BOARD)
+--7. О©╫т╫О©╫О©╫О©╫(BOARD)
 CREATE TABLE TBL_BOARD(
-B_NUM NUMBER     CONSTRAINT PK_BOARD  PRIMARY KEY,    --╟т╫ц╠ш ╧Ьхё(╫цдЖ╫╨)
-M_ID VARCHAR2(15) NOT NULL,   --х╦©Ьid(╟т╫ц╠ш юш╪╨юз)
-B_TITLE VARCHAR2(100) NOT NULL,   --╟т╫ц╠ш а╕╦Я
-B_CONTENT     VARCHAR2(4000) NOT NULL,   --╟т╫ц╠ш Ё╩©К
-B_REGDATE DATE DEFAULT SYSDATE NOT NULL,    --╟т╫ц╠ш ╣Н╥оЁ╞б╔
+B_NUM NUMBER     CONSTRAINT PK_BOARD  PRIMARY KEY,    --О©╫т╫ц╠О©╫ О©╫О©╫хё(О©╫О©╫О©╫О©╫О©╫О©╫)
+M_ID VARCHAR2(15) NOT NULL,   --х╦О©╫О©╫id(О©╫т╫ц╠О©╫ О©╫ш╪О©╫О©╫О©╫)
+B_TITLE VARCHAR2(100) NOT NULL,   --О©╫т╫ц╠О©╫ О©╫О©╫О©╫О©╫
+B_CONTENT     VARCHAR2(4000) NOT NULL,   --О©╫т╫ц╠О©╫ О©╫О©╫О©╫О©╫
+B_REGDATE DATE DEFAULT SYSDATE NOT NULL,    --О©╫т╫ц╠О©╫ О©╫О©╫оЁО©╫б╔
     CONSTRAINT FK_BOARD_M_ID FOREIGN KEY(M_ID) REFERENCES TBL_MEMBER(M_ID)
 );
 CREATE SEQUENCE SEQ_BOARD;
 --b_num, m_id, b_title, b_content, b_regdate?
 
---8. ╦╝╨Д
+--8. О©╫О©╫О©╫О©╫
 CREATE TABLE TBL_REVIEW(
-R_NUM NUMBER     CONSTRAINT PK_REVIEW  PRIMARY KEY, --╦╝╨Д╠ш ╧Ьхё
-M_ID VARCHAR2(15) NOT NULL,   --х╦©Ь id
-P_NUM NUMBER NOT NULL,   --╩Сг╟╧Ьхё
-R_CONTENT VARCHAR2(200) NOT NULL,   --╦╝╨ДЁ╩©К
-R_SCORE NUMBER NOT NULL,   --╦╝╨Д фРа║
-R_REGDATE DATE DEFAULT SYSDATE NOT NULL,    --╦╝╨Д юш╪╨юо
+R_NUM NUMBER     CONSTRAINT PK_REVIEW  PRIMARY KEY, --О©╫О©╫О©╫О©╫О©╫ О©╫О©╫хё
+M_ID VARCHAR2(15) NOT NULL,   --х╦О©╫О©╫ id
+P_NUM NUMBER NOT NULL,   --О©╫О©╫г╟О©╫О©╫хё
+R_CONTENT VARCHAR2(200) NOT NULL,   --О©╫О©╫О©╫ДЁ╩О©╫О©╫
+R_SCORE NUMBER NOT NULL,   --О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+R_REGDATE DATE DEFAULT SYSDATE NOT NULL,    --О©╫О©╫О©╫О©╫ О©╫ш╪О©╫О©╫О©╫
     CONSTRAINT FK_REVIEW_M_ID FOREIGN KEY(M_ID) REFERENCES TBL_MEMBER(M_ID),
     CONSTRAINT FK_REVIEW_P_NUM FOREIGN KEY(P_NUM) REFERENCES TBL_PRODUCT(P_NUM)
 );
 --r_num, m_id, p_num, r_content, r_score, r_regdate?
 
---9. ╟Э╦╝юз евюл╨М (ADMIN)
+--9. О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫л╨О©╫ (ADMIN)
 CREATE TABLE TBL_ADMIN(
-ADMIN_ID VARCHAR2(15)    CONSTRAINT PK_ADMIN  PRIMARY KEY,    --╟Э╦╝юз id
-ADMIN_PW VARCHAR2(60) NOT NULL,   --╟Э╦╝юз ╨Я╧п╧Ьхё
-ADMIN_NAME VARCHAR2(100) NOT NULL,   --╟Э╦╝юз╦М
-ADMIN_LASTDATE DATE DEFAULT SYSDATE NOT NULL    --а╒╪с╫ц╟ё
+ADMIN_ID VARCHAR2(15)    CONSTRAINT PK_ADMIN  PRIMARY KEY,    --О©╫О©╫О©╫О©╫О©╫О©╫ id
+ADMIN_PW VARCHAR2(60) NOT NULL,   --О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫п╧О©╫хё
+ADMIN_NAME VARCHAR2(100) NOT NULL,   --О©╫О©╫О©╫О©╫О©╫з╦О©╫
+ADMIN_LASTDATE DATE DEFAULT SYSDATE NOT NULL    --О©╫О©╫О©╫с╫ц╟О©╫
 );
 
 --admin_id, admin_pw, admin_name, admin_lastdate
 --ADMIN_ID, ADMIN_PW, ADMIN_NAME, ADMIN_LASTDATE
---╟Э╦╝юз ╟Ха╓ ╩Щ╪╨ - ╬фюл╣П: admin,╨Я╧п╧Ьхё: 1234(╬охёх╜╣х ╨Я╧п╧Ьхё ╨╧╩Ггь©х), юл╦╖: ╟Э╦╝юз
+--О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ - О©╫О©╫О©╫л╣О©╫: admin,О©╫О©╫п╧О©╫хё: 1234(О©╫О©╫хёх╜О©╫О©╫ О©╫О©╫п╧О©╫хё О©╫О©╫О©╫О©╫О©╫ь©О©╫), О©╫л╦О©╫: О©╫О©╫О©╫О©╫О©╫О©╫
 INSERT INTO TBL_ADMIN (admin_id, admin_pw, admin_name, admin_lastdate)
-    VALUES('admin', '$2a$10$RFjRcMcQVPZ9s3OVmwuUUOrJ34pEbGtp.2jB8QJv/56YpfpUE470q', '╟Э╦╝юз', sysdate);
+    VALUES('admin', '$2a$10$RFjRcMcQVPZ9s3OVmwuUUOrJ34pEbGtp.2jB8QJv/56YpfpUE470q', 'О©╫О©╫О©╫О©╫О©╫О©╫', sysdate);
 commit;

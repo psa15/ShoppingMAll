@@ -131,9 +131,9 @@
 	      			</div>
 	      			<div class="box-footer text-center">
 	      				<c:if test="${!empty cartList}">
-							<button type="button" name="btnClearCart" class="btn btn-primary">장바구니 비우기</button>
-							<button type="button" name="btnShopping"  class="btn btn-primary">계속 쇼핑하기</button>
-							<button type="button" name="btnOrder"  class="btn btn-primary">주문하기</button>
+							<button type="button" id="btnClearCart" class="btn btn-primary">장바구니 비우기</button>
+							<button type="button" id="btnShopping"  class="btn btn-primary">계속 쇼핑하기</button>
+							<button type="button" id="btnOrder"  class="btn btn-primary">주문하기</button>
 						</c:if>
 						<c:if test="${empty cartList}">
 							<button type="button" name="btnShopping"  class="btn btn-primary">쇼핑하기</button>
@@ -204,7 +204,7 @@
 			});
 
 			//장바구니 비우기
-			$("button[name='btnClearCart']").on("click", function(){
+			$("button#btnClearCart").on("click", function(){
 				console.log("장바구니 비우기");
 
 				if(!confirm("장바구니를 비우시겠습니까?")){
@@ -212,6 +212,13 @@
 				}
 
 				location.href = "/user/cart/clearCart";
+			});
+			
+			//주문하기
+			$("button#btnOrder").on("click", function(){
+				console.log("주문하기");
+
+				location.href = "/user/order/orderList";
 			});
 			
 		});
