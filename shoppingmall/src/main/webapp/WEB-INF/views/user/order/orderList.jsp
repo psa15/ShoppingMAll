@@ -73,26 +73,21 @@
       	<div class="col-12">
       		<div id="productDetailTabs">
 			  <ul>
-			    <li><a href="#recentAddr">최근 배송지</a></li>
-			    <li><a href="#newAddr">직접 입력</a></li>
-			  </ul>
-			  <div id="recentAddr">
-			    <!-- 최근 배송지 불러오기 -->
-			    <c:out value="${sessionScope.loginStatus.m_name }" /><br>
-			    [<c:out value="${sessionScope.loginStatus.m_postcode }" />]
-			    <c:out value="${sessionScope.loginStatus.m_addr} " /> 
-			    <c:out value="${sessionScope.loginStatus.m_addr_d}" /><br>
-			    <c:out value="${sessionScope.loginStatus.m_tel}" />
-			  </div>
+			  	<li><a href="#newAddr">직접 입력</a></li>
+			    <li><a href="#recentAddr">최근 배송지</a></li>			    
+			  </ul>			 
 			  <div id="newAddr" class="row">
 			  	<!-- 배송지 목록 -->
 			  	<form action="" method="post" id="">
 			  	  <div class="form-group row">
-			  	  	<input type="radio" name="shipment" value="userInfo">
-					<label for="html">회원 정보와 동일</label>
-					<input type="radio" name="shipment" value="new">
-					<label for="css">새로운 배송지</label>
-			  	  </div>			  	  
+			  	  	<div class="col-4">
+						<input type="radio" id="userAddr" name="shipment" value="userAddr" checked>회원 정보와 동일
+					</div>
+					<div class="col-4">
+						<input type="radio" id="newAddr" name="shipment" value="newAddr">새로운 배송지
+					</div>
+			  	  </div>
+			  	  			  	  
 				  <div class="form-group row">
 				    <label for="ord_name" class="col-sm-2 col-form-label">받는 사람</label>
 				    <div class="col-sm-10">
@@ -131,40 +126,119 @@
 				      <input type="text" class="form-control" id="ord_email" name="ord_email" value="${sessionScope.loginStatus.m_email }" >
 				    </div>
 				  </div>	
-				</form>
-				
-				<!-- 메시지 선택 - select태그 -->
-				
-				<!-- 주문 상품 -->
-				<h5>주문 상품</h5>
-				<hr>
-				<c:forEach items="${orderCartList }" var="orderCartListVO">
-					<div class="row">         
-				       	<div class = "col-5">
-				  			<!-- 상품 이미지 -->
-				      		<img src="/user/order/displayFile?folderName=${orderCartListVO.p_image_folder}&fileName=${orderCartListVO.p_image}" 
-									alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image.png'">
-				      	</div>
-				      	<div class = "col-5">
-				      		<!-- 상품 이미지 필드 정보 -->
-				      		<h5>${orderCartListVO.p_name}</h5>
-				      		<p>판매가격: <fmt:formatNumber type="number" maxFractionDigits="3" value="${orderCartListVO.p_cost}" /></p>
-				      		<p>
-				      			<input type="hidden" id="p_num" value="${orderCartListVO.p_num}">
-				      			수량: <c:out value="${orderCartListVO.cart_amount}" />개
-				      		</p>
-				      	</div>
-				      	<!-- x 클릭 시 상품 삭제 -->
-				      	<div class = "col-5">
-				      		<span>X</span>
-				      	</div>
-				      </div>
-			      </c:forEach>
-			  	
+				</form>				  	
+			  </div>
+			  <div id="recentAddr">
+			    <!-- 최근 배송지 불러오기 -->
+			    <c:out value="${sessionScope.loginStatus.m_name }" /><br>
+			    [<c:out value="${sessionScope.loginStatus.m_postcode }" />]
+			    <c:out value="${sessionScope.loginStatus.m_addr} " /> 
+			    <c:out value="${sessionScope.loginStatus.m_addr_d}" /><br>
+			    <c:out value="${sessionScope.loginStatus.m_tel}" />
 			  </div>
 			</div>
-      	</div>
+      	</div>      	
       </div>
+      
+      
+      <!-- 메시지 선택 - select태그 -->
+      <div class="row">
+      
+      </div>
+      
+      <!-- 주문 상품 -->
+      <div class="row">
+	      	<div class="col-md-12">      	
+	      		<div class="box box-primary">
+	      			<div class="box-header">
+	      				<hr>
+	      				<h5>주문 상품 </h5>
+	      			</div>	
+	      			<div class="box-body">	      				
+					  <table class="table table-hover" id="tblCartList">
+						  <thead>
+						    <tr>
+						      <th scope="col">상품</th>
+						      <th scope="col">판매 가격</th>
+						      <th scope="col">수량</th>						      						      
+						      <th scope="col">적립예정 금액</th>
+						      <th scope="col">총 가격</th>
+						      <th scope="col">삭제</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						  <c:forEach items="${orderCartList}" var="orderCartListVO">
+						  <c:set var="price" value="${orderCartListVO.cart_amount * orderCartListVO.p_cost}"></c:set>
+						    <tr>	
+						      <!-- 상품 : 이미지 및 상품이름 -->				      
+						      <td>						      	
+						      	<a class="move" href="${orderCartListVO.p_num}">
+						      		<img src="/user/product/displayFile?folderName=${orderCartListVO.p_image_folder}&fileName=s_${orderCartListVO.p_image}" 
+						      		alt="" style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image.png'">
+						      		<c:out value="${orderCartListVO.p_name}" />
+						      	</a>
+						      </td>
+						      <!-- 판매 가격 -->
+						      <td>
+						      	￦ <fmt:formatNumber type="number" maxFractionDigits="3" value="${orderCartListVO.p_cost}" />
+								<input type="hidden" name="p_cost" value="${orderCartListVO.p_cost}">
+						      </td>
+						      <!-- 수량 -->
+						      <td>
+						      	<c:out value="${orderCartListVO.cart_amount}" />개
+								<input type="hidden" name="p_cost" value="${orderCartListVO.p_cost}">
+						      </td>
+						      <!-- 적립 예정 금액 -->
+						      <td class="text-center" >
+						      	<fmt:formatNumber type="number" maxFractionDigits="3" value="${orderCartListVO.p_cost * 0.001}" />
+						      </td>	
+							  <!-- 상품 가격 * 수량 -->				      
+							  <td>
+								<span class="unitPrice">						      	
+									￦ <fmt:formatNumber type="number" maxFractionDigits="3" value="${price}" />
+								</span>
+							  </td>
+						      <!-- 삭제 -->
+						      <td>
+			                    <input type="hidden" name="p_image_dateFolder" value="${orderCartListVO.p_image_folder}">
+			                    <input type="hidden" name="p_image" value="${orderCartListVO.p_image}">
+			                    <button type="button" name="btnCartDelete" data-cart_code="${orderCartListVO.cart_code}" class="btn btn-link">X</button></td>
+						    </tr>
+						    <c:set var="sum" value="${sum + price}"></c:set>
+						   </c:forEach>					   
+						  </tbody>
+						  <tfoot>
+							<tr>
+								<c:if test="${!empty orderCartList}">
+									<td colspan="5" style="text-align: right"> 
+										총 구매 금액: ￦ <span id="cartTotalPrice"><fmt:formatNumber type="number" maxFractionDigits="3" value="${sum}" /></span>
+									</td>
+								</c:if>
+								<c:if test="${empty orderCartList}">
+									<td colspan="5" style="text-align: right"> 
+										주문 내역이 비었습니다.
+									</td>
+								</c:if>
+							</tr>
+						  </tfoot>
+						</table>							
+	      			</div>
+	      			<div class="box-footer text-center">
+	      				<c:if test="${!empty orderCartList}">
+	      					<button type="button" id="btnOrder"  class="btn btn-primary">주문취소</button>
+							<button type="button" id="btnOrder"  class="btn btn-primary">주문하기</button>
+						</c:if>
+						<c:if test="${empty orderCartList}">
+							<button type="button" name="btnShopping"  class="btn btn-primary">쇼핑하기</button>
+						</c:if>
+				    </div>		
+	      		</div>     
+	      	</div>      
+	      </div>
+      	
+				
+				
+				
     </div>  
 
 </main>
@@ -179,9 +253,60 @@
 
 		$(function(){
 
-
 			//jQuery-ui 탭기능
-			$("#productDetailTabs").tabs();			
+			$("#productDetailTabs").tabs();
+			
+			//라디오 버튼
+			$("input[name='shipment']").change(function(){
+
+				//새로운 배송지 선택 시
+				if($("input[name='shipment']:checked").val() == 'newAddr'){
+					$("#ord_name").val("");
+					$("#ord_tel").val("");
+					$("#ord_postcode").val("");
+					$("#ord_addr").val("");
+					$("#ord_addr_d").val("");
+					$("#ord_email").val("");
+				}	
+				// 무통장입금 결제 선택 시.
+				else if($("input[name='shipment']:checked").val() == 'userAddr'){
+					$("#ord_name").val("${sessionScope.loginStatus.m_name }");
+					$("#ord_tel").val("${sessionScope.loginStatus.m_tel }");
+					$("#ord_postcode").val("${sessionScope.loginStatus.m_postcode }");
+					$("#ord_addr").val("${sessionScope.loginStatus.m_addr }");
+					$("#ord_addr_d").val("${sessionScope.loginStatus.m_addr_d }");
+					$("#ord_email").val("${sessionScope.loginStatus.m_email }");
+				}		
+			});
+			/* $("#newAddr").on("click", function(){
+				console.log("새로운 배송지 선택");
+
+				$("#ord_name").val("");
+				$("#ord_tel").val("");
+				$("#ord_postcode").val("");
+				$("#ord_addr").val("");
+				$("#ord_addr_d").val("");
+				$("#ord_email").val("");
+
+				$("#userAddr").attr("checked", "");
+				$("#newAddr").attr("checked", "checked");
+			});
+
+			$("#userAddr").on("click", function(){
+				console.log("회원 정보와 동일 선택");
+				$("#newAddr").attr("checked", "");
+
+				$("#ord_name").val("${sessionScope.loginStatus.m_name }");
+				$("#ord_tel").val("${sessionScope.loginStatus.m_tel }");
+				$("#ord_postcode").val("${sessionScope.loginStatus.m_postcode }");
+				$("#ord_addr").val("${sessionScope.loginStatus.m_addr }");
+				$("#ord_addr_d").val("${sessionScope.loginStatus.m_addr_d }");
+				$("#ord_email").val("${sessionScope.loginStatus.m_email }");
+
+				
+				$("#userAddr").attr("checked", "checked");
+			});
+ */
 
 		});
 

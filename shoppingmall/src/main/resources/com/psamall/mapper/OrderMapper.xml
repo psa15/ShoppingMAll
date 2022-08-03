@@ -16,5 +16,11 @@
 		    C.M_ID = #{m_id}
 	
 	</select>
+	
+	<!-- 최근 배송지 불러오기 -->
+	<select id="getRecentAddr">
+	
+	
+	</select>
 
 </mapper>

@@ -49,7 +49,7 @@ public class OrderController {
 		
 	}
 	
-	//상품목록 이미지 불러오기
+	//주문 상품 이미지 불러오기
 	@ResponseBody
 	@GetMapping("/displayFile")
 	public ResponseEntity<byte[]> displayFile(String folderName, String fileName) {
@@ -58,5 +58,11 @@ public class OrderController {
 		
 		//저장된 썸네일 이미지를 byte[]로 읽어오는 작업
 		return UploadFileUtils.getImageFile(uploadPath, folderName + "\\" + fileName);
+	}
+	
+	//최근 배송지 불러오기
+	@GetMapping("/getRecentAddr")
+	public void getRecentAddr (HttpSession session, Model model) {
+		
 	}
 }
