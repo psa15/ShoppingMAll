@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.psamall.domain.OrderCartListVO;
-import com.psamall.domain.OrderDetailVO;
 import com.psamall.domain.OrderVO;
 
 public interface OrderMapper {
@@ -20,5 +19,5 @@ public interface OrderMapper {
 	//1)주문테이블
 	void insertOrder(OrderVO vo);
 	//2)주문 상세 테이블
-	void insertOrderDetail(OrderDetailVO odvo);
+	void insertOrderDetail(@Param("ord_code") Long ord_code, @Param("m_id") String m_id);
 }

@@ -40,13 +40,11 @@ public class OrderServiceImpl implements OrderService {
 		//2) 주문 상세 테이블
 		//시퀀스 값 확보
 		Long ord_code = vo.getOrd_code();
-		OrderDetailVO odvo = new OrderDetailVO();
-		odvo.setOrd_code(ord_code);
+		String m_id = vo.getM_id();
 		
-		orderMapper.insertOrderDetail(odvo);
+		orderMapper.insertOrderDetail(ord_code, m_id);;
 		
 		//3)장바구니 비우기
-		String m_id = vo.getM_id();
 		userCartMapper.clearCart(m_id);
 		
 	}

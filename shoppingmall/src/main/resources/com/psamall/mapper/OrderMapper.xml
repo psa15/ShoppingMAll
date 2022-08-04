@@ -42,10 +42,15 @@
 	<insert id="insertOrderDetail">
 	
 		INSERT INTO
-			TBL_ORDER_D
-				(ORD_CODE, P_NUM, ORD_AMOUNT, ORD_COST)
-			VALUES
-				(#{ord_code}, #{p_num}, #{ord_amount}, #{ord_cost})
+			TBL_ORDER_D(ORD_CODE, P_NUM, ORD_AMOUNT, ORD_COST)
+		SELECT 
+			#{ord_code}, C.P_NUM, C.CART_AMOUNT, C.P_NUM * P.P_COST
+		FROM 
+			TBL_CART C INNER JOIN TBL_PRODUCT P
+	        ON 
+	        	C.P_NUM = P.P_NUM
+	        WHERE 
+	        	M_ID = #{m_id}
 	
 	</insert>
 
