@@ -10,11 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.psamall.domain.MemberVO;
 import com.psamall.domain.OrderCartListVO;
+import com.psamall.domain.OrderVO;
 import com.psamall.service.OrderService;
 import com.psamall.utils.UploadFileUtils;
 
@@ -64,5 +66,19 @@ public class OrderController {
 	@GetMapping("/getRecentAddr")
 	public void getRecentAddr (HttpSession session, Model model) {
 		
+	}
+	
+	//주문 저장
+	@PostMapping("/addOrder")
+	public String addOrder(HttpSession session, OrderVO vo) {
+		
+		log.info("주문 정보: " + vo);
+		
+		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
+		vo.setM_id(m_id);
+		
+		orderService.orderSave(vo);
+		
+		return "redirect:/";
 	}
 }

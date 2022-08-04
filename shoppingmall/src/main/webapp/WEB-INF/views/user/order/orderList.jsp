@@ -73,12 +73,12 @@
       	<div class="col-12">
       		<div id="productDetailTabs">
 			  <ul>
-			  	<li><a href="#newAddr">직접 입력</a></li>
-			    <li><a href="#recentAddr">최근 배송지</a></li>			    
+			  	<li><a href="#newAddr" class="">직접 입력</a></li>
+			    <li><a href="#recentAddr" class="selected">최근 배송지</a></li>			    
 			  </ul>			 
 			  <div id="newAddr" class="row">
 			  	<!-- 배송지 목록 -->
-			  	<form action="" method="post" id="">
+			  	<form action="" method="post" id="newAddrForm">
 			  	  <div class="form-group row">
 			  	  	<div class="col-4">
 						<input type="radio" id="userAddr" name="shipment" value="userAddr" checked>회원 정보와 동일
@@ -92,6 +92,7 @@
 				    <label for="ord_name" class="col-sm-2 col-form-label">받는 사람</label>
 				    <div class="col-sm-10">
 				      <input type="text" class="form-control" id="ord_name" name="ord_name" value="${sessionScope.loginStatus.m_name }" >
+				      
 				    </div>
 				  </div>
 				  <div class="form-group row">
@@ -125,7 +126,20 @@
 				    <div class="col-sm-10">
 				      <input type="text" class="form-control" id="ord_email" name="ord_email" value="${sessionScope.loginStatus.m_email }" >
 				    </div>
-				  </div>	
+				  </div>
+				  <div class="form-group row">
+				  	<label for="" class="col-sm-2 col-form-label">배송 메시지</label>
+				    <select name="ord_message">
+				      <option value="" selected>--메시지 선택 (선택 사항)--</option>
+				      <option value="배송 전에 미리 연락 바랍니다.">배송 전에 미리 연락 바랍니다.</option>
+				      <option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
+				      <option value="부재 시 문 앞에 놓아주세요.">부재 시 문 앞에 놓아주세요.</option>
+				      <option value="빠른 배송 부탁드립니다.">빠른 배송 부탁드립니다.</option>
+				      <option value="택배함에 보관해 주세요.">택배함에 보관해 주세요.</option>
+				      <option value="newMessage">직접 입력</option>
+				    </select>
+					<input type="text" id="newMessage">
+				  </div>				  	
 				</form>				  	
 			  </div>
 			  <div id="recentAddr">
@@ -135,6 +149,18 @@
 			    <c:out value="${sessionScope.loginStatus.m_addr} " /> 
 			    <c:out value="${sessionScope.loginStatus.m_addr_d}" /><br>
 			    <c:out value="${sessionScope.loginStatus.m_tel}" />
+			    <div class="form-group row">
+				  	<label for="" class="col-sm-2 col-form-label">배송 메시지</label>
+				    <select name="ord_message">
+				      <option value="메시지 선택" selected>--메시지 선택 (선택 사항)--</option>
+				      <option value="배송 전에 미리 연락 바랍니다.">배송 전에 미리 연락 바랍니다.</option>
+				      <option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
+				      <option value="부재 시 문 앞에 놓아주세요.">부재 시 문 앞에 놓아주세요.</option>
+				      <option value="빠른 배송 부탁드립니다.">빠른 배송 부탁드립니다.</option>
+				      <option value="택배함에 보관해 주세요.">택배함에 보관해 주세요.</option>
+				      <option value="newMessage">직접 입력</option>
+				  	</select>
+				  </div>
 			  </div>
 			</div>
       	</div>      	
@@ -143,7 +169,6 @@
       
       <!-- 메시지 선택 - select태그 -->
       <div class="row">
-      
       </div>
       
       <!-- 주문 상품 -->
@@ -186,7 +211,6 @@
 						      <!-- 수량 -->
 						      <td>
 						      	<c:out value="${orderCartListVO.cart_amount}" />개
-								<input type="hidden" name="p_cost" value="${orderCartListVO.p_cost}">
 						      </td>
 						      <!-- 적립 예정 금액 -->
 						      <td class="text-center" >
@@ -202,6 +226,9 @@
 						      <td>
 			                    <input type="hidden" name="p_image_dateFolder" value="${orderCartListVO.p_image_folder}">
 			                    <input type="hidden" name="p_image" value="${orderCartListVO.p_image}">
+			                    <input type="hidden" name="ord_cost" value="${orderCartListVO.p_cost * orderCartListVO.cart_amount}" >
+					  <input type="hidden" name="p_num" value="${orderCartListVO.p_num}" >
+					  <input type="hidden" name="ord_amount" value="${orderCartListVO.cart_amount}" >
 			                    <button type="button" name="btnCartDelete" data-cart_code="${orderCartListVO.cart_code}" class="btn btn-link">X</button></td>
 						    </tr>
 						    <c:set var="sum" value="${sum + price}"></c:set>
@@ -225,7 +252,7 @@
 	      			</div>
 	      			<div class="box-footer text-center">
 	      				<c:if test="${!empty orderCartList}">
-	      					<button type="button" id="btnOrder"  class="btn btn-primary">주문취소</button>
+	      					<button type="button" id="btnCancelOrder"  class="btn btn-primary">주문취소</button>
 							<button type="button" id="btnOrder"  class="btn btn-primary">주문하기</button>
 						</c:if>
 						<c:if test="${empty orderCartList}">
@@ -268,7 +295,7 @@
 					$("#ord_addr_d").val("");
 					$("#ord_email").val("");
 				}	
-				// 무통장입금 결제 선택 시.
+				// 회원 정보와 동일 선택 시.
 				else if($("input[name='shipment']:checked").val() == 'userAddr'){
 					$("#ord_name").val("${sessionScope.loginStatus.m_name }");
 					$("#ord_tel").val("${sessionScope.loginStatus.m_tel }");
@@ -278,35 +305,30 @@
 					$("#ord_email").val("${sessionScope.loginStatus.m_email }");
 				}		
 			});
-			/* $("#newAddr").on("click", function(){
-				console.log("새로운 배송지 선택");
 
-				$("#ord_name").val("");
-				$("#ord_tel").val("");
-				$("#ord_postcode").val("");
-				$("#ord_addr").val("");
-				$("#ord_addr_d").val("");
-				$("#ord_email").val("");
+			$("#newMessage").hide();
 
-				$("#userAddr").attr("checked", "");
-				$("#newAddr").attr("checked", "checked");
+			//배송 메시지 직접입력 선택 시
+			$("select[name='ord_message']").on("change", function(){
+
+				if($(this).val() == 'newMessage') {
+					$("#newMessage").show();
+					$("select[name='ord_message']").val($("#newMessage").val());
+				} else {
+					$("#newMessage").hide();
+				}
 			});
 
-			$("#userAddr").on("click", function(){
-				console.log("회원 정보와 동일 선택");
-				$("#newAddr").attr("checked", "");
 
-				$("#ord_name").val("${sessionScope.loginStatus.m_name }");
-				$("#ord_tel").val("${sessionScope.loginStatus.m_tel }");
-				$("#ord_postcode").val("${sessionScope.loginStatus.m_postcode }");
-				$("#ord_addr").val("${sessionScope.loginStatus.m_addr }");
-				$("#ord_addr_d").val("${sessionScope.loginStatus.m_addr_d }");
-				$("#ord_email").val("${sessionScope.loginStatus.m_email }");
+			//주문하기 버튼 클릭 시
+			$("#btnOrder").on("click", function(){
 
-				
-				$("#userAddr").attr("checked", "checked");
+				//유효성 검사
+
+
+				$("#newAddrForm").attr("action", "/user/order/addOrder");
+				$("#newAddrForm").submit();
 			});
- */
 
 		});
 

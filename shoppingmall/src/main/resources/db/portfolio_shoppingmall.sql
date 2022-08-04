@@ -143,9 +143,9 @@ CREATE TABLE TBL_ORDER (
     ORD_TEL                   VARCHAR2(15)                  NOT NULL,       --배송받는 사람 전화번호
     ORD_TOTALCOST         NUMBER                  NOT NULL,       --주문 총 금액
     ORD_DATE                  DATE    DEFAULT SYSDATE,               --�ֹ��� ��¥
-    ORD_DEFAULT_ADDR    CHAR(1) DEFAULT 'N'         --기본 배송지로 저장 유무
+    ORD_MESSAGE     VARCHAR2(100)         --배송 메시지
 );
---ord_code, m_id, ord_name, ord_post, ord_addr, ord_addr_d, ord_tel, ord_totalcost, ord_date, ORD_DEFAULT_ADDR
+--ord_code, m_id, ord_name, ord_post, ord_addr, ord_addr_d, ord_tel, ord_totalcost, ord_date, ord_message
 --ORD_CODE, M_ID, ORD_NAME, ORD_POST, ORD_ADDR, ORD_ADDR_D, ORD_TEL, ORD_TOTALCOST, ORD_DATE, ORD_DEFAULT_ADDR
 
 --6. �ֹ� �� ���̺�(T_ORDER_D)

@@ -19,5 +19,5 @@ public class OrderVO {
 	private String ord_email;
 	private int ord_totalcost;
 	private Date ord_date;
-	private String ord_default_addr; //기본 배송지로 저장 유무(default : 'N')
+	private String ord_message; //배송 메시지
 }
