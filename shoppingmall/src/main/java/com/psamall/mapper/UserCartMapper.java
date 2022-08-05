@@ -21,6 +21,9 @@ public interface UserCartMapper {
 	//장바구니 상품 삭제
 	void deleteCart(Long cart_code);
 	
+	//장바구니 주문 상품 삭제
+	void deleteCartOrder(Integer p_num);
+	
 	//장바구니 비우기
 	void clearCart(String m_id);
 }

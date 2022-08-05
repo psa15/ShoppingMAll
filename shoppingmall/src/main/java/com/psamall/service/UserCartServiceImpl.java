@@ -46,5 +46,12 @@ public class UserCartServiceImpl implements UserCartService {
 	public void clearCart(String m_id) {
 		cartMapper.clearCart(m_id);
 	}
+
+	//장바구니 주문 상품 삭제
+	@Override
+	public void deleteCartOrder(Integer p_num) {
+		cartMapper.deleteCartOrder(p_num);
+		
+	}
 	
 }

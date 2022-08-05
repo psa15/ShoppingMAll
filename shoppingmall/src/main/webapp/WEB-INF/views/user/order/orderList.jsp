@@ -244,7 +244,7 @@
 							  </div>
 							  <div class="form-group row">
 							  	<label for="" class="col-sm-2 col-form-label">배송 메시지</label>
-							    <select name="ord_message">
+							    <select name="selectBox">
 							      <option value="" selected>--메시지 선택 (선택 사항)--</option>
 							      <option value="배송 전에 미리 연락 바랍니다.">배송 전에 미리 연락 바랍니다.</option>
 							      <option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
@@ -253,7 +253,7 @@
 							      <option value="택배함에 보관해 주세요.">택배함에 보관해 주세요.</option>
 							      <option value="newMessage">직접 입력</option>
 							    </select>
-								<input type="text" id="newMessage">
+								<input type="text" name="ord_message" id="newMessage">
 								<input type="hidden" name="ord_totalcost" value="${sum}">
 							  </div>
 							</form>
@@ -307,13 +307,14 @@
 			});
 			
 			$("#newMessage").hide();
-
+			
+			
 			//배송 메시지 직접입력 선택 시
-			$("select[name='ord_message']").on("change", function(){
-
+			$("select[name='selectBox']").on("change", function(){
+				
 				if($(this).val() == 'newMessage') {
 					$("#newMessage").show();
-					
+										
 				} else {
 					$("#newMessage").hide();
 				}
@@ -325,7 +326,11 @@
 
 				//유효성 검사
 
-
+				let ord_message = $("select[name='selectBox']").val();
+				if(ord_message != 'newMessage') {
+					$("#newMessage").val(ord_message);
+				} 
+				//console.log("o_message 값: " + $("#newMessage").val());
 				$("#orderForm").attr("action", "/user/order/addOrder");
 				$("#orderForm").submit();
 			});

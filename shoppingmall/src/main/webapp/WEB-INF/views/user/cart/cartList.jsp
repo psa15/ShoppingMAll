@@ -218,7 +218,7 @@
 			$("button#btnOrder").on("click", function(){
 				console.log("주문하기");
 
-				location.href = "/user/order/orderList";
+				location.href = "/user/order/orderList?type=cartOrder";
 			});
 			
 		});

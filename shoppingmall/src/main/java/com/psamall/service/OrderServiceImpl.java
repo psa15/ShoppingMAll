@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.psamall.domain.CartVO;
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderDetailVO;
 import com.psamall.domain.OrderVO;
@@ -28,6 +29,12 @@ public class OrderServiceImpl implements OrderService {
 	public List<OrderCartListVO> orderCartList(String m_id) {
 		return orderMapper.orderCartList(m_id);
 	}
+
+	//장바구니 외 주문
+	@Override
+	public List<OrderCartListVO> orderDirectList(Integer p_num, int ord_amount) {
+		return orderMapper.orderDirectList(p_num, ord_amount);
+	}
 	
 	//주문하기
 	@Transactional
@@ -42,12 +49,15 @@ public class OrderServiceImpl implements OrderService {
 		Long ord_code = vo.getOrd_code();
 		String m_id = vo.getM_id();
 		
-		orderMapper.insertOrderDetail(ord_code, m_id);;
+		orderMapper.insertOrderDetail(ord_code, m_id, p_num);;
 		
 		//3)장바구니 비우기
-		userCartMapper.clearCart(m_id);
+		OrderDetailVO orderDetailVO = new OrderDetailVO();
+		Integer p_num = orderDetailVO.getP_num();
+		userCartMapper.deleteCartOrder(p_num);
 		
 	}
+
 	
 	
 }

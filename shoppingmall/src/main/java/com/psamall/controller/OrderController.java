@@ -12,12 +12,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.psamall.domain.CartVO;
 import com.psamall.domain.MemberVO;
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
 import com.psamall.service.OrderService;
+import com.psamall.service.UserCartService;
 import com.psamall.utils.UploadFileUtils;
 
 import lombok.Setter;
@@ -34,14 +37,33 @@ public class OrderController {
 	
 	@Setter(onMethod_ = {@Autowired})
 	private OrderService orderService;
+	
+	@Setter(onMethod_ = {@Autowired})
+	private UserCartService userCartService;
 
 	//주문하기 폼
 	@GetMapping("/orderList")
-	public void orderList(HttpSession session, Model model) {
+	public void orderList(HttpSession session, Model model,
+							@RequestParam("type") String type, @RequestParam(value="p_num", required = false) Integer p_num, @RequestParam(value="cart_amount", required = false) Integer ord_amount ) {
 		
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		
-		List<OrderCartListVO> vo = orderService.orderCartList(m_id);
+		List<OrderCartListVO> vo = null;
+		
+		if(type.equals("cartOrder")) {
+			//장바구니에서 주문하기
+			vo = orderService.orderCartList(m_id);
+		} else if(type.equals("directOrder")) {			
+			//장바구니 외에서 주문하기
+			vo = orderService.orderDirectList(p_num, ord_amount);
+			
+			CartVO cartVO = new CartVO();
+			cartVO.setM_id(m_id);
+			cartVO.setCart_amount(ord_amount);
+			cartVO.setP_num(p_num);
+			userCartService.addCart(cartVO);
+		}
+		
 		for(int i=0; i<vo.size(); i++) {
 			String p_image_folder = vo.get(i).getP_image_folder().replace("\\", "/");
 			vo.get(i).setP_image_folder(p_image_folder);
@@ -76,6 +98,7 @@ public class OrderController {
 		
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		vo.setM_id(m_id);
+		
 		
 		orderService.orderSave(vo);
 		

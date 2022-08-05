@@ -50,6 +50,16 @@
 	
 	</delete>
 	
+	<!-- 장바구니 주문 상품 삭제 -->
+	<delete id="deleteCartOrder">
+	
+		DELETE
+			TBL_CART
+		WHERE
+			P_NUM = #{p_num}
+	
+	</delete>
+	
 	<!-- 장바구니 비우기 -->
 	<delete id="clearCart">
 	

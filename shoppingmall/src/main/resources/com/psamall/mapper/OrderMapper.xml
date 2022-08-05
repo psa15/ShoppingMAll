@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.psamall.mapper.OrderMapper">
 
-	<!-- 주문 페이지 주문 상품 목록 -->
+	<!-- 주문 페이지 주문 상품 목록 - 장바구니에서 주문 -->
 	<select id="orderCartList" resultType="com.psamall.domain.OrderCartListVO">
 	
 		SELECT
@@ -14,6 +14,18 @@
 			C.P_NUM = P.P_NUM
 		WHERE 
 		    C.M_ID = #{m_id}
+	
+	</select>
+	
+	<!-- 장바구니 외 주문 -->
+	<select id="orderDirectList" resultType="com.psamall.domain.OrderCartListVO">
+	
+		SELECT
+	        P_NUM, P_NAME, P_COST, P_DISCOUNT, P_COMPANY, P_IMAGE, P_IMAGE_FOLDER, #{ord_amount} as CART_AMOUNT
+		FROM 
+			TBL_PRODUCT P
+		WHERE 
+		    P_NUM = #{p_num}
 	
 	</select>
 	
@@ -50,8 +62,9 @@
 	        ON 
 	        	C.P_NUM = P.P_NUM
 	        WHERE 
-	        	M_ID = #{m_id}
+	        	M_ID = #{m_id} AND C.P_NUM = #{p_num}
 	
 	</insert>
+	
 
 </mapper>
