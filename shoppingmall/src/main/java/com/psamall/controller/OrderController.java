@@ -1,8 +1,13 @@
 package com.psamall.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +24,12 @@ import com.psamall.domain.CartVO;
 import com.psamall.domain.MemberVO;
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
+import com.psamall.domain.ProductVO;
+import com.psamall.dto.OrderProductDTO;
+import com.psamall.dto.OrderProductListDTO;
 import com.psamall.service.OrderService;
 import com.psamall.service.UserCartService;
+import com.psamall.service.UserProductService;
 import com.psamall.utils.UploadFileUtils;
 
 import lombok.Setter;
@@ -40,6 +49,9 @@ public class OrderController {
 	
 	@Setter(onMethod_ = {@Autowired})
 	private UserCartService userCartService;
+	
+	@Setter(onMethod_ = {@Autowired})
+	private UserProductService userProductService;
 
 	//주문하기 폼
 	@GetMapping("/orderList")
@@ -71,6 +83,39 @@ public class OrderController {
 		
 		model.addAttribute("orderCartList", vo);
 		
+	}
+	
+	@GetMapping("/test")
+	public void test() {
+		
+	}
+	
+	//장바구니 선택한 상품만 주문하기
+	@GetMapping("/orderSelected")
+	@ResponseBody
+	public String orderSelected(HttpServletRequest request, HttpServletResponse response) {
+		//List<OrderProductListDTO> orderdto = new ArrayList<OrderProductListDTO>();
+		
+		String[] list = request.getParameterValues("checkProduct");
+		for(String str : list) {
+			log.info(str);
+		}
+		
+//		String code = checkList.get("checkedValue").toString();
+//		log.info(code);
+//		array = code.split(",");
+		
+//		int[] results = new int[array.length];
+//		int result = 1;
+//		log.info(array);
+//		for(int i=0; i<array.length; i++) {
+//			HashMap<String, Object> resendMap = new HashMap<String, Object>();
+//			
+//			resendMap.put
+//		}
+		
+//		model.addAttribute("testList", testList);
+		return "";
 	}
 	
 	//주문 상품 이미지 불러오기

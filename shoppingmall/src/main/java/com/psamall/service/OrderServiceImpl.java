@@ -1,5 +1,6 @@
 package com.psamall.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import com.psamall.domain.CartVO;
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderDetailVO;
 import com.psamall.domain.OrderVO;
+import com.psamall.dto.OrderProductDTO;
+import com.psamall.dto.OrderProductListDTO;
 import com.psamall.mapper.OrderMapper;
 import com.psamall.mapper.UserCartMapper;
 
@@ -49,13 +52,33 @@ public class OrderServiceImpl implements OrderService {
 		Long ord_code = vo.getOrd_code();
 		String m_id = vo.getM_id();
 		
-		orderMapper.insertOrderDetail(ord_code, m_id, p_num);;
+		//orderMapper.insertOrderDetail(ord_code, m_id, p_num);;
 		
 		//3)장바구니 비우기
 		OrderDetailVO orderDetailVO = new OrderDetailVO();
 		Integer p_num = orderDetailVO.getP_num();
 		userCartMapper.deleteCartOrder(p_num);
 		
+	}
+
+	//선택한 상품 주문
+	@Override
+	public List<OrderProductDTO> getSelectedProduct(List<OrderProductDTO> dto) {
+		
+		List<OrderProductDTO> result = new ArrayList<OrderProductDTO>();
+		
+		for(OrderProductDTO opDTO : dto) {
+			
+			OrderProductDTO productInfo = orderMapper.getSelected(opDTO.getP_num());
+			
+			productInfo.setCart_amount(opDTO.getCart_amount());
+			
+			result.add(productInfo);
+			
+		}
+		
+		
+		return result;
 	}
 
 	

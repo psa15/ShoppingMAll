@@ -5,12 +5,18 @@
 	<!-- 장바구니 담기 -->
 	<insert id="addCart">
 	
-		INSERT INTO
-			TBL_CART
-				(CART_CODE, P_NUM, M_ID, CART_AMOUNT)
-			VALUES
-				(SEQ_CART_CODE.nextval, #{p_num}, #{m_id}, #{cart_amount})
-	
+		MERGE INTO TBL_CART
+			    USING DUAL
+			        ON (M_ID = #{m_id} AND P_NUM = #{p_num})
+			WHEN MATCHED THEN
+			    UPDATE SET 
+			    	CART_AMOUNT = CART_AMOUNT + #{cart_amount}
+			WHEN NOT MATCHED THEN
+			    INSERT
+			    	(CART_CODE, P_NUM, M_ID, CART_AMOUNT)
+			    VALUES
+			    	(SEQ_CART_CODE.NEXTVAL, #{p_num}, #{m_id}, #{cart_amount})
+			    	
 	</insert>
 	
 	<!-- 장바구니 목록 -->

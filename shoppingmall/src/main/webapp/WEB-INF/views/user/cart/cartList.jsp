@@ -59,10 +59,18 @@
 	      			<div class="box-header">
 	      				LIST CART     
 	      			</div>	
-	      			<div class="box-body">	      				
+	      			<div class="box-body">
+	      				<div class="form-check">
+						  <input class="form-check-input" type="checkbox" value="" id="checkAll" checked>
+						  <label class="form-check-label" for="checkAll">
+						    전체 선택
+						  </label>
+						</div>	
+						<form action="" method="get" id="productSelectedForm">      				
 					  <table class="table table-hover" id="tblCartList">
 						  <thead>
 						    <tr>
+						      <th scope="col"></th>
 						      <th scope="col">제품</th>
 						      <th scope="col">수량</th>
 						      <th scope="col">배송비</th>
@@ -72,9 +80,20 @@
 						    </tr>
 						  </thead>
 						  <tbody>
-						  <c:forEach items="${cartList}" var="cartVO">
+							
+						  <c:forEach items="${cartList}" var="cartVO" varStatus="status">
 						  <c:set var="price" value="${cartVO.cart_amount * cartVO.p_cost}"></c:set>
-						    <tr>	
+						    <tr>
+						      <!-- 체크박스 -->				      
+						      <td class="calCheckedProduct"> 						      	
+						      	<input class="form-check-input" type="checkbox" value="${cartVO.p_num}" name="checkProduct" checked>
+						      	<input type="hidden" class="productPriceForCal" value="${cartVO.p_cost}">
+						      	<input type="hidden" class="productAmountForCal" value="${cartVO.cart_amount}">
+						      	<input type="hidden" class="productTotalPriceForCal" value="${cartVO.p_cost * cartVO.cart_amount}">
+						      	<input type="hidden" class="productPointForCal" value="${cartVO.p_cost * 0.005}">
+								
+						      	
+						      </td>	
 						      <!-- 제품 : 이미지 및 상품이름 -->				      
 						      <td>						      	
 						      	<a class="move" href="${cartVO.p_num}">
@@ -85,14 +104,14 @@
 						      </td>
 						      <!-- 수량 -->
 						      <td>
-						      	<input type="number" name="cart_amount" value='<c:out value="${cartVO.cart_amount}" />'>
+						      	<input type="number" name="cart_amount" value='<c:out value="${cartVO.cart_amount}" />' id="cart_amount${status.index}">
 								<input type="hidden" name="p_cost" value="${cartVO.p_cost}">
 						      	<button type="button" name="btnCartAmountChange" data-cart_code="${cartVO.cart_code}" class="btn btn-link">수량변경</button>
 						 
 						      </td>
 						      <!-- 배송비 -->	
 						      <td>
-						      	[기본배송]
+						      	[기본배송] (30,000만원 이상 무료배송)
 						      </td>	
 								<!-- 상품 가격 * 수량 -->				      
 							  <td>
@@ -111,29 +130,46 @@
 			                    <button type="button" name="btnCartDelete" data-cart_code="${cartVO.cart_code}" class="btn btn-link">삭제</button></td>
 						    </tr>
 						    <c:set var="sum" value="${sum + price}"></c:set>
-						   </c:forEach>					   
+						   </c:forEach>	
+						   
 						  </tbody>
 						  <tfoot>
-							<tr>
-								<c:if test="${!empty cartList}">
-									<td colspan="6" style="text-align: right"> 
-										총 구매 금액: <span id="cartTotalPrice"><fmt:formatNumber type="number" maxFractionDigits="3" value="${sum}" /></span>
+							<c:if test="${!empty cartList}">
+								<tr>
+									<td colspan="7" style="text-align: left"> 
+										총 상품 금액: <span id="productTotalPrice"></span><br>
 									</td>
-								</c:if>
-								<c:if test="${empty cartList}">
+									
+								</tr>
+								<tr>
+									<td colspan="7" style="text-align: left"> 
+										배송비: <span id="deliveryPrice"></span>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="7" style="text-align: right"> 
+										총 구매 금액: <span id="cartTotalPrice"></span><br>
+									</td>
+								</tr>
+							</c:if>
+							<c:if test="${empty cartList}">
+								<tr>
 									<td colspan="6" style="text-align: right"> 
 										장바구니가 비었습니다.
 									</td>
-								</c:if>
-							</tr>
+								</tr>
+							</c:if>						
 						  </tfoot>
-						</table>							
+						</table>
+						</form>								
 	      			</div>
 	      			<div class="box-footer text-center">
 	      				<c:if test="${!empty cartList}">
 							<button type="button" id="btnClearCart" class="btn btn-primary">장바구니 비우기</button>
 							<button type="button" id="btnShopping"  class="btn btn-primary">계속 쇼핑하기</button>
 							<button type="button" id="btnOrder"  class="btn btn-primary">주문하기</button>
+							<form id="orderCheckForm" action="/user/order/orderSelected" method="get">									
+							</form>
 						</c:if>
 						<c:if test="${empty cartList}">
 							<button type="button" name="btnShopping"  class="btn btn-primary">쇼핑하기</button>
@@ -152,6 +188,14 @@
 	<script>
 
 		$(function(){
+
+			totalInfo();
+
+			//선택 여부에 따른 금액 변화
+			$("input[name='checkProduct']").on("change", function(){
+				// console.log("체크변화");
+				totalInfo();
+			});
 
 			//장바구니 페이지에서 상품 수량 변경
 			$("button[name='btnCartAmountChange']").on("click", function(){
@@ -174,20 +218,24 @@
 							//상품 가격 참조
 							let p_cost = btnCartAmountChange.parent().find("input[name='p_cost']").val();
 							btnCartAmountChange.parents("tr").find("span.unitPrice").html($.numberWithCommas(p_cost * cart_amount));
+							
+							//새로고침 안하려고 ajax를 사용했으나 수량 수정 후 총구매금액 변경이 안됨...
+							location.href="/user/cart/cartList";
 
 							//총 구매금액 변경
-							let totalPrice = 0;
-							$("table#tblCartList tr td span.unitPrice").each(function(index, item){
-								console.log("단위가격: " + $(item).html());
+							// let totalPrice = 0;
+							/* $("table#tblCartList tr td span.unitPrice").each(function(index, item){
+								// console.log("단위가격: " + $(item).html());
 								// console.log("단위가격: " + $(item).text());
-
-								totalPrice += parseInt($.withoutCommas($(item).text())); //무언갈 읽어오는 데이터는 전부 text(String)
-								$("table#tblCartList tr td span#cartTotalPrice").text($.numberWithCommas(totalPrice));
-							});
+								
+								// totalPrice += parseInt($.withoutCommas($(item).text())); //무언갈 읽어오는 데이터는 전부 text(String)
+								// $("table#tblCartList tr td span#cartTotalPrice").text($.numberWithCommas(totalPrice));
+							});  */
 						}
 					}
-				});
 
+					
+				});
 
 			});
 
@@ -217,8 +265,55 @@
 			//주문하기
 			$("button#btnOrder").on("click", function(){
 				console.log("주문하기");
+				
+				location.href="/user/order/orderSelected";
 
-				location.href = "/user/order/orderList?type=cartOrder";
+				/* let checkArr = [];
+				$("input[name='checkProduct']:checked").each(function(i){
+					checkArr.push($(this).val());
+				});
+
+				$.ajax({
+					url: "/user/order/orderSelected",
+					type: 'get',
+					dataType: 'text',
+					data: { productArrCheck : checkArr}
+				}); */
+
+				/* let pNumStr = "";
+					$("input[name='checkProduct']:checked").each(function(index, item){
+						pNumStr += "<input type='hidden' name='checkedValue[" + index + "]' value='" + $(item).val() + "'>";
+					});
+				
+				$("#orderCheckForm").append(pNumStr);
+				$("#orderCheckForm").attr("action", "/user/order/orderSelected");
+				$("#orderCheckForm").submit(); */
+				
+				/* let orderInfoStr = "";
+				let orderNumber = 0;
+				let orderInfoForm = $("#orderInfoForm");
+				
+				$(".calCheckedProduct").each(function(index, item){
+					
+					if($(item).find("input[name='checkProduct']").is(":checked") == true) {
+
+						let p_num = $(item).find(".productNum").val();
+						let cart_amount = $(item).find(".productAmountForCal").val();
+
+						orderInfoStr += "<input type='hidden' value='" + p_num + "' name='orderProduct[" + orderNumber + "].p_num'>";
+
+						orderInfoStr += "<input type='hidden' value='" + cart_amount + "' name='orderProduct[" + orderNumber + "].cart_amount'>";
+
+						orderNumber += 1;
+					}			
+
+				});
+
+				orderInfoForm.html(orderInfoStr);
+				orderInfoForm.attr("action", "/user/order/orderSelected");
+				orderInfoForm.submit(); */
+
+				
 			});
 			
 		});
@@ -231,6 +326,48 @@
 		//3자리마다 콤마 제거하기
 		$.withoutCommas = function (x) {
 			return x.toString().replace(",", '');
+		}
+
+		//선택한 상품의 정보만 계산하기(배송비, 총 가격, 적립금)
+		function totalInfo(){
+
+			let totalCost = 0; //주문할 상품 총 가격
+			let deliveryCost = 0; //배송비
+			let totalPoint = 0; //상품 주문시 적립될 포인트
+			let realTotalCost = 0; //상품 총 가격 + 배송비
+			
+			
+
+			//선택된 상품 계산
+			$(".calCheckedProduct").each(function(index, item){
+				
+				
+
+				if($(item).find("input[name='checkProduct']").is(":checked") == true) {
+
+					totalCost += parseInt($(item).find(".productTotalPriceForCal").val());
+					totalPoint += parseInt($(item).find(".productPointForCal").val());
+				}
+								
+			});
+
+			//배송비
+			if(totalCost >= 30000) {
+				deliveryCost = 0;
+			} else if(totalCost == 0) {
+				deliveryCost = 0;
+			} else {
+				deliveryCost = 3000;
+			}
+
+			realTotalCost = totalCost + deliveryCost;
+
+			//선택된 상품 총 금액
+			$("#productTotalPrice").text($.numberWithCommas(totalCost));
+			//배송비
+			$("#deliveryPrice").text($.numberWithCommas(deliveryCost));
+			//총 구매 금액
+			$("#cartTotalPrice").text($.numberWithCommas(realTotalCost));
 		}
 	</script>
 
