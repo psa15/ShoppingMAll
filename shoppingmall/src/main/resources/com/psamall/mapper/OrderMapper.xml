@@ -56,9 +56,9 @@
 		
 		INSERT INTO 
 			TBL_ORDER
-				(ORD_CODE, M_ID, ORD_NAME, ORD_POSTCODE, ORD_ADDR, ORD_ADDR_D, ORD_TEL, ORD_TOTALCOST, ORD_MESSAGE, ORD_EMAIL) 
+				(ORD_CODE, M_ID, ORD_NAME, ORD_POSTCODE, ORD_ADDR, ORD_ADDR_D, ORD_TEL, ORD_TOTALCOST, ORD_MESSAGE, ORD_EMAIL, PAY_STATUS) 
 			VALUES
-				(#{ord_code}, #{m_id}, #{ord_name}, #{ord_postcode}, #{ord_addr}, #{ord_addr_d}, #{ord_tel}, #{ord_totalcost}, #{ord_message}, #{ord_email})
+				(#{ord_code}, #{m_id}, #{ord_name}, #{ord_postcode}, #{ord_addr}, #{ord_addr_d}, #{ord_tel}, #{ord_totalcost}, #{ord_message}, #{ord_email}, #{pay_status})
 				
 	</insert>
 	
@@ -74,7 +74,19 @@
 	        ON 
 	        	C.P_NUM = P.P_NUM
 	        WHERE 
-	        	M_ID = #{m_id} AND C.P_NUM = #{p_num}
+	        	M_ID = #{m_id} <!-- AND C.P_NUM = #{p_num} -->
+	
+	</insert>
+	
+	<!-- 주문 저장 2)결제 테이블 -->
+	<insert id="insertPayment">
+	
+		INSERT INTO 
+			TBL_PAYMENT
+				(PAY_CODE, ORD_CODE, PAY_METHOD, PAY_DATE, PAY_TOT_PRICE, PAY_REST_PRICE, PAY_NOACCOUNT_PRICE, PAY_NOACCOUNT_USERNAME, PAY_NOACCOUNT_BANK) 
+			VALUES
+				(SEQ_PAYMENT_CODE.nextval, #{ord_code}, #{pay_method}, SYSDATE, #{pay_tot_price}, #{pay_rest_price}, #{pay_noAccount_price}, #{pay_noAccount_username}, #{pay_noAccount_bank})
+				
 	
 	</insert>
 	

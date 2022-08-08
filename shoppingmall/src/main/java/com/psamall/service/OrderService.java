@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
+import com.psamall.domain.PaymentVO;
 import com.psamall.dto.OrderProductDTO;
 import com.psamall.dto.OrderProductListDTO;
 
@@ -18,6 +19,6 @@ public interface OrderService {
 	List<OrderProductDTO> getSelectedProduct(List<OrderProductDTO> dto);
 	
 	
-	//주문하기
-	void orderSave(OrderVO vo);
+	//주문하기(주문 정보 + 결제 정보)
+	void orderSave(OrderVO orderVO, PaymentVO payVO);
 }

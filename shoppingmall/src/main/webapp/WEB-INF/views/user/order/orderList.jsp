@@ -164,6 +164,7 @@
 		      		<div class="box box-primary">
 		      			<div>
 		      				<form id="orderForm" method="post" action="">
+								<input type="hidden" class="form-control" name="p_num" id="pNumForOrder" >
 		      				  <h5>주문자 정보</h5>
 		      				  <hr>
 							  <div class="form-group row">
@@ -276,7 +277,7 @@
 								  <input type="hidden" class="form-control" name="pay_noAccount_bank" id="pay_noAccount_bank" value="">
 								  <input type="hidden" class="form-control" name="pay_noAccount_price" id="pay_noAccount_price" value="${sum}">
 								</div>
-								<div class="form-group row">
+								<div class="form-group row" id="noAccountUsername">
 								  <label for="pay_user" class="col-sm-2 col-form-label">입금자 명</label>
 								  <div class="col-sm-10">
 								    <input type="text" class="form-control" name="pay_noAccount_username" id="pay_noAccount_username">
@@ -348,15 +349,43 @@
 			});
 
 			//은행과 입금자 명은 결제방법을 무통장 입금으로 선택했을 때만 나오게
+			$("#bank").hide();
+			$("div#noAccountUsername").hide();
+			
 			//결제 방법 선택
-			$("#").on("change", function(){
+			$("#pay_method").on("change", function(){
 				
+				$("#bank").hide();
+				$("div#noAccountUsername").hide();
+
+				if($(this).val() == '') {
+					alert("결제 방법을 선택해 주세요");
+					return;
+				}
+
+				if($(this).val() == '무통장 입금') {
+					$("#bank").show();
+					$("div#noAccountUsername").show();
+				}
+			});
+
+			//무통장 입금 선택 시
+			$("#bank").on("change", function(){
+				
+				if($(this).val() == '') {
+					alert("입금 은행을 선택해 주세요");
+					return;
+				}
+
+				$("#pay_noAccount_bank").val($("#bank option:selected").text().substring(0,5));
 			});
 
 			//주문하기 버튼 클릭 시
 			$("#btnOrder").on("click", function(){
 
 				//유효성 검사
+
+				$("#pNumForOrder").val($(".move").attr("href"));
 
 				let ord_message = $("select[name='selectBox']").val();
 				if(ord_message != 'newMessage') {

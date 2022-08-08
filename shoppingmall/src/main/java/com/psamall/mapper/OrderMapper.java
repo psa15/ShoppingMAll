@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
+import com.psamall.domain.PaymentVO;
 import com.psamall.dto.OrderProductDTO;
 
 public interface OrderMapper {
@@ -25,5 +26,7 @@ public interface OrderMapper {
 	//1)주문테이블
 	void insertOrder(OrderVO vo);
 	//2)주문 상세 테이블
-	void insertOrderDetail(@Param("ord_code") Long ord_code, @Param("m_id") String m_id, @Param("p_num") Integer p_num);
+	void insertOrderDetail(@Param("ord_code") Long ord_code, @Param("m_id") String m_id);
+	//3) 결제 테이블
+	void insertPayment(PaymentVO vo);
 }

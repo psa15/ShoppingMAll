@@ -21,6 +21,7 @@ import com.psamall.domain.CartVO;
 import com.psamall.domain.MemberVO;
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
+import com.psamall.domain.PaymentVO;
 import com.psamall.dto.OrderProductListDTO;
 import com.psamall.service.OrderService;
 import com.psamall.service.UserCartService;
@@ -51,11 +52,18 @@ public class OrderController {
 
 	//주문하기 폼
 	@GetMapping("/orderList")
-	public void orderList(HttpSession session, Model model,
+	public String orderList(HttpSession session, Model model,
 							@RequestParam("type") String type, @RequestParam(value="p_num", required = false) Integer p_num, @RequestParam(value="cart_amount", required = false) Integer ord_amount ) {
 		
-		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
+		String url = "";
 		
+		//String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
+		
+//		 if((MemberVO)session.getAttribute("loginStatus") == null) {
+//			url = "redirect:/user";
+//		}
+//		
+		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		List<OrderCartListVO> vo = null;
 		
 		if(type.equals("cartOrder")) {
@@ -78,6 +86,8 @@ public class OrderController {
 		}
 		
 		model.addAttribute("orderCartList", vo);
+		
+		return url;
 		
 	}
 	
@@ -121,15 +131,21 @@ public class OrderController {
 	
 	//주문 저장
 	@PostMapping("/addOrder")
-	public String addOrder(HttpSession session, OrderVO vo) {
+	public String addOrder(HttpSession session, OrderVO orderVO, PaymentVO payVO) {
 		
-		log.info("주문 정보: " + vo);
+		log.info("주문 정보: " + orderVO);
+		log.info("결제 정보: " + payVO);
 		
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
-		vo.setM_id(m_id);
+		orderVO.setM_id(m_id);
 		
+		if(payVO.getPay_noAccount_bank() != null) {
+			orderVO.setPay_status("입금전");
+			payVO.setPay_tot_price(orderVO.getOrd_totalcost()); //실제 총 결제금액
+			payVO.setPay_rest_price(0);	//추가 입금 금액
+		}
 		
-		orderService.orderSave(vo);
+		orderService.orderSave(orderVO, payVO);
 		
 		return "redirect:/";
 	}

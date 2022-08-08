@@ -137,7 +137,7 @@
 			</div>	        
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-primary">바로 구매</button>
+	        <button type="button" name="btnBuyNow" class="btn btn-primary">바로 구매</button>
 	        <button type="button" name="btnAddCart" class="btn btn-primary">장바구니 담기</button>
 	      </div>
 	    </div>
@@ -221,6 +221,17 @@
 
 				let p_num = $(this).attr("href");
 				location.href = "/user/product/userProductDetail?p_num=" + p_num;
+			});
+			
+			//모달 - 바로구매 클릭
+			$("button[name='btnBuyNow']").on("click", function(){
+				console.log("바로구매 클릭");
+				
+				let p_num = $("div#modal_productDetail input#p_num").val();
+				let cart_amount = $("div#modal_productDetail input#p_amount").val();
+				
+				location.href = "/user/order/orderList?type=directOrder&p_num=" + p_num + "&cart_amount=" + cart_amount;
+				
 			});
 		});
 	</script>

@@ -17,7 +17,7 @@ public class PaymentVO {
 	private Long ord_code;
 	private String pay_method;
 	private Date pay_date;
-	private int pat_tot_price;
+	private int pay_tot_price;
 	private int pay_rest_price;
 	private int pay_noAccount_price;
 	private String pay_noAccount_username;
