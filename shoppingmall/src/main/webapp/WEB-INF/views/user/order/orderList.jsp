@@ -128,8 +128,8 @@
 				                    <input type="hidden" name="p_image_dateFolder" value="${orderCartListVO.p_image_folder}">
 				                    <input type="hidden" name="p_image" value="${orderCartListVO.p_image}">
 				                    <input type="hidden" name="ord_cost" value="${orderCartListVO.p_cost * orderCartListVO.cart_amount}" >
-						  <input type="hidden" name="p_num" value="${orderCartListVO.p_num}" >
-						  <input type="hidden" name="ord_amount" value="${orderCartListVO.cart_amount}" >
+								    <input type="hidden" name="p_num" value="${orderCartListVO.p_num}" >
+								    <input type="hidden" name="ord_amount" value="${orderCartListVO.cart_amount}" >
 				                    <button type="button" name="btnCartDelete" data-cart_code="${orderCartListVO.cart_code}" class="btn btn-link">X</button></td>
 							    </tr>
 							    <c:set var="sum" value="${sum + price}"></c:set>
@@ -256,6 +256,33 @@
 								<input type="text" name="ord_message" id="newMessage">
 								<input type="hidden" name="ord_totalcost" value="${sum}">
 							  </div>
+							  <div class="form-group">
+								  <label for="exampleFormControlSelect1">결제 방법</label>
+								  <select class="form-control" id="pay_method" name="pay_method">
+								    <option value="">결제방법을 선택하세요</option>
+								    <option value="무통장 입금">무통장 입금</option>
+								    <option value="카카오 페이">카카오 페이</option>
+								    <option value="휴대폰 결제">휴대폰 결제</option>
+								    <option value="신용카드 결제">신용카드 결제</option>
+								    <option value="페이코">페이코</option>
+								  </select>
+								  <select class="form-control" id="bank" name="bank">
+								    <option value="">은행을 선택하세요</option>
+								    <option value="국민-0000000000000">국민 은행(0000000000000)</option>
+								    <option value="우리-1111111111111">우리 은행(1111111111111)</option>
+								    <option value="신한-2222222222222">신한 은행(2222222222222)</option>
+								    <option value="하나-3333333333333">하나 은행(3333333333333)</option>
+								  </select>
+								  <input type="hidden" class="form-control" name="pay_noAccount_bank" id="pay_noAccount_bank" value="">
+								  <input type="hidden" class="form-control" name="pay_noAccount_price" id="pay_noAccount_price" value="${sum}">
+								</div>
+								<div class="form-group row">
+								  <label for="pay_user" class="col-sm-2 col-form-label">입금자 명</label>
+								  <div class="col-sm-10">
+								    <input type="text" class="form-control" name="pay_noAccount_username" id="pay_noAccount_username">
+								  </div>
+								</div>
+							  
 							</form>
 		      			</div>      	
 					 
@@ -320,6 +347,11 @@
 				}
 			});
 
+			//은행과 입금자 명은 결제방법을 무통장 입금으로 선택했을 때만 나오게
+			//결제 방법 선택
+			$("#").on("change", function(){
+				
+			});
 
 			//주문하기 버튼 클릭 시
 			$("#btnOrder").on("click", function(){

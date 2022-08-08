@@ -20,4 +20,8 @@ public class OrderVO {
 	private int ord_totalcost;
 	private Date ord_date;
 	private String ord_message; //배송 메시지
+	
+	private String ord_status;
+	private String pay_status;
+	private String cs_status;
 }

@@ -266,28 +266,35 @@
 			$("button#btnOrder").on("click", function(){
 				console.log("주문하기");
 				
-				location.href="/user/order/orderSelected";
+				//location.href="/user/order/orderSelected";
 
-				/* let checkArr = [];
+				 let checkArr = [];
 				$("input[name='checkProduct']:checked").each(function(i){
 					checkArr.push($(this).val());
-				});
-
+				}); 
+				
+				let formData = { "checkArray" : checkArr };
+				
 				$.ajax({
-					url: "/user/order/orderSelected",
+					url: '/user/order/orderSelected',
 					type: 'get',
-					dataType: 'text',
-					data: { productArrCheck : checkArr}
-				}); */
-
-				/* let pNumStr = "";
-					$("input[name='checkProduct']:checked").each(function(index, item){
-						pNumStr += "<input type='hidden' name='checkedValue[" + index + "]' value='" + $(item).val() + "'>";
-					});
+					data: formData,
+					success: function(data) {
+						alert("완료");
+						location.href="/user/order/orderSelected"
+					}
+				
+				});
+				/*
+				let pNumStr = "";
+				$("input[name='checkProduct']:checked").each(function(index, item){
+					pNumStr += "<input type='hidden' name='checkedValue' value='" + $(item).val() + "'>";
+				});
+					//" + index + "
 				
 				$("#orderCheckForm").append(pNumStr);
 				$("#orderCheckForm").attr("action", "/user/order/orderSelected");
-				$("#orderCheckForm").submit(); */
+				$("#orderCheckForm").submit();*/
 				
 				/* let orderInfoStr = "";
 				let orderNumber = 0;

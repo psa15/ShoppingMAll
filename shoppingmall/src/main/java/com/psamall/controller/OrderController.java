@@ -1,8 +1,5 @@
 package com.psamall.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -24,8 +21,6 @@ import com.psamall.domain.CartVO;
 import com.psamall.domain.MemberVO;
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
-import com.psamall.domain.ProductVO;
-import com.psamall.dto.OrderProductDTO;
 import com.psamall.dto.OrderProductListDTO;
 import com.psamall.service.OrderService;
 import com.psamall.service.UserCartService;
@@ -34,6 +29,7 @@ import com.psamall.utils.UploadFileUtils;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+import oracle.jdbc.proxy.annotation.GetProxy;
 
 @Controller
 @Log4j
@@ -93,29 +89,17 @@ public class OrderController {
 	//장바구니 선택한 상품만 주문하기
 	@GetMapping("/orderSelected")
 	@ResponseBody
-	public String orderSelected(HttpServletRequest request, HttpServletResponse response) {
-		//List<OrderProductListDTO> orderdto = new ArrayList<OrderProductListDTO>();
+	public String orderSelected(@RequestParam("checkArray") List<Integer> arrayParams){
 		
-		String[] list = request.getParameterValues("checkProduct");
-		for(String str : list) {
-			log.info(str);
-		}
+		log.info(arrayParams);
 		
-//		String code = checkList.get("checkedValue").toString();
-//		log.info(code);
-//		array = code.split(",");
 		
-//		int[] results = new int[array.length];
-//		int result = 1;
-//		log.info(array);
-//		for(int i=0; i<array.length; i++) {
-//			HashMap<String, Object> resendMap = new HashMap<String, Object>();
-//			
-//			resendMap.put
-//		}
+		/*
+		 * String[] arrayParam = request.getParameterValues("checkedValue"); for(int
+		 * i=0; i<arrayParam.length; i++) { System.out.println(arrayParam[i]); }
+		 */
 		
-//		model.addAttribute("testList", testList);
-		return "";
+		return "redirect:/user/order/orderList";
 	}
 	
 	//주문 상품 이미지 불러오기

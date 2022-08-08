@@ -160,6 +160,41 @@ CREATE TABLE TBL_ORDER_D(
 ALTER TABLE TBL_ORDER_D ADD CONSTRAINT FK_ORD_CODE FOREIGN KEY(ORD_CODE) REFERENCES TBL_ORDER(ORD_CODE);
 --ord_code, p_num, ord_amount, ord_cost?
 
+/* 220808
+1) 주문 테이블
+    - 주문상태 컬럼 : 상품 준비중 / 베송 준비 중 / 배송 보류 / 배송 대기 / 배송 중 / 배송 완료
+    - 결제 상태 컬럼: 입금 전 / 추가 입금 대기 / 입금 완료(수동) / 입금 완료(자동) / 결제 완료
+    -cs 상태 : 취소 / 교환 / 반품 / 환불
+2) 주문 상세 테이블
+3)결제 테이블 
+        결제 코드
+        주문 코드
+        결제 수단
+        결제(입금)일자
+        총 실제 결제 금액
+        추가 입금금액
+        무통장 입금액
+        무통장 입금자명
+        무통장 입금은행
+*/
+CREATE TABLE TBL_PAYMENT (
+    
+    PAY_CODE                NUMBER  CONSTRAINT PK_PAYMENT   PRIMARY KEY, --결제 코드
+    ORD_CODE                   NUMBER NOT NULL, --주문코드(FK)
+    PAY_METHOD           VARCHAR2(20)    NOT NULL, --무통장 / 신용카드 / 페이코 / 휴대폰 / 카카오 페이
+    PAY_DATE                DATE        NOT NULL, --결제(입금)일자
+    PAT_TOT_PRICE        NUMBER    NOT NULL, --총 실제 결제 금액
+    PAY_REST_PRICE        NUMBER NOT NULL, --추가 입금금액
+    PAY_NOACCOUNT_PRICE                NUMBER, --무통장 입금액
+    PAY_NOACCOUNT_USERNAME                 VARCHAR2(20), -- 무통장 입금자명
+    PAY_NOACCOUNT_BANK                VARCHAR2(20) --무통장 입금금액
+);
+CREATE SEQUENCE SEQ_PAYMENT_CODE;
+
+pay_code, ord_code, pay_method, pay_date, pat_tot_price, pay_rest_price, pay_noaccount_price, pay_noaccount_username, pay_noaccount_bank
+PAY_CODE, ORD_CODE, PAY_METHOD, PAY_DATE, PAT_TOT_PRICE, PAY_REST_PRICE, PAY_NOACCOUNT_PRICE, PAY_NOACCOUNT_USERNAME, PAY_NOACCOUNT_BANK
+
+
 --7. �Խ���(BOARD)
 CREATE TABLE TBL_BOARD(
 B_NUM NUMBER     CONSTRAINT PK_BOARD  PRIMARY KEY,    --�Խñ� ��ȣ(������)
