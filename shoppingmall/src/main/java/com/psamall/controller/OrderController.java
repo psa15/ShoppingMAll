@@ -52,10 +52,10 @@ public class OrderController {
 
 	//주문하기 폼
 	@GetMapping("/orderList")
-	public String orderList(HttpSession session, Model model,
+	public void orderList(HttpSession session, Model model,
 							@RequestParam("type") String type, @RequestParam(value="p_num", required = false) Integer p_num, @RequestParam(value="cart_amount", required = false) Integer ord_amount ) {
 		
-		String url = "";
+	
 		
 		//String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		
@@ -86,8 +86,6 @@ public class OrderController {
 		}
 		
 		model.addAttribute("orderCartList", vo);
-		
-		return url;
 		
 	}
 	

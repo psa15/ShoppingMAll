@@ -42,6 +42,12 @@
 		color: black;
 	}
     </style>
+    
+  <script>
+	if('${msg}' == 'logout') {
+		alert("로그아웃 되었습니다.");
+	}
+  </script>
 
     
     <!-- Custom styles for this template -->
@@ -160,54 +166,6 @@
 <footer class="text-muted">
   <%@include file="/WEB-INF/views/include/footer.jsp" %>
 </footer>
-
-	<!-- 상품상세보기(바로구매 + 장바구니) 모달 -->
-	<div class="modal fade" id="modal_productDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-			<div class="row">
-				<div class="col-md-6">
-					<img src="" id="modal_product_img"
-					 alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image.png'">
-	
-				</div>
-				<div class="col-md-6">
-					<form>
-						<div class="form-group">
-							<label for="p_name" class="col-form-label">상품명</label>
-							<input type="text" class="form-control" id="p_name" readonly>
-							<input type="hidden" class="form-control" id="p_num">
-						</div>
-						<div class="form-group">
-							<label for="p_cost" class="col-form-label">가격</label>
-							<input type="text" class="form-control" id="p_cost" readonly>
-						</div>
-						<div class="form-group">
-							<label for="p_company" class="col-form-label">제조사</label>
-							<input type="text" class="form-control" id="p_company" readonly>
-						</div>
-						<div class="form-group">
-							<label for="p_amount" class="col-form-label">수량</label>
-							<input type="number" class="form-control" id="p_amount" min="1" value="1">
-						</div>
-					</form>
-				</div>
-			</div>	        
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-primary">바로 구매</button>
-	        <button type="button" name="btnAddCart" class="btn btn-primary">장바구니 담기</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
 	
 	<!-- 리뷰 작성할 모달 -->
 	<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -252,7 +210,7 @@
 		$(function(){
 
 
-			//모달 - 장바구니 담기 클릭
+			//장바구니 담기 클릭
 			$("#btnCart").on("click", function(){
 				console.log("장바구니 담기 클릭");
 				
@@ -271,12 +229,24 @@
 					}
 				});
 			});
+
+			//바로구매 클릭
+			$("#btnOrder").on("click", function(){
+				console.log("바로구매 클릭");
+				let p_num = $("input#p_num").val()
+				let cart_amount = $("input#p_amount").val();
+				
+				location.href = "/user/order/orderList?type=directOrder&p_num=" + p_num + "&cart_amount=" + cart_amount;
+			});
 			
 			//jQuery-ui 탭기능
 			$("#productDetailTabs").tabs();
 			
 			//상품 리뷰 쓰기 버튼 클릭
 			$("button#btnReview").on("click", function(){
+
+				$("#star_r_score a.r_score").parent().children().removeClass("on"); 
+				$("#r_content").val("");
 
 				$(".btnReview").hide();
 				$("#btnReviewWrite").show();

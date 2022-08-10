@@ -169,10 +169,12 @@ public class MemberController {
 	
 	//로그아웃
 	@GetMapping("/logout")
-	public String logout(HttpSession session) {
+	public String logout(HttpSession session,  RedirectAttributes rttr) {
 		
 		//세션에 저장된 모든 정보 제거
 		session.invalidate();
+		
+		rttr.addFlashAttribute("msg", "logout");
 		
 		return "redirect:/";
 	}
