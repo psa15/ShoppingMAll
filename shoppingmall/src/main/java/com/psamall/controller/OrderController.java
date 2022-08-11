@@ -16,13 +16,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.psamall.domain.CartListVO;
 import com.psamall.domain.CartVO;
 import com.psamall.domain.MemberVO;
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
 import com.psamall.domain.PaymentVO;
 import com.psamall.dto.OrderProductListDTO;
+import com.psamall.kakaopay.ApproveResponse;
+import com.psamall.kakaopay.ReadyResponse;
 import com.psamall.service.OrderService;
 import com.psamall.service.UserCartService;
 import com.psamall.service.UserProductService;
@@ -49,20 +53,27 @@ public class OrderController {
 	
 	@Setter(onMethod_ = {@Autowired})
 	private UserProductService userProductService;
+	
+	@Setter(onMethod_ = {@Autowired})
+	private com.psamall.service.KakaoPayServiceImpl kakaopayService;
 
 	//주문하기 폼
 	@GetMapping("/orderList")
-	public void orderList(HttpSession session, Model model,
+	public void orderList(HttpSession session, Model model, RedirectAttributes rttr,
 							@RequestParam("type") String type, @RequestParam(value="p_num", required = false) Integer p_num, @RequestParam(value="cart_amount", required = false) Integer ord_amount ) {
 		
 	
-		
+		String url = "";
 		//String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		
-//		 if((MemberVO)session.getAttribute("loginStatus") == null) {
-//			url = "redirect:/user";
-//		}
-//		
+//		if((MemberVO)session.getAttribute("loginStatus") == null){
+//			
+//			//로그인 후 사용해달라는 메시지를 띄우기 위한 작업
+//			rttr.addFlashAttribute("msg", "needLogin");
+//			
+//			url = "redirect:/member/login";
+		//} else {
+		
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		List<OrderCartListVO> vo = null;
 		
@@ -86,6 +97,11 @@ public class OrderController {
 		}
 		
 		model.addAttribute("orderCartList", vo);
+		
+		//url = "redirect:/user/order/orderList?type=" + type + "&p_num=" + p_num + "&cart_amount" + ord_amount;
+		//}
+		
+		//return url;
 		
 	}
 	
@@ -146,5 +162,59 @@ public class OrderController {
 		orderService.orderSave(orderVO, payVO);
 		
 		return "redirect:/";
+	}
+	
+	//카카오페이 결제요청. 바로구매는 에러발생된다.
+	@GetMapping("/orderPay")
+	public @ResponseBody ReadyResponse payReady(OrderVO ordervo, PaymentVO payVO, int totalAmount, HttpSession session, Model model) {
+		
+		//장바구니테이블에서 상품정보(상품명, 상품코드, 수량, 상품가격*수량=단위별 금액)
+		String m_userid = ((MemberVO) session.getAttribute("loginStatus")).getM_id();
+		//장바구니에서 주문이 진행될 때
+		List<CartListVO> cartList = userCartService.getCartList(m_userid);
+		String itemName = cartList.get(0).getP_name() + "외 " + String.valueOf(cartList.size() - 1) + " 개";
+		int quantity = cartList.size() - 1;
+		
+		
+		// 카카오페이서버에서 보낸온 정보.
+		ReadyResponse readyResponse = kakaopayService.payReady(itemName, quantity, m_userid, totalAmount);
+		
+		//model.addAttribute("tid", readyResponse.getTid());
+		
+		session.setAttribute("tid", readyResponse.getTid());
+		log.info("결제고유번호1: " + readyResponse.getTid());
+		
+		ordervo.setM_id(m_userid);
+		session.setAttribute("order", ordervo);
+		session.setAttribute("payment", payVO);
+		
+		return readyResponse;
+	}
+	
+	
+	//결제승인요청 : 큐알코드를 찍고(결제요청) 카카오페이 서버에서 결제가 성공적으로 끝나면, 카카오페이 서버에서 호출하는 주소
+	@GetMapping("/orderApproval")
+	public String orderApproval(@RequestParam("pg_token") String pgToken, /*, @ModelAttribute("tid") String tid, */ HttpSession session ) {
+		
+		log.info("결제 승인요청 인증토큰: " + pgToken);
+		//log.info("주문정보: " + o_vo);
+		
+		String tid = (String) session.getAttribute("tid");
+		OrderVO orderVO = (OrderVO) session.getAttribute("order");
+		PaymentVO payVO = (PaymentVO) session.getAttribute("payment");
+		
+		session.removeAttribute("tid"); //세션 제거 - 반드시 처리! 로그인 상태에서 세션정보가 필요하지 않게되면 불필요하게 서버측의 메모리를 사용하게 됨
+		session.removeAttribute("order");
+		session.removeAttribute("payment");
+		
+		log.info("결제 고유번호2: " + tid);
+		
+		//카카오페이 결제하기
+		ApproveResponse approveResponse =kakaopayService.payApprove(tid, pgToken);
+		log.info("appreveResponse: " + approveResponse);
+		
+		//orderService.orderBuy(orderVO, payVO);
+		
+		return "redirect:/user/order/orderComplete";
 	}
 }

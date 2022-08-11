@@ -103,3 +103,13 @@
   
   
 	  </script>
+	  
+	  <script>
+		if("${msg}" == "logout") {
+			alert("로그아웃 되었습니다.");
+		}
+		
+		if("${msg}" == "needLogin") {
+			alert("로그인 후 사용해 주세요.");
+		}
+  	  </script>

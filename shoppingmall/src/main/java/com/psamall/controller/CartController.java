@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.psamall.domain.CartListVO;
 import com.psamall.domain.CartVO;
@@ -33,19 +34,27 @@ public class CartController {
 	//장바구니 담기 - ajax
 	@ResponseBody
 	@GetMapping("/addCart")
-	public ResponseEntity<String> addCart(CartVO vo, HttpSession session) {
+	public ResponseEntity<String> addCart(CartVO vo, HttpSession session, RedirectAttributes rttr) {
 		
 		ResponseEntity<String> entity = null;
 		
-		//로그인 시 사용한 세션 정보
-		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
-		vo.setM_id(m_id);
 		
-		cartService.addCart(vo);
-		log.info("장바구니 정보: " + vo);
-		
-		entity = new ResponseEntity<String>("success", HttpStatus.OK);
-		
+		if((MemberVO)session.getAttribute("loginStatus") == null){
+			
+			//로그인 후 사용해달라는 메시지를 띄우기 위한 작업
+			rttr.addFlashAttribute("msg", "needLogin");
+			
+			entity = new ResponseEntity<String>("noID", HttpStatus.OK);
+		} else {
+			//로그인 시 사용한 세션 정보
+			String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
+			vo.setM_id(m_id);
+			
+			cartService.addCart(vo);
+			log.info("장바구니 정보: " + vo);
+			
+			entity = new ResponseEntity<String>("success", HttpStatus.OK);
+		}
 		return entity;
 	}
 	

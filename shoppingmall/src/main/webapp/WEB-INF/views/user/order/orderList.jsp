@@ -50,6 +50,7 @@
     <!-- bootstrap 버전 및 여러 파일들 -->
 	<%@include file="/WEB-INF/views/include/common.jsp" %>
 	
+	
 	<!-- Tab 기능 -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 	<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
@@ -294,6 +295,7 @@
 		<div class="box-footer text-center">
 		<c:if test="${!empty orderCartList}">
 			<button type="button" id="btnCancelOrder"  class="btn btn-primary">주문취소</button>
+			<img id="kakao_pay" alt="kakaoPay" src="/image/payment_icon_yellow_medium.png" style="display: none;">
 			<button type="button" id="btnOrder"  class="btn btn-primary">주문하기</button>
 		</c:if>
 		<c:if test="${empty orderCartList}">
@@ -367,6 +369,66 @@
 					$("#bank").show();
 					$("div#noAccountUsername").show();
 				}
+				
+				$("#btnOrder").attr("disabled", false); //비활성화 -> 활성화
+				$("img#kakao_pay").css("display", "none");
+
+				//카카오 페이 선택 시
+				if($("#pay_method option:selected").val() =="카카오 페이") {
+					alert("카카오페이 이미지를 클릭하세요");
+
+					//ajax구문에서 카카오페이라는 값을 pay_method로 보내주기 위해
+					pay_method = $("#pay_method option:selected").val();
+
+					$("#btnOrder").attr("disabled", true); //활성화 -> 비활성화
+					$("#kakao_pay").attr("style", "display:inline;");
+					return;
+				}
+			});
+			
+			//카카오페이 버튼 클릭(ajax구문으로 사용해야 함)
+			$("img#kakao_pay").on("click", function(){
+
+				//카카오 페이에서 요청하는 필수 입력값 확보
+				
+				//주문자				
+				let ord_name = $("input[name='ord_name']").val();
+				//연락처
+				let ord_tel = $("input[name='ord_tel']").val();
+				//전자우편
+				let ord_email = $("input[name='ord_email']").val();
+				//전체금액
+				let ord_totalcost = $("input[name='ord_totalcost']").val();
+				//적립금
+				//쿠폰
+
+				$.ajax({
+					url: '/user/order/orderPay',
+					type: 'get',
+					data: {
+						totalAmount : ord_totalcost,
+
+						ord_name : ord_name,
+						ord_postcode : $("input[name='ord_postcode']").val(),
+						ord_addr : $("input[name='ord_addr']").val(),
+						ord_addr_d : $("input[name='ord_addr_d']").val(),
+						ord_tel : ord_tel,
+						ord_totalcost : ord_totalcost,
+						ord_message : $("select[name='selectBox']").val(),
+						pay_status : '결제완료',
+
+						pay_method : pay_method,
+						pay_tot_price : ord_totalcost,
+
+
+
+					},
+					success: function(response) {
+						//alert(response.next_redirect_pc_url);
+						location.href = response.next_redirect_pc_url;
+					}
+
+				});
 			});
 
 			//무통장 입금 선택 시

@@ -42,12 +42,6 @@
 		color: black;
 	}
     </style>
-    
-  <script>
-	if('${msg}' == 'logout') {
-		alert("로그아웃 되었습니다.");
-	}
-  </script>
 
     
     <!-- Custom styles for this template -->
@@ -56,6 +50,8 @@
     <!-- bootstrap 버전 및 여러 파일들 -->
 	<%@include file="/WEB-INF/views/include/common.jsp" %>
 	
+
+
 	<!-- Tab 기능 -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 	<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
@@ -88,6 +84,7 @@
 		{{/each}}
 
 	</script>
+
 
   </head>
   <body>
@@ -225,6 +222,11 @@
 							if(confirm("장바구니로 이동하시겠습니까?")) {
 								location.href = "/user/cart/cartList"
 							}
+						}
+						
+						if(result == "noID") {
+							alert("로그인 후 사용해 주세요.");
+							location.href = "/member/login";						
 						}
 					}
 				});

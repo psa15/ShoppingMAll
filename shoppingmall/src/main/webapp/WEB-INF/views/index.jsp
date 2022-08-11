@@ -38,6 +38,9 @@
     
     <!-- bootstrap 버전 및 여러 파일들 -->
 	<%@include file="/WEB-INF/views/include/common.jsp" %>
+  	
+
+  
   </head>
   <body>
     

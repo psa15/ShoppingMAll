@@ -217,15 +217,21 @@
 				
 				$.ajax({
 					url: "/user/cart/addCart",
-					data: { p_num : $("div#modal_productDetail input#p_num").val(), cart_amount : $("div#modal_productDetail input#p_amount").val()},
+					data: { p_num : $("input#p_num").val(), cart_amount : $("input#p_amount").val()},
 					dataType: 'text',
 					success: function(result) {
 					
+						alert(result);
 						if(result == "success") {
 							alert("장바구니가 추가되었습니다.");
 							if(confirm("장바구니로 이동하시겠습니까?")) {
 								location.href = "/user/cart/cartList"
 							}
+						}
+						
+						if(result == "noID") {
+							alert("로그인 후 사용해 주세요.");
+							location.href = "/member/login";						
 						}
 					}
 				});

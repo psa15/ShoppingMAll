@@ -69,7 +69,7 @@
 		      <input type="checkbox" value="remember-me"> Remember me
 		    </label>
 		  </div>
-		  <button class="btn btn-lg btn-primary btn-block" id="btnsignIn" type="button">Sign in</button>
+		  <button class="btn btn-lg btn-primary btn-block" id="btnsignIn" type="submit">Sign in</button>
 		  <a href="/member/lostId">아이디 찾기</a> |
 		  <a href="/member/newPw">비밀번호 발급받기</a>
 		</form>
@@ -92,8 +92,6 @@
         $("#loginForm").on("submit", function(){
           console.log("로그인");
 
-          var referrer = document.referrer;
-          console.log(referrer);
           /*유효성 검사 */
           
           //아이디와 비밀번호 입력했는지 확인
@@ -102,39 +100,17 @@
             $("#m_id").focus();
             return false;
           }
+          
           if($("#m_passwd").val() == "") {
             alert("비밀번호를 입력하세요");
             $("#m_passwd").focus();
             return false;
           }
 
-          //return true; //전송
+          return true;
         });
-/* 
-        $("#btnsignIn").on("click", function(){
+         
 
-
-          //아이디와 비밀번호 입력했는지 확인
-          if($("#m_id").val() == "") {
-            alert("아이디를 입력하세요");
-            $("#m_id").focus();
-            return false;
-          }
-          if($("#m_passwd").val() == "") {
-            alert("비밀번호를 입력하세요");
-            $("#m_passwd").focus();
-            return false;
-          }
-
-          // 뒤로 갈 페이지가 있는 경우
-          if (document.referrer !== -1) {
-              history.back();    // 뒤로가기
-          }
-          // 페이지가 없는 경우 (URL을 직접 입력하여 유입된 경우)
-          else {
-              location.href = "/";    // 메인페이지로 
-          }
-        }); */
 
 
         //아이디 찾기 버튼

@@ -262,8 +262,16 @@
 				location.href = "/user/cart/clearCart";
 			});
 			
+			//주문하기 버튼 클릭
+			$("#btnOrder").on("click", function(){
+				//let type = "cartOrder";
+				console.log("버튼 클릭");
+				
+				location.href="/user/order/orderList?type=cartOrder";
+			});
+			
 			//주문하기
-			$("button#btnOrder").on("click", function(){
+/* 			$("button#btnOrder").on("click", function(){
 				console.log("주문하기");
 				
 				//location.href="/user/order/orderSelected";
@@ -284,7 +292,7 @@
 						location.href="/user/order/orderSelected"
 					}
 				
-				});
+				}); */
 				/*
 				let pNumStr = "";
 				$("input[name='checkProduct']:checked").each(function(index, item){
@@ -318,10 +326,10 @@
 
 				orderInfoForm.html(orderInfoStr);
 				orderInfoForm.attr("action", "/user/order/orderSelected");
-				orderInfoForm.submit(); */
+				orderInfoForm.submit(); });*/
 
 				
-			});
+			
 			
 		});
 
