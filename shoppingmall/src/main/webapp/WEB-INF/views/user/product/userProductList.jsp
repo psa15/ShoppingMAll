@@ -170,6 +170,11 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" name="btnBuyNow" class="btn btn-primary">바로 구매</button>
+			<form action="/user/order/orderList" method="get" id="orderForm">
+				<input type="hidden" name="p_num" value="${productVO.p_num}">
+				<input type="hidden" name="cart_amount" value="">
+				<input type="hidden" name="type" value="directOrder">
+			</form>
 	        <button type="button" name="btnAddCart" class="btn btn-primary">장바구니 담기</button>
 	      </div>
 	    </div>
@@ -221,7 +226,7 @@
 					dataType: 'text',
 					success: function(result) {
 					
-						alert(result);
+
 						if(result == "success") {
 							alert("장바구니가 추가되었습니다.");
 							if(confirm("장바구니로 이동하시겠습니까?")) {
@@ -238,16 +243,17 @@
 			});
 			
 			//모달 - 바로구매 클릭
+			let orderForm = $("#orderForm");
 			$("button[name='btnBuyNow']").on("click", function(){
 				console.log("바로구매 클릭");
 				
-				let p_num = $("div#modal_productDetail input#p_num").val();
-				let cart_amount = $("div#modal_productDetail input#p_amount").val();
+				$("input[name='cart_amount']").val($("input#p_amount").val());
+				$("input[name='p_num']").val($("input#p_num").val());
 				
-				location.href = "/user/order/orderList?type=directOrder&p_num=" + p_num + "&cart_amount=" + cart_amount;
+				orderForm.submit();
 				
 			});
-			
+
 		    //페이지 번호 이동 
 		    let actionForm = $("#actionForm");
 		    $("ul.pagination li a.page-link").on("click", function(e){

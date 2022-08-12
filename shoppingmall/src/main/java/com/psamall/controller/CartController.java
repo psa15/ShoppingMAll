@@ -42,7 +42,7 @@ public class CartController {
 		if((MemberVO)session.getAttribute("loginStatus") == null){
 			
 			//로그인 후 사용해달라는 메시지를 띄우기 위한 작업
-			rttr.addFlashAttribute("msg", "needLogin");
+			//rttr.addFlashAttribute("msg", "needLogin");
 			
 			entity = new ResponseEntity<String>("noID", HttpStatus.OK);
 		} else {
@@ -94,7 +94,7 @@ public class CartController {
 		
 		cartService.deleteCart(cart_code);
 		
-		return  "/user/cart/cartList";
+		return  "redirect:/user/cart/cartList";
 	}
 	
 	//장바구니 비우기

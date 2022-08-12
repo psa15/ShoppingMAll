@@ -111,6 +111,11 @@
       			수량: <input type="number" id="p_amount" min="1" value="1">
       		</p>
       		<button type="button" id="btnOrder"  class="btn btn-primary">구매하기</button>
+      		<form action="/user/order/orderList" method="get" id="orderForm">
+				<input type="hidden" name="p_num" value="${productVO.p_num}">
+				<input type="hidden" name="cart_amount" value="">
+				<input type="hidden" name="type" value="directOrder">
+			</form>
 			<button type="button" id="btnCart"  class="btn btn-primary">장바구니</button>
       	</div>
       </div>
@@ -217,6 +222,7 @@
 					dataType: 'text',
 					success: function(result) {
 					
+						alert(result);
 						if(result == "success") {
 							alert("장바구니가 추가되었습니다.");
 							if(confirm("장바구니로 이동하시겠습니까?")) {
@@ -233,13 +239,16 @@
 			});
 
 			//바로구매 클릭
+			let orderForm = $("#orderForm");
+
 			$("#btnOrder").on("click", function(){
 				console.log("바로구매 클릭");
-				let p_num = $("input#p_num").val()
-				let cart_amount = $("input#p_amount").val();
+
+				$("input[name='cart_amount']").val($("input#p_amount").val());
 				
-				location.href = "/user/order/orderList?type=directOrder&p_num=" + p_num + "&cart_amount=" + cart_amount;
+				orderForm.submit();
 			});
+			
 			
 			//jQuery-ui 탭기능
 			$("#productDetailTabs").tabs();

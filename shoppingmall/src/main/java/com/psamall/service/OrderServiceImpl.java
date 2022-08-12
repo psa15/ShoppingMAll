@@ -7,13 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.psamall.domain.CartVO;
 import com.psamall.domain.OrderCartListVO;
-import com.psamall.domain.OrderDetailVO;
 import com.psamall.domain.OrderVO;
 import com.psamall.domain.PaymentVO;
 import com.psamall.dto.OrderProductDTO;
-import com.psamall.dto.OrderProductListDTO;
 import com.psamall.mapper.OrderMapper;
 import com.psamall.mapper.UserCartMapper;
 

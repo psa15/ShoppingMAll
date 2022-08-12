@@ -26,7 +26,7 @@ public class KakaoPayServiceImpl {
 	
 	
 	// 1)카카오 Pay에서 요청하는 정보
-	public ReadyResponse payReady(String itemName, int quantity, String mem_id, int totalAmount) {
+	public ReadyResponse payReady(String itemName, int quantity, String m_id, int totalAmount) {
 		
 		String order_id = "100";
 		//String itemName = "테스트상품"; // 상품이름
@@ -38,7 +38,7 @@ public class KakaoPayServiceImpl {
 		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
 		parameters.add("cid", "TC0ONETIME"); // 테스트 가맹점ID
 		parameters.add("partner_order_id", order_id); // 가맹점 주문번호.
-		parameters.add("partner_user_id", mem_id); // 가맹점 회원Id
+		parameters.add("partner_user_id", m_id); // 가맹점 회원Id
 		parameters.add("item_name", itemName); // 상품명  체크  예>땡땡땡상품외 2건
 		parameters.add("quantity", String.valueOf(quantity)); // 상품수량  체크
 		parameters.add("total_amount", String.valueOf(totalAmount)); // 상품총액
@@ -70,7 +70,7 @@ public class KakaoPayServiceImpl {
 	
 	
 	// 두번째 요청 : 결제 승인요청 메서드
-	public ApproveResponse payApprove(String tid, String pgToken) {
+	public ApproveResponse payApprove(String tid, String pgToken, String m_id) {
 		
 		String order_id = "100";
 		
@@ -78,7 +78,7 @@ public class KakaoPayServiceImpl {
 		parameters.add("cid", "TC0ONETIME"); // 테스트 가맹점ID
 		parameters.add("tid", tid); // 카카오 페이에서 보내준 결재고유 ID
 		parameters.add("partner_order_id", order_id); // 주문번호
-		parameters.add("partner_user_id", "doccomsa"); // 주문자
+		parameters.add("partner_user_id", m_id); // 주문자
 		parameters.add("pg_token", pgToken); // 
 		
 		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
@@ -99,7 +99,7 @@ public class KakaoPayServiceImpl {
 	// Kakao Pay request의 두번사용시 공통 Header정보 설정.
 	private HttpHeaders getHeaders() {
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "KakaoAK 64834f0334712f7693de92c18bc246d8");
+		headers.set("Authorization", "KakaoAK ");
 		headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		
 		return headers;

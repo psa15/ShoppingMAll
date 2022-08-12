@@ -3,8 +3,6 @@ package com.psamall.controller;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,6 @@ import com.psamall.domain.MemberVO;
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
 import com.psamall.domain.PaymentVO;
-import com.psamall.dto.OrderProductListDTO;
 import com.psamall.kakaopay.ApproveResponse;
 import com.psamall.kakaopay.ReadyResponse;
 import com.psamall.service.OrderService;
@@ -34,7 +31,6 @@ import com.psamall.utils.UploadFileUtils;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
-import oracle.jdbc.proxy.annotation.GetProxy;
 
 @Controller
 @Log4j
@@ -59,20 +55,24 @@ public class OrderController {
 
 	//주문하기 폼
 	@GetMapping("/orderList")
-	public void orderList(HttpSession session, Model model, RedirectAttributes rttr,
+	public String orderList(HttpSession session, Model model, RedirectAttributes rttr,
 							@RequestParam("type") String type, @RequestParam(value="p_num", required = false) Integer p_num, @RequestParam(value="cart_amount", required = false) Integer ord_amount ) {
 		
 	
+		log.info("cart_amount: " + ord_amount);
+		log.info("상품 번호: " + p_num);
+		log.info("상품 타입: " + type);
+		
 		String url = "";
 		//String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		
-//		if((MemberVO)session.getAttribute("loginStatus") == null){
-//			
-//			//로그인 후 사용해달라는 메시지를 띄우기 위한 작업
-//			rttr.addFlashAttribute("msg", "needLogin");
-//			
-//			url = "redirect:/member/login";
-		//} else {
+		if((MemberVO)session.getAttribute("loginStatus") == null){
+			
+			//로그인 후 사용해달라는 메시지를 띄우기 위한 작업
+			rttr.addFlashAttribute("msg", "needLogin");
+			
+			url = "redirect:/member/login";
+		} else {
 		
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		List<OrderCartListVO> vo = null;
@@ -80,6 +80,7 @@ public class OrderController {
 		if(type.equals("cartOrder")) {
 			//장바구니에서 주문하기
 			vo = orderService.orderCartList(m_id);
+			url = "redirect:/user/order/orderList?type=cartOrder";
 		} else if(type.equals("directOrder")) {			
 			//장바구니 외에서 주문하기
 			vo = orderService.orderDirectList(p_num, ord_amount);
@@ -89,6 +90,7 @@ public class OrderController {
 			cartVO.setCart_amount(ord_amount);
 			cartVO.setP_num(p_num);
 			userCartService.addCart(cartVO);
+			url = "redirect:/user/order/orderList?p_num=" + p_num + "&cart_amount=" + ord_amount + "&type=directOrder";
 		}
 		
 		for(int i=0; i<vo.size(); i++) {
@@ -98,10 +100,10 @@ public class OrderController {
 		
 		model.addAttribute("orderCartList", vo);
 		
-		//url = "redirect:/user/order/orderList?type=" + type + "&p_num=" + p_num + "&cart_amount" + ord_amount;
-		//}
 		
-		//return url;
+		}
+		
+		return url;
 		
 	}
 	
@@ -166,26 +168,26 @@ public class OrderController {
 	
 	//카카오페이 결제요청. 바로구매는 에러발생된다.
 	@GetMapping("/orderPay")
-	public @ResponseBody ReadyResponse payReady(OrderVO ordervo, PaymentVO payVO, int totalAmount, HttpSession session, Model model) {
+	public @ResponseBody ReadyResponse payReady(OrderVO orderVO, PaymentVO payVO, int totalAmount, HttpSession session, Model model) {
 		
 		//장바구니테이블에서 상품정보(상품명, 상품코드, 수량, 상품가격*수량=단위별 금액)
-		String m_userid = ((MemberVO) session.getAttribute("loginStatus")).getM_id();
+		String m_id = ((MemberVO) session.getAttribute("loginStatus")).getM_id();
 		//장바구니에서 주문이 진행될 때
-		List<CartListVO> cartList = userCartService.getCartList(m_userid);
+		List<CartListVO> cartList = userCartService.getCartList(m_id);
 		String itemName = cartList.get(0).getP_name() + "외 " + String.valueOf(cartList.size() - 1) + " 개";
 		int quantity = cartList.size() - 1;
 		
 		
 		// 카카오페이서버에서 보낸온 정보.
-		ReadyResponse readyResponse = kakaopayService.payReady(itemName, quantity, m_userid, totalAmount);
+		ReadyResponse readyResponse = kakaopayService.payReady(itemName, quantity, m_id, totalAmount);
 		
 		//model.addAttribute("tid", readyResponse.getTid());
 		
 		session.setAttribute("tid", readyResponse.getTid());
 		log.info("결제고유번호1: " + readyResponse.getTid());
 		
-		ordervo.setM_id(m_userid);
-		session.setAttribute("order", ordervo);
+		orderVO.setM_id(m_id);
+		session.setAttribute("order", orderVO);
 		session.setAttribute("payment", payVO);
 		
 		return readyResponse;
@@ -194,11 +196,12 @@ public class OrderController {
 	
 	//결제승인요청 : 큐알코드를 찍고(결제요청) 카카오페이 서버에서 결제가 성공적으로 끝나면, 카카오페이 서버에서 호출하는 주소
 	@GetMapping("/orderApproval")
-	public String orderApproval(@RequestParam("pg_token") String pgToken, /*, @ModelAttribute("tid") String tid, */ HttpSession session ) {
+	public String orderApproval(@RequestParam("pg_token") String pgToken, HttpSession session ) {
 		
 		log.info("결제 승인요청 인증토큰: " + pgToken);
 		//log.info("주문정보: " + o_vo);
 		
+		String m_id = ((MemberVO) session.getAttribute("loginStatus")).getM_id();
 		String tid = (String) session.getAttribute("tid");
 		OrderVO orderVO = (OrderVO) session.getAttribute("order");
 		PaymentVO payVO = (PaymentVO) session.getAttribute("payment");
@@ -210,10 +213,10 @@ public class OrderController {
 		log.info("결제 고유번호2: " + tid);
 		
 		//카카오페이 결제하기
-		ApproveResponse approveResponse =kakaopayService.payApprove(tid, pgToken);
+		ApproveResponse approveResponse =kakaopayService.payApprove(tid, pgToken, m_id);
 		log.info("appreveResponse: " + approveResponse);
 		
-		//orderService.orderBuy(orderVO, payVO);
+		orderService.orderSave(orderVO, payVO);
 		
 		return "redirect:/user/order/orderComplete";
 	}
