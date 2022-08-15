@@ -266,7 +266,8 @@
 			$("#btnOrder").on("click", function(){
 				//let type = "cartOrder";
 				console.log("버튼 클릭");
-				
+				let p_num = $(".move").attr("href");
+				//let cart_amount = 
 				location.href="/user/order/orderList?type=cartOrder";
 			});
 			
@@ -354,10 +355,8 @@
 			
 
 			//선택된 상품 계산
-			$(".calCheckedProduct").each(function(index, item){
+			$(".calCheckedProduct").each(function(index, item){			
 				
-				
-
 				if($(item).find("input[name='checkProduct']").is(":checked") == true) {
 
 					totalCost += parseInt($(item).find(".productTotalPriceForCal").val());

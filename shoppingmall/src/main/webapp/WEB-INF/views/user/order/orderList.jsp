@@ -125,30 +125,44 @@
 									</span>
 								  </td>
 							      <!-- 삭제 -->
-							      <td>
+							      <td class="calProduct">
 				                    <input type="hidden" name="p_image_dateFolder" value="${orderCartListVO.p_image_folder}">
 				                    <input type="hidden" name="p_image" value="${orderCartListVO.p_image}">
 				                    <input type="hidden" name="ord_cost" value="${orderCartListVO.p_cost * orderCartListVO.cart_amount}" >
 								    <input type="hidden" name="p_num" value="${orderCartListVO.p_num}" >
 								    <input type="hidden" name="ord_amount" value="${orderCartListVO.cart_amount}" >
-				                    <button type="button" name="btnCartDelete" data-cart_code="${orderCartListVO.cart_code}" class="btn btn-link">X</button></td>
-							    </tr>
+								    <input type="hidden" class="productPointForCal" value="${cartVO.p_cost * 0.001}">
+				                    <button type="button" name="btnCartDelete" data-cart_code="${orderCartListVO.cart_code}" class="btn btn-link">X</button>
+								  </td>
+							      </tr>
 							    <c:set var="sum" value="${sum + price}"></c:set>
 							   </c:forEach>					   
 							  </tbody>
 							  <tfoot>
-								<tr>
-									<c:if test="${!empty orderCartList}">
-										<td colspan="5" style="text-align: right"> 
-											총 구매 금액: ￦ <span id="cartTotalPrice"><fmt:formatNumber type="number" maxFractionDigits="3" value="${sum}" /></span>
+							  	<c:if test="${!empty orderCartList}">
+									<tr>
+										<td colspan="5" style="text-align: left"> 
+											총 상품 금액: <span id="productTotalPrice"></span><br>
 										</td>
-									</c:if>
-									<c:if test="${empty orderCartList}">
-										<td colspan="5" style="text-align: right"> 
-											주문 내역이 비었습니다.
+									</tr>
+									<tr>
+										<td colspan="5" style="text-align: left"> 
+											배송비: <span id="deliveryPrice"></span>
 										</td>
-									</c:if>
-								</tr>
+									</tr>
+									<tr>
+										<td colspan="5" style="text-align: right"> 
+											총 구매 금액: <span id="cartTotalPrice"></span><br>
+										</td>
+									</tr>
+								</c:if>
+								<c:if test="${empty orderCartList}">
+									<tr>
+										<td colspan="5" style="text-align: right"> 
+											주문내역이 비었습니다.
+										</td>
+									</tr>
+								</c:if>
 							  </tfoot>
 							</table>	
 						</form>						
@@ -317,6 +331,8 @@
 	<script>
 
 		$(function(){
+			
+			totalInfo();
 
 			//jQuery-ui 탭기능
 			$("#productDetailTabs").tabs();
@@ -458,9 +474,57 @@
 				$("#orderForm").submit();
 			});
 
+			$("button[name='btnCalProduct']").on("click", function(){
+				console.log("계산하기");
+			});
+			
+
 		});
 
-		
+		//총 가격 계산하기(배송비, 총 가격, 적립금)
+		function totalInfo(){
+
+			let totalCost = 0; //주문할 상품 총 가격
+			let deliveryCost = 0; //배송비
+			let totalPoint = 0; //상품 주문시 적립될 포인트
+			let realTotalCost = 0; //상품 총 가격 + 배송비
+
+			//상품 계산
+			$(".calProduct").each(function(index, item){		
+			
+				totalCost += parseInt($(item).find("input[name='ord_cost']").val());
+				totalPoint += parseInt($(item).find(".productPointForCal").val());
+								
+			});
+
+			//배송비
+			if(totalCost >= 30000) {
+				deliveryCost = 0;
+			} else if(totalCost == 0) {
+				deliveryCost = 0;
+			} else {
+				deliveryCost = 3000;
+			}
+
+			realTotalCost = totalCost + deliveryCost;
+
+			//상품 총 금액
+			$("#productTotalPrice").text($.numberWithCommas(totalCost) + "원");
+			//배송비
+			$("#deliveryPrice").text($.numberWithCommas(deliveryCost) + "원");
+			//총 구매 금액(상품 총 금액 + 배송비)
+			$("#cartTotalPrice").text($.numberWithCommas(realTotalCost) + "원");
+		}
+
+		//숫자값을 천단위 마다 콤마 찍기
+		$.numberWithCommas = function(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+
+		//3자리마다 콤마 제거하기
+		$.withoutCommas = function (x) {
+			return x.toString().replace(",", '');
+		}
 
 	</script>
 	

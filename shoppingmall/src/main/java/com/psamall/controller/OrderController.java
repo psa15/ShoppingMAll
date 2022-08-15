@@ -55,7 +55,7 @@ public class OrderController {
 
 	//주문하기 폼
 	@GetMapping("/orderList")
-	public String orderList(HttpSession session, Model model, RedirectAttributes rttr,
+	public void orderList(HttpSession session, Model model, RedirectAttributes rttr,
 							@RequestParam("type") String type, @RequestParam(value="p_num", required = false) Integer p_num, @RequestParam(value="cart_amount", required = false) Integer ord_amount ) {
 		
 	
@@ -66,13 +66,13 @@ public class OrderController {
 		String url = "";
 		//String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		
-		if((MemberVO)session.getAttribute("loginStatus") == null){
-			
-			//로그인 후 사용해달라는 메시지를 띄우기 위한 작업
-			rttr.addFlashAttribute("msg", "needLogin");
-			
-			url = "redirect:/member/login";
-		} else {
+//		if((MemberVO)session.getAttribute("loginStatus") == null){
+//			
+//			//로그인 후 사용해달라는 메시지를 띄우기 위한 작업
+//			rttr.addFlashAttribute("msg", "needLogin");
+//			
+//			url = "redirect:/member/login";
+//		} else {
 		
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		List<OrderCartListVO> vo = null;
@@ -80,7 +80,7 @@ public class OrderController {
 		if(type.equals("cartOrder")) {
 			//장바구니에서 주문하기
 			vo = orderService.orderCartList(m_id);
-			url = "redirect:/user/order/orderList?type=cartOrder";
+			//url = "redirect:/user/order/orderList?type=cartOrder";
 		} else if(type.equals("directOrder")) {			
 			//장바구니 외에서 주문하기
 			vo = orderService.orderDirectList(p_num, ord_amount);
@@ -90,7 +90,7 @@ public class OrderController {
 			cartVO.setCart_amount(ord_amount);
 			cartVO.setP_num(p_num);
 			userCartService.addCart(cartVO);
-			url = "redirect:/user/order/orderList?p_num=" + p_num + "&cart_amount=" + ord_amount + "&type=directOrder";
+			//url = "redirect:/user/order/orderList?p_num=" + p_num + "&cart_amount=" + ord_amount + "&type=directOrder";
 		}
 		
 		for(int i=0; i<vo.size(); i++) {
@@ -101,9 +101,9 @@ public class OrderController {
 		model.addAttribute("orderCartList", vo);
 		
 		
-		}
+		//}
 		
-		return url;
+		//return url;
 		
 	}
 	
