@@ -29,4 +29,7 @@ public interface OrderMapper {
 	void insertOrderDetail(@Param("ord_code") Long ord_code, @Param("m_id") String m_id);
 	//3) 결제 테이블
 	void insertPayment(PaymentVO vo);
+	
+	//주문완료 후 주문 정보 불러오기
+	OrderVO getOrderInfo(String m_id);
 }

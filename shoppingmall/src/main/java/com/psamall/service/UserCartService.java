@@ -24,4 +24,7 @@ public interface UserCartService {
 	
 	//장바구니 비우기
 	void clearCart(String m_id);
+	
+	//장바구니 개수
+	int totalCart(String m_id);
 }

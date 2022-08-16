@@ -90,5 +90,17 @@
 	
 	</insert>
 	
+	<!-- 주문완료 후 주문 정보 불러오기 -->
+	<select id="getOrderInfo" resultType="com.psamall.domain.OrderVO">
+	
+		SELECT 
+			*
+		FROM
+			TBL_ORDER
+		WHERE
+			M_ID = #{m_id} AND ORD_DATE >= sysdate
+	
+	</select>
+	
 
 </mapper>

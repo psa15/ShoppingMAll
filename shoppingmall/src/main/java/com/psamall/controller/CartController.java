@@ -52,6 +52,8 @@ public class CartController {
 			
 			cartService.addCart(vo);
 			log.info("장바구니 정보: " + vo);
+
+			session.setAttribute("totalCart", cartService.totalCart(m_id));
 			
 			entity = new ResponseEntity<String>("success", HttpStatus.OK);
 		}

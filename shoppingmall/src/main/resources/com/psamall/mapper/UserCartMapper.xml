@@ -75,5 +75,17 @@
 			M_ID = #{m_id}
 	
 	</delete>
+	
+	<!-- 장바구니 개수 -->
+	<select id="totalCart" resultType="int">
+	
+		SELECT 
+			COUNT(*)
+		FROM 
+			TBL_CART
+		WHERE
+			M_ID = #{m_id}
+	
+	</select>
 
 </mapper>

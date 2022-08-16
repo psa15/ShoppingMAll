@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.psamall.domain.CartVO;
 import com.psamall.domain.MemberVO;
 import com.psamall.dto.EmailDTO;
 import com.psamall.dto.LoginDTO;
 import com.psamall.service.EmailService;
 import com.psamall.service.MemberService;
+import com.psamall.service.UserCartService;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -40,6 +42,9 @@ public class MemberController {
 	
 	@Setter(onMethod_ = {@Autowired})
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Setter(onMethod_ = {@Autowired})
+	private UserCartService cartService;
 	
 	//회원가입 폼
 	@GetMapping("/join")

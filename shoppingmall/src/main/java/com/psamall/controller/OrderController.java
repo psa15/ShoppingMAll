@@ -163,7 +163,7 @@ public class OrderController {
 		
 		orderService.orderSave(orderVO, payVO);
 		
-		return "redirect:/";
+		return "redirect:/user/order/orderComplete";
 	}
 	
 	//카카오페이 결제요청. 바로구매는 에러발생된다.
@@ -219,5 +219,14 @@ public class OrderController {
 		orderService.orderSave(orderVO, payVO);
 		
 		return "redirect:/user/order/orderComplete";
+	}
+	
+	//주문 완료 폼
+	@GetMapping("/orderComplete")
+	public void orderComplete(HttpSession session, Model model) {
+		
+		String m_id = ((MemberVO) session.getAttribute("loginStatus")).getM_id();
+		
+		model.addAttribute("orderInfo", orderService.getOrderInfo(m_id));
 	}
 }

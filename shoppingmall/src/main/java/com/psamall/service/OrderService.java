@@ -20,4 +20,7 @@ public interface OrderService {
 	
 	//주문하기(주문 정보 + 결제 정보)
 	void orderSave(OrderVO orderVO, PaymentVO payVO);
+	
+	//주문완료 후 주문 정보 불러오기
+	OrderVO getOrderInfo(String m_id);
 }

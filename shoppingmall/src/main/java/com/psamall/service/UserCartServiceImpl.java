@@ -53,5 +53,11 @@ public class UserCartServiceImpl implements UserCartService {
 		cartMapper.deleteCartOrder(p_num);
 		
 	}
+
+	//장바구니 개수
+	@Override
+	public int totalCart(String m_id) {
+		return cartMapper.totalCart(m_id);
+	}
 	
 }

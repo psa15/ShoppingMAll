@@ -83,6 +83,12 @@ public class OrderServiceImpl implements OrderService {
 		return result;
 	}
 
+	//주문완료 후 주문 정보 불러오기
+	@Override
+	public OrderVO getOrderInfo(String m_id) {
+		return orderMapper.getOrderInfo(m_id);
+	}
+
 	
 	
 }
