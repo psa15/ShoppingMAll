@@ -55,7 +55,7 @@
 	    	/*+ INDEX_DESC(TBL_PRODUCT PK_PRODUCT) */ 
 	    	ROWNUM RN,  P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, 
 	    	P_COMPANY, P_IMAGE, P_IMAGE_FOLDER, P_AMOUNT,
-               P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL
+               P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL, R_COUNT
 	    FROM 
 			TBL_PRODUCT
 	    WHERE
@@ -70,13 +70,13 @@
 		SELECT 
 			RN, P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, 
 			P_COMPANY, P_IMAGE, P_IMAGE_FOLDER,  P_AMOUNT,
-			P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL
+			P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL, R_COUNT
 		FROM(
 		    SELECT 
 		    	/*+ INDEX_DESC(TBL_PRODUCT PK_PRODUCT) */ 
 		    	ROWNUM RN,  P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, 
 		    	P_COMPANY, P_IMAGE, P_IMAGE_FOLDER, P_AMOUNT,
-                P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL
+                P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL, R_COUNT
 		    FROM 
 				TBL_PRODUCT
 		    WHERE
@@ -112,12 +112,36 @@
 		SELECT
 			P_NUM, F_CT_CODE, S_CT_CODE, P_NAME, P_COST, P_DISCOUNT, 
 			P_COMPANY, P_IMAGE,  P_IMAGE_FOLDER,  P_AMOUNT,
-			P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL
+			P_BUY_OK, P_REGDATE, P_UPDATEDATE, P_DETAIL, R_COUNT
 		FROM 
 			TBL_PRODUCT
 		WHERE
 			P_NUM = #{p_num}
 		
 	</select>
+	
+	<!-- 후기가 추가되면 r_count 컬럼에 1 추가 -->
+	<update id="plusReviewCount">
+	
+		UPDATE 
+			TBL_PRODUCT
+		SET
+			R_COUNT = R_COUNT + 1
+		WHERE 
+			P_NUM = #{p_num}
+		
+	</update>
+	
+	<!-- 후기가 삭제시 -1 -->
+	<update id="minusReviewCount">
+	
+		UPDATE 
+			TBL_PRODUCT
+		SET
+			R_COUNT = R_COUNT - 1
+		WHERE 
+			P_NUM = #{p_num}
+		
+	</update>
 
 </mapper>

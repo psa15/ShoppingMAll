@@ -77,6 +77,7 @@
 				<p>
 					<small>{{prettifyDate r_regdate}}</small>
 					{{reviewDelete m_id r_num}}
+					<input type="hidden" name="r_num" value="{{r_num}}">
 				</p>
 			</div>								   
 		</div>
@@ -130,7 +131,7 @@
       		<div id="productDetailTabs">
 			  <ul>
 			    <li><a href="#productDetailInfo">상세정보</a></li>
-			    <li><a href="#productDetailReview">상품리뷰</a></li>
+			    <li><a href="#productDetailReview">상품리뷰 [${productVO.r_count}]</a></li>
 			    <li><a href="#tabs-3">QnA</a></li>
 			  </ul>
 			  <div id="productDetailInfo">
@@ -418,34 +419,33 @@
 			});
 
 			//상품 후기 삭제
-			$("div#reviewDelete").on("click", "p a.reviewModify", function(e){
+			$("div#reviewListResult").on("click", "p a.reviewDelete", function(e){
 				e.preventDefault();
 
 				if(!confirm("상품 후기를 삭제하시겠습니까?")) {
 					return;
 				}
 
-				let r_num = $("#r_num").val();
+				let r_num = $(this).attr("href");
+				let p_num = $("input[name='p_num']").val();
 
 				$.ajax({
-					url: '/user/review/deleteReview/' + r_num,
+					url: '/user/review/deleteReview/' + r_num + "/" + p_num,
 					dataType: 'text',
-					method: 'patch',
+					method: 'DELETE',
 					headers: {
-						"Content-type" : "application/json", "X-HTTP-Method_Override" : "PATCH"
+						"Content-type" : "application/json", "X-HTTP-Method_Override" : "DELETE"
 					},
 					success: function(result){
 						if(result == "success") {
 							alert("상품 후기가 삭제되었습니다.");
 
 							//상품 후기 목록
-							url = "/user/review/reviewList/" + $("#p_num").val() + "/" + reviewPage;
-
+							url = "/user/review/reviewList/" + p_num + "/" + reviewPage;
+							//console.log(url);
 							getPage(url);
 
-							//후기가 수정되고 초기화
-							$("#star_r_score a.r_score").parent().children().removeClass("on"); 
-							$("#r_content").val("");
+							
 						}
 					}
 				});
@@ -467,8 +467,6 @@
 		function getPage(pageInfo) {
 
 			$.getJSON(pageInfo, function(data) {
-			// console.log("목록: " + data.list[0].rv_num);
-			// console.log("페이지정보: " + data.pageMaker.startPage);
 
 				if(data.list.length > 0) {
 

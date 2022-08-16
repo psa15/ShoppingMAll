@@ -92,12 +92,12 @@ public class ReviewController {
 	}
 	
 	//리뷰 삭제하기
-	@DeleteMapping("/deleteReview/{r_num}")
-	public ResponseEntity<String> deleteReview(@PathVariable("r_num") Integer r_num){
+	@DeleteMapping("/deleteReview/{r_num}/{p_num}")
+	public ResponseEntity<String> deleteReview(@PathVariable("r_num") Integer r_num, @PathVariable("p_num") Integer p_num){
 		
 		ResponseEntity<String> entity = null;
 				
-		reviewSerice.deleteReview(r_num);
+		reviewSerice.deleteReview(r_num, p_num);
 		
 		entity = new ResponseEntity<String>("success", HttpStatus.OK);
 		

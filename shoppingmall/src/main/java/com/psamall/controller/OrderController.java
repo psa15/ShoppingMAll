@@ -71,7 +71,7 @@ public class OrderController {
 //			//로그인 후 사용해달라는 메시지를 띄우기 위한 작업
 //			rttr.addFlashAttribute("msg", "needLogin");
 //			
-//			url = "redirect:/member/login";
+//			//url = "redirect:/member/login";
 //		} else {
 		
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();

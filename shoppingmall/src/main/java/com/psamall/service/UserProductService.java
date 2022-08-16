@@ -2,8 +2,6 @@ package com.psamall.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.psamall.domain.CatetgoryVO;
 import com.psamall.domain.ProductVO;
 import com.psamall.dto.Criteria;

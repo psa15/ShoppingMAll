@@ -29,6 +29,9 @@ public class ProductVO {
 	private Date p_regdate;
 	private Date p_updatedate;
 	
+	//리뷰개수 표시 위해 컬럼 하나 추가
+	private int r_count;
+	
 	//상품 이미지 파일을 받는 필드
 	private MultipartFile uploadFile;
 	

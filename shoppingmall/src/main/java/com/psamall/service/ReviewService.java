@@ -20,5 +20,5 @@ public interface ReviewService {
 	void updateReview(ReviewVO vo);
 	
 	//리뷰 삭제
-	void deleteReview(Integer r_num);
+	void deleteReview(Integer r_num, Integer p_num);
 }

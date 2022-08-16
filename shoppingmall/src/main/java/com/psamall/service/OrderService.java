@@ -6,7 +6,6 @@ import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
 import com.psamall.domain.PaymentVO;
 import com.psamall.dto.OrderProductDTO;
-import com.psamall.dto.OrderProductListDTO;
 
 public interface OrderService {
 
