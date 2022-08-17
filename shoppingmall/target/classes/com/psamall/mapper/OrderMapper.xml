@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.psamall.mapper.OrderMapper">
 
-	<!-- //선택한 상품 주문 -->
-	<select id="getSelected" resultType="com.psamall.dto.OrderProductDTO">
+	<!-- 선택한 상품 주문 -->
+	<select id="getSelected" resultType="com.psamall.domain.OrderCartListVO">
 	
 		SELECT 
 			P_NUM, P_NAME, P_COST, P_DISCOUNT, P_IMAGE, P_IMAGE_FOLDER
@@ -25,7 +25,7 @@
 		ON 
 			C.P_NUM = P.P_NUM
 		WHERE 
-		    C.M_ID = #{m_id}
+		    C.M_ID = #{m_id} AND C.P_NUM = #{p_num}
 	
 	</select>
 	

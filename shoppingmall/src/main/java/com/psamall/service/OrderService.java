@@ -5,7 +5,6 @@ import java.util.List;
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
 import com.psamall.domain.PaymentVO;
-import com.psamall.dto.OrderProductDTO;
 
 public interface OrderService {
 
@@ -15,7 +14,7 @@ public interface OrderService {
 	List<OrderCartListVO> orderDirectList(Integer p_num, int ord_amount);
 	
 	//선택한 상품 주문
-	List<OrderProductDTO> getSelectedProduct(List<OrderProductDTO> dto);
+	OrderCartListVO getSelected(Integer p_num, String m_id);
 	
 	
 	//주문하기(주문 정보 + 결제 정보)

@@ -1,15 +1,18 @@
 package com.psamall.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,9 +56,10 @@ public class OrderController {
 	@Setter(onMethod_ = {@Autowired})
 	private com.psamall.service.KakaoPayServiceImpl kakaopayService;
 
+	/*
 	//주문하기 폼
 	@GetMapping("/orderList")
-	public void orderList(HttpSession session, Model model, RedirectAttributes rttr,
+	public void orderList(HttpSession session, Model model, RedirectAttributes rttr, @ModelAttribute("orderCartList")List<OrderCartListVO> orderCartList,
 							@RequestParam("type") String type, @RequestParam(value="p_num", required = false) Integer p_num, @RequestParam(value="cart_amount", required = false) Integer ord_amount ) {
 		
 	
@@ -63,67 +67,86 @@ public class OrderController {
 		log.info("상품 번호: " + p_num);
 		log.info("상품 타입: " + type);
 		
-		String url = "";
-		//String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		
-//		if((MemberVO)session.getAttribute("loginStatus") == null){
-//			
-//			//로그인 후 사용해달라는 메시지를 띄우기 위한 작업
-//			rttr.addFlashAttribute("msg", "needLogin");
-//			
-//			//url = "redirect:/member/login";
-//		} else {
 		
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		List<OrderCartListVO> vo = null;
 		
 		if(type.equals("cartOrder")) {
 			//장바구니에서 주문하기
-			vo = orderService.orderCartList(m_id);
-			//url = "redirect:/user/order/orderList?type=cartOrder";
+			//vo = orderService.orderCartList(m_id);
+			
 		} else if(type.equals("directOrder")) {			
 			//장바구니 외에서 주문하기
 			vo = orderService.orderDirectList(p_num, ord_amount);
 			
-			CartVO cartVO = new CartVO();
+		CartVO cartVO = new CartVO();
 			cartVO.setM_id(m_id);
 			cartVO.setCart_amount(ord_amount);
 			cartVO.setP_num(p_num);
 			userCartService.addCart(cartVO);
-			//url = "redirect:/user/order/orderList?p_num=" + p_num + "&cart_amount=" + ord_amount + "&type=directOrder";
+			
 		}
 		
-		for(int i=0; i<vo.size(); i++) {
-			String p_image_folder = vo.get(i).getP_image_folder().replace("\\", "/");
+	for(int i=0; i<vo.size(); i++) {
+		String p_image_folder = vo.get(i).getP_image_folder().replace("\\", "/");
 			vo.get(i).setP_image_folder(p_image_folder);
 		}
-		
-		model.addAttribute("orderCartList", vo);
-		
-		
-		//}
-		
-		//return url;
-		
-	}
 	
+		model.addAttribute("orderCartList", vo);
+	
+	
+	}
+*/	
 	@GetMapping("/test")
 	public void test() {
 		
 	}
 	
+	@GetMapping("/orderList")
+	public void orderList() {
+		
+	}
 	//장바구니 선택한 상품만 주문하기
-	@GetMapping("/orderSelected")
+	@PostMapping("/orderList")
 	@ResponseBody
-	public String orderSelected(@RequestParam("checkArray") List<Integer> arrayParams){
+	public String orderList(@RequestParam("checkArr[]") List<Integer> checkArr, Model model,
+											@RequestParam("ordAmountArr[]") List<Integer> ordAmountArr,	HttpSession session) {
 		
-		log.info(arrayParams);
+		//ResponseEntity<String> entity = null;
+		
+		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
+		List<OrderCartListVO> vo = new ArrayList<OrderCartListVO>();
 		
 		
-		/*
-		 * String[] arrayParam = request.getParameterValues("checkedValue"); for(int
-		 * i=0; i<arrayParam.length; i++) { System.out.println(arrayParam[i]); }
-		 */
+			//선택한 상품
+			for(int i=0; i<checkArr.size(); i++) {
+				vo.add(i, orderService.getSelected(checkArr.get(i), m_id));
+			}
+			
+			Integer[] amountArr = new Integer[ordAmountArr.size()];
+			
+			
+			for(int i=0; i<ordAmountArr.size(); i++) {
+				amountArr[i] = ordAmountArr.get(i);
+			}
+			
+			
+			
+		
+		
+		for(int i=0; i<vo.size(); i++) {
+			String p_image_folder = vo.get(i).getP_image_folder().replace("\\", "/");
+			vo.get(i).setP_image_folder(p_image_folder);
+			vo.get(i).setM_id(m_id);
+			vo.get(i).setCart_amount(amountArr[i]);
+		}
+		
+		System.out.println("선택한 상품 정보: " + vo);
+		
+		model.addAttribute("orderCartList", vo);
+		
+		//entity = new ResponseEntity<String>("success", HttpStatus.OK);
 		
 		return "redirect:/user/order/orderList";
 	}

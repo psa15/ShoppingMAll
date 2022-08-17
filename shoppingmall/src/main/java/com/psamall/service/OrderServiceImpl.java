@@ -65,29 +65,16 @@ public class OrderServiceImpl implements OrderService {
 
 	//선택한 상품 주문
 	@Override
-	public List<OrderProductDTO> getSelectedProduct(List<OrderProductDTO> dto) {
-		
-		List<OrderProductDTO> result = new ArrayList<OrderProductDTO>();
-		
-		for(OrderProductDTO opDTO : dto) {
-			
-			OrderProductDTO productInfo = orderMapper.getSelected(opDTO.getP_num());
-			
-			productInfo.setCart_amount(opDTO.getCart_amount());
-			
-			result.add(productInfo);
-			
-		}
-		
-		
-		return result;
-	}
+	public OrderCartListVO getSelected(Integer p_num, String m_id) {
+		return orderMapper.getSelected(p_num, m_id);
+	}	
 
 	//주문완료 후 주문 정보 불러오기
 	@Override
 	public OrderVO getOrderInfo(String m_id) {
 		return orderMapper.getOrderInfo(m_id);
 	}
+
 
 	
 	
