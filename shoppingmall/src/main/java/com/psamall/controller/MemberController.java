@@ -153,6 +153,8 @@ public class MemberController {
 				//로그인 성공 시 서버측에 세션을 통해 회원정보 저장
 				session.setAttribute("loginStatus", vo);
 				
+				session.setAttribute("totalCart", cartService.totalCart(vo.getM_id()));
+				
 			} else {
 				//2)비번 불일치 -> 다시 로그인 페이지로
 				url = "/member/login";

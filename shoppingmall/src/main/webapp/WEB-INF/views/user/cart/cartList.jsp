@@ -61,7 +61,7 @@
 	      			</div>	
 	      			<div class="box-body">
 	      				<div class="form-check">
-						  <input class="form-check-input" type="checkbox" value="" id="checkAll" checked>
+						  <input class="form-check-input" type="checkbox" id="checkAll" checked>
 						  <label class="form-check-label" for="checkAll">
 						    전체 선택
 						  </label>
@@ -190,6 +190,30 @@
 		$(function(){
 
 			totalInfo();
+			
+			//체크박스 전체선택(제목 행 체크박스)
+			$("#checkAll").on("click", function(){
+			  
+			  $("input[name='checkProduct']").prop("checked", this.checked);
+			  //attr()메소드 사용 X
+			  
+			
+			});
+			
+			//데이터 행 체크박스
+			$("input[name='checkProduct']").on("click", function(){
+			
+			  //데이터 행의 체크박스가 전부 체크되어있다면 전체선택 체크박스도 체크!
+			  $("#checkAll").prop("checked", this.checked);
+			
+			  //데이터 행의 체크박스의 선택자 해당하는 만큼 동작하는 구문
+			  $("input[name='checkProduct']").each(function() {
+			    if(!$(this).is(":checked")) {
+			      //체크가 하나라도 존재
+			      $("#checkAll").prop("checked", false);
+			    }
+			  });
+			});
 
 			//선택 여부에 따른 금액 변화
 			$("input[name='checkProduct']").on("change", function(){
@@ -271,29 +295,33 @@
 				location.href="/user/order/orderList?type=cartOrder";
 			});
 			
-			//주문하기
-/* 			$("button#btnOrder").on("click", function(){
+			//선택한 상품 주문하기
+ 			$("button#btnOrder").on("click", function(){
 				console.log("주문하기");
 				
 				//location.href="/user/order/orderSelected";
 
 				 let checkArr = [];
-				$("input[name='checkProduct']:checked").each(function(i){
+				$("input[name='checkProduct']:checked").each(function(){
 					checkArr.push($(this).val());
 				}); 
 				
-				let formData = { "checkArray" : checkArr };
+				console.log(checkArr);
 				
-				$.ajax({
+				
+/* 				$.ajax({
 					url: '/user/order/orderSelected',
 					type: 'get',
-					data: formData,
-					success: function(data) {
+					data: {},
+					success: function(result) {
 						alert("완료");
-						location.href="/user/order/orderSelected"
-					}
+						
+					} */
 				
-				}); */
+				});
+				
+				
+				
 				/*
 				let pNumStr = "";
 				$("input[name='checkProduct']:checked").each(function(index, item){
@@ -344,12 +372,13 @@
 			return x.toString().replace(",", '');
 		}
 
+		//변경될때마다 초기화
 		//선택한 상품의 정보만 계산하기(배송비, 총 가격, 적립금)
 		function totalInfo(){
 
-			let totalCost = 0; //주문할 상품 총 가격
+ 			let totalCost = 0; //주문할 상품 총 가격
 			let deliveryCost = 0; //배송비
-			let totalPoint = 0; //상품 주문시 적립될 포인트
+			let totalPoint = 0; //상품 주문시 적립될 포인트 
 			let realTotalCost = 0; //상품 총 가격 + 배송비
 			
 			
@@ -361,9 +390,10 @@
 
 					totalCost += parseInt($(item).find(".productTotalPriceForCal").val());
 					totalPoint += parseInt($(item).find(".productPointForCal").val());
-				}
+				} 
 								
 			});
+			
 
 			//배송비
 			if(totalCost >= 30000) {
