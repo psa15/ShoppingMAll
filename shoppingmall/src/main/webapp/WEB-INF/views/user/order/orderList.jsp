@@ -181,6 +181,7 @@
 		      			<div>
 		      				<form id="orderForm" method="post" action="">
 								<input type="hidden" class="form-control" name="p_num" id="pNumForOrder" >
+								
 		      				  <h5>주문자 정보</h5>
 		      				  <hr>
 							  <div class="form-group row">
@@ -460,15 +461,32 @@
 			});
 
 			//주문하기 버튼 클릭 시
+			let orderForm = $("#orderForm");
 			$("#btnOrder").on("click", function(){
 
+				//console.log("버튼클릭");
 				//유효성 검사
 				
 				//카트 코드 받아서 orderForm에 추가해주기???
-				let cartCodeArr = [];
-				$(".check:checked").each(function(){
-					oCodeArr.push($(this).val());
-				});
+				//값들의 갯수 -> 배열 길이를 지정
+				let valueLength = $("input[name='cart_code']").length;
+				//배열 생성
+				let cartCodeArr = new Array(valueLength);
+				//배열에 값 주입
+				for(let i=0; i<valueLength; i++){                          
+					cartCodeArr[i] = $("input[name='cart_code']").eq(i).val();
+				}
+				//console.log(cartCodeArr[0]);
+				//console.log(cartCodeArr[1]);
+
+				let url = "";
+
+				for(let i=0; i<valueLength; i++){
+					url += "<input type='hidden' class='form-control' name='cartCodeArr' value='" + cartCodeArr[i] + "'>"
+				}
+				//console.log(url);
+				
+				orderForm.append(url);
 
 				$("#pNumForOrder").val($(".move").attr("href"));
 
@@ -477,9 +495,9 @@
 					$("#newMessage").val(ord_message);
 				} 
 				//console.log("o_message 값: " + $("#newMessage").val());
-				$("#orderForm").attr("action", "/user/order/addOrder");
-				$("#orderForm").submit();
-			});
+				orderForm.attr("action", "/user/order/addOrder");
+				orderForm.submit();
+			}); 
 
 			$("button[name='btnCalProduct']").on("click", function(){
 				console.log("계산하기");

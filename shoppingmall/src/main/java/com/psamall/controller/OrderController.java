@@ -99,10 +99,6 @@ public class OrderController {
 	
 	}
 */	
-	@GetMapping("/test")
-	public void test() {
-		
-	}
 	
 	@GetMapping("/orderList")
 	public void orderList(@RequestParam(value="checkProduct", required = false)List<Integer> checkProduct, HttpSession session, Model model, 
@@ -186,18 +182,10 @@ public class OrderController {
 	
 	//주문 저장
 	@PostMapping("/addOrder")
-	public String addOrder(HttpSession session, OrderVO orderVO, PaymentVO payVO, @RequestParam(value="cart_code", required = false) List<Integer> cart_code) {
+	public String addOrder(HttpSession session, OrderVO orderVO, PaymentVO payVO, @RequestParam(value="cartCodeArr", required = false) List<Long> cartCodeArr) {
 		
 		System.out.println("주문 정보: " + orderVO);
 		System.out.println("결제 정보: " + payVO);
-		
-		//Integer[] cartCodeArr = new Integer[cart_code.size()];
-//		
-		for (int i=0; i<cart_code.size(); i++) {
-			System.out.println("장바구니 코드: " + cart_code.get(i));
-		}
-		
-		
 		
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		orderVO.setM_id(m_id);
@@ -207,8 +195,14 @@ public class OrderController {
 			payVO.setPay_tot_price(orderVO.getOrd_totalcost()); //실제 총 결제금액
 			payVO.setPay_rest_price(0);	//추가 입금 금액
 		}
-		
+				
 		orderService.orderSave(orderVO, payVO);
+		
+		if(cartCodeArr != null) {
+			for (int i=0; i<cartCodeArr.size(); i++) {
+				userCartService.deleteCart(cartCodeArr.get(i));
+			}
+		}
 		
 		return "redirect:/user/order/orderComplete";
 	}

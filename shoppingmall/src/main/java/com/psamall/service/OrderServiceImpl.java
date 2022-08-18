@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
 //		Integer p_num = orderDetailVO.getP_num();
 		//userCartMapper.clearCart(m_id);
 		
-		//4) 결제 정보
+		//3) 결제 정보
 		payVO.setOrd_code(ord_code);
 		orderMapper.insertPayment(payVO);
 		
