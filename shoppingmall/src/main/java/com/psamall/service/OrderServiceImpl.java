@@ -55,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
 		//3)장바구니 비우기
 //		OrderDetailVO orderDetailVO = new OrderDetailVO();
 //		Integer p_num = orderDetailVO.getP_num();
-		userCartMapper.clearCart(m_id);
+		//userCartMapper.clearCart(m_id);
 		
 		//4) 결제 정보
 		payVO.setOrd_code(ord_code);

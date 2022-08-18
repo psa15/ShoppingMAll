@@ -186,10 +186,18 @@ public class OrderController {
 	
 	//주문 저장
 	@PostMapping("/addOrder")
-	public String addOrder(HttpSession session, OrderVO orderVO, PaymentVO payVO) {
+	public String addOrder(HttpSession session, OrderVO orderVO, PaymentVO payVO, @RequestParam(value="cart_code", required = false) List<Integer> cart_code) {
 		
-		log.info("주문 정보: " + orderVO);
-		log.info("결제 정보: " + payVO);
+		System.out.println("주문 정보: " + orderVO);
+		System.out.println("결제 정보: " + payVO);
+		
+		//Integer[] cartCodeArr = new Integer[cart_code.size()];
+//		
+		for (int i=0; i<cart_code.size(); i++) {
+			System.out.println("장바구니 코드: " + cart_code.get(i));
+		}
+		
+		
 		
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		orderVO.setM_id(m_id);

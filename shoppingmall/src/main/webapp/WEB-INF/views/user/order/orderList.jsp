@@ -131,7 +131,7 @@
 				                    <input type="hidden" name="ord_cost" value="${orderCartListVO.p_cost * orderCartListVO.cart_amount}" >
 								    <input type="hidden" name="p_num" value="${orderCartListVO.p_num}" >
 								    <input type="hidden" name="ord_amount" value="${orderCartListVO.cart_amount}" >
-								    <input type="hidden" name="ord_amount" value="${orderCartListVO.cart_code}" >
+								    <input type="hidden" name="cart_code" value="${orderCartListVO.cart_code}" >
 								    <input type="hidden" class="productPointForCal" value="${cartVO.p_cost * 0.001}">
 				                    <button type="button" name="btnCartDelete" data-cart_code="${orderCartListVO.cart_code}" class="btn btn-link">X</button>
 								  </td>
@@ -463,6 +463,12 @@
 			$("#btnOrder").on("click", function(){
 
 				//유효성 검사
+				
+				//카트 코드 받아서 orderForm에 추가해주기???
+				let cartCodeArr = [];
+				$(".check:checked").each(function(){
+					oCodeArr.push($(this).val());
+				});
 
 				$("#pNumForOrder").val($(".move").attr("href"));
 
