@@ -1,6 +1,7 @@
 package com.psamall.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -104,32 +105,48 @@ public class OrderController {
 	}
 	
 	@GetMapping("/orderList")
-	public void orderList() {
+	public void orderList(@RequestParam(value="checkProduct", required = false)List<Integer> checkProduct, HttpSession session, Model model, 
+							@RequestParam(value="type", required = false) String type,
+							@RequestParam(value="p_num", required = false) Integer p_num, 
+							@RequestParam(value="cart_amount", required = false) Integer ord_amount) {
 		
-	}
-	//장바구니 선택한 상품만 주문하기
-	@PostMapping("/orderList")
-	@ResponseBody
-	public String orderList(@RequestParam("checkArr[]") List<Integer> checkArr, Model model,
-											@RequestParam("ordAmountArr[]") List<Integer> ordAmountArr,	HttpSession session) {
-		
-		//ResponseEntity<String> entity = null;
+//		Integer[] checkArr = new Integer[checkProduct.size()];
+//		for(int i=0; i<checkProduct.size(); i++) {
+//			checkArr[i] = checkProduct.get(i);
+//		}
+		//System.out.println(Arrays.toString(checkArr));
 		
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		List<OrderCartListVO> vo = new ArrayList<OrderCartListVO>();
 		
 		
+		if(type == null) {
+			//장바구니에서 주문하기
 			//선택한 상품
-			for(int i=0; i<checkArr.size(); i++) {
-				vo.add(i, orderService.getSelected(checkArr.get(i), m_id));
+			for(int i=0; i<checkProduct.size(); i++) {
+				vo.add(i, orderService.orderCartList(checkProduct.get(i), m_id));
 			}
 			
-			Integer[] amountArr = new Integer[ordAmountArr.size()];
+		} else if(type.equals("directOrder")) {			
+			//장바구니 외에서 주문하기
+			vo = orderService.orderDirectList(p_num, ord_amount);
 			
+//		CartVO cartVO = new CartVO();
+//			cartVO.setM_id(m_id);
+//			cartVO.setCart_amount(ord_amount);
+//			cartVO.setP_num(p_num);
+//			userCartService.addCart(cartVO);
 			
-			for(int i=0; i<ordAmountArr.size(); i++) {
-				amountArr[i] = ordAmountArr.get(i);
-			}
+		}
+		//
+
+			
+//			Integer[] amountArr = new Integer[ordAmountArr.size()];
+//			
+//			
+//			for(int i=0; i<ordAmountArr.size(); i++) {
+//				amountArr[i] = ordAmountArr.get(i);
+//			}
 			
 			
 			
@@ -139,17 +156,16 @@ public class OrderController {
 			String p_image_folder = vo.get(i).getP_image_folder().replace("\\", "/");
 			vo.get(i).setP_image_folder(p_image_folder);
 			vo.get(i).setM_id(m_id);
-			vo.get(i).setCart_amount(amountArr[i]);
+			//vo.get(i).setCart_amount(amountArr[i]);
 		}
 		
-		System.out.println("선택한 상품 정보: " + vo);
+		//System.out.println("선택한 상품 정보: " + vo);
 		
 		model.addAttribute("orderCartList", vo);
 		
-		//entity = new ResponseEntity<String>("success", HttpStatus.OK);
 		
-		return "redirect:/user/order/orderList";
 	}
+
 	
 	//주문 상품 이미지 불러오기
 	@ResponseBody

@@ -52,7 +52,9 @@ public class CartController {
 			
 			cartService.addCart(vo);
 			log.info("장바구니 정보: " + vo);
-
+			
+			session.removeAttribute("totalCart");
+			session.setAttribute("totalCart", cartService.totalCart(vo.getM_id()));
 			
 			entity = new ResponseEntity<String>("success", HttpStatus.OK);
 		}
@@ -89,11 +91,14 @@ public class CartController {
 		return entity;
 	}
 	
-	//장바구니 상품 삭제
+	//선택된 장바구니 상품 삭제
 	@GetMapping("/deleteCart")
-	public String deleteCart(@RequestParam("cart_code") Long cart_code) {
+	public String deleteCart(@RequestParam(value="checkProduct")List<Long> checkProduct) {
 		
-		cartService.deleteCart(cart_code);
+		for(int i=0; i<checkProduct.size(); i++) {
+			cartService.deleteCart(checkProduct.get(i));
+		}
+		
 		
 		return  "redirect:/user/cart/cartList";
 	}

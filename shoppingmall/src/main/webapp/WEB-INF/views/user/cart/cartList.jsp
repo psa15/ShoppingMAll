@@ -65,8 +65,9 @@
 						  <label class="form-check-label" for="checkAll">
 						    전체 선택
 						  </label>
+						  
 						</div>	
-						<form action="" method="get" id="productSelectedForm">      				
+						<form action="/user/order/orderList" method="get" id="productSelectedForm">      				
 					  <table class="table table-hover" id="tblCartList">
 						  <thead>
 						    <tr>
@@ -86,7 +87,8 @@
 						    <tr>
 						      <!-- 체크박스 -->				      
 						      <td class="calCheckedProduct"> 						      	
-						      	<input class="form-check-input" type="checkbox" value="${cartVO.p_num}" name="checkProduct" checked>
+						      	<input class="form-check-input" type="checkbox" value="${cartVO.cart_code}" name="checkProduct" checked>
+						      	
 						      	<input type="hidden" class="productPriceForCal" value="${cartVO.p_cost}">
 						      	<input type="hidden" class="productAmountForCal" value="${cartVO.cart_amount}">
 						      	<input type="hidden" class="productTotalPriceForCal" value="${cartVO.p_cost * cartVO.cart_amount}">
@@ -158,7 +160,7 @@
 										장바구니가 비었습니다.
 									</td>
 								</tr>
-							</c:if>						
+							</c:if>				
 						  </tfoot>
 						</table>
 						</form>								
@@ -263,16 +265,18 @@
 
 			});
 
-			//상품 삭제
-			$("button[name='btnCartDelete']").on("click", function(){
+			let productSelectedForm = $("#productSelectedForm");
+			
+			//선택된 상품 삭제
+			$("button[name='btnSelectDelete']").on("click", function(){
 				console.log("상품삭제");
 
 				if(!confirm("선택하신 상품을 삭제하시겠습니까?")){
 					return;
 				}
 
-				let cart_code = $(this).data("cart_code");
-				location.href = "/user/cart/deleteCart?cart_code=" + cart_code;
+				productSelectedForm.attr("action","/user/cart/deleteCart");
+				productSelectedForm.submit();
 			});
 
 			//장바구니 비우기
@@ -286,17 +290,17 @@
 				location.href = "/user/cart/clearCart";
 			});
 			
-			//주문하기 버튼 클릭
-/* 			$("#btnOrder").on("click", function(){
-				//let type = "cartOrder";
-				console.log("버튼 클릭");
-				let p_num = $(".move").attr("href");
-				//let cart_amount = 
-				location.href="/user/order/orderList?type=cartOrder";
-			}); */
+			//주문하기 버튼 클릭			
+ 			$("#btnOrder").on("click", function(){
+ 				console.log("주문하기");
+ 				
+ 				let type = "cartOrder";
+ 				//productSelectedForm.attr("action","/user/order/orderList");
+ 				productSelectedForm.submit();
+			}); 
 			
 			//선택한 상품 주문하기
- 			$("button#btnOrder").on("click", function(){
+ 			/*$("button#btnOrder").on("click", function(){
 				// console.log("주문하기");
 				
 				if(!confirm("선택하신 상품을 주문하시겠습니까?")) return;
@@ -315,21 +319,22 @@
 				});
 				console.log(ordAmountArr);
 
- 				$.ajax({
+ 				 $.ajax({
 					url: '/user/order/orderList',
 					type: 'post',
 					data: {
 						checkArr : checkArr, ordAmountArr : ordAmountArr
-					}
-					/* success: function(result) {
+					},
+					 success: function(result) {
 						if(result == "success") {
 							alert("주문 페이지로 이동합니다.");
+							location.href="/user/order/orderList";
 						}
 						
-					}  */
+					}  
 				
-				});
- 			});
+				}); 
+ 			});*/
 				
 				
 				/*

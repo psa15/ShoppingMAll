@@ -25,7 +25,7 @@
 		ON 
 			C.P_NUM = P.P_NUM
 		WHERE 
-		    C.M_ID = #{m_id} AND C.P_NUM = #{p_num}
+		    C.M_ID = #{m_id} AND C.CART_CODE = #{cart_code}
 	
 	</select>
 	
@@ -35,7 +35,7 @@
 		SELECT
 	        P_NUM, P_NAME, P_COST, P_DISCOUNT, P_COMPANY, P_IMAGE, P_IMAGE_FOLDER, #{ord_amount} as CART_AMOUNT
 		FROM 
-			TBL_PRODUCT P
+			TBL_PRODUCT
 		WHERE 
 		    P_NUM = #{p_num}
 	

@@ -9,12 +9,12 @@ import com.psamall.domain.PaymentVO;
 public interface OrderService {
 
 	//주문 페이지 주문 상품 목록
-	List<OrderCartListVO> orderCartList(String m_id);
+	OrderCartListVO orderCartList(Integer cart_code, String m_id);
 	//장바구니 외 주문
 	List<OrderCartListVO> orderDirectList(Integer p_num, int ord_amount);
 	
 	//선택한 상품 주문
-	OrderCartListVO getSelected(Integer p_num, String m_id);
+	OrderCartListVO getSelected( String m_id);
 	
 	
 	//주문하기(주문 정보 + 결제 정보)

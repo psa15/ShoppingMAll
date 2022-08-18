@@ -11,12 +11,12 @@ import com.psamall.domain.PaymentVO;
 public interface OrderMapper {
 
 	//주문 페이지 주문 상품 목록 - 장바구니에서 주문
-	List<OrderCartListVO> orderCartList(String m_id);
+	OrderCartListVO orderCartList(@Param("cart_code") Integer cart_code,@Param("m_id")  String m_id);
 	//장바구니 외 주문
 	List<OrderCartListVO> orderDirectList(@Param("p_num") Integer p_num, @Param("ord_amount") int ord_amount);
 	
 	//선택한 상품 주문
-	OrderCartListVO getSelected(@Param("p_num") Integer p_num, @Param("m_id") String m_id);
+	OrderCartListVO getSelected( String m_id);
 	
 	//최근 배송지 불러오기
 	OrderVO getRecentAddr(String m_id);

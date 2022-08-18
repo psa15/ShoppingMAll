@@ -27,8 +27,8 @@ public class OrderServiceImpl implements OrderService {
 	
 	//주문 페이지 주문 상품 목록
 	@Override
-	public List<OrderCartListVO> orderCartList(String m_id) {
-		return orderMapper.orderCartList(m_id);
+	public OrderCartListVO orderCartList(Integer cart_code, String m_id) {
+		return orderMapper.orderCartList(cart_code, m_id);
 	}
 
 	//장바구니 외 주문
@@ -65,8 +65,8 @@ public class OrderServiceImpl implements OrderService {
 
 	//선택한 상품 주문
 	@Override
-	public OrderCartListVO getSelected(Integer p_num, String m_id) {
-		return orderMapper.getSelected(p_num, m_id);
+	public OrderCartListVO getSelected( String m_id) {
+		return orderMapper.getSelected( m_id);
 	}	
 
 	//주문완료 후 주문 정보 불러오기
@@ -74,6 +74,8 @@ public class OrderServiceImpl implements OrderService {
 	public OrderVO getOrderInfo(String m_id) {
 		return orderMapper.getOrderInfo(m_id);
 	}
+
+	
 
 
 	
