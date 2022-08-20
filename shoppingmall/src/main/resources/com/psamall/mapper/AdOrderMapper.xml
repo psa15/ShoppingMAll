@@ -5,7 +5,7 @@
 	<!-- 검색 조건 쿼리 -->
 	<sql id="criteria">
 		<trim prefix="(" suffix=") AND " prefixOverrides="OR"><!-- serffix 공백 주의 -->
-			<foreach collection="typeArr" item="type">
+			<foreach collection="cri.typeArr" item="type">
 			 <!-- jstl문법의 foreach와는 다름, 이건 mybatis 문법 -->
 			 <!-- 6개 type에 따라 상황이 달라지기 때문에 이렇게 복잡해짐 -->
 			 <!-- typeArr : 파라미터타입의 Criteria클래스의 getter메소드를 가리킴, 검색종류(타입)의 값을 참조 -->
@@ -13,18 +13,34 @@
 			 		<choose>
 			 			<!-- T, C, W 제외 다른 type은 조합이기 때문에 when절은 3개만 -->
 			 			<when test="type == 'O'.toString()">
-			 				ORD_STATUS LIKE '%' || #{keyword} || '%'
+			 				ORD_STATUS LIKE '%' || #{cri.keyword} || '%'
 			 			</when>
 			 			<when test="type == 'P'.toString()">
-			 				PAY_STATUS LIKE '%' || #{keyword} || '%'
+			 				PAY_STATUS LIKE '%' || #{cri.keyword} || '%'
 			 			</when>
 			 			<when test="type == 'C'.toString()">
-			 				CS_STATUS LIKE '%' || #{keyword} || '%'
+			 				CS_STATUS LIKE '%' || #{cri.keyword} || '%'
 			 			</when>
 			 		</choose>
 			 	</trim>
 			</foreach>		
 		</trim>
+	</sql>
+	
+	<!-- 날짜 조건 쿼리 -->
+	<sql id="period">
+		<!-- 
+		startDate와 endDate가 존재하면
+		TO_DATE : 오라클db의 변환 함수
+		 -->
+		<if test="startDate != null and !startDate.equals('') and endDate != null and !endDate.equals('')">
+		<![CDATA[
+			O_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
+			AND
+			O_DATE < TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1
+			AND
+		]]>
+		</if>
 	</sql>
 	
 	<!-- 상품목록 -->
@@ -41,12 +57,13 @@
 				TBL_ORDER
 		    WHERE
 		]]>
+				<include refid="period"></include>
 				<include refid="criteria"></include>
 				<!-- <![CDATA[ ]]> 안에 들어가면 태그가 아닌 문자열로 읽게 됨 -->
 		<![CDATA[
-			 ROWNUM <= #{pageNum} * #{amount}
+			 ROWNUM <= #{cri.pageNum} * #{cri.amount}
 		)
-		WHERE RN > (#{pageNum}-1) * #{amount}	
+		WHERE RN > (#{cri.pageNum}-1) * #{cri.amount}	
 		]]>
 		<!-- <를 문자로 보는 것이 아니라 시작태그 문자로 봐서 오류가 남 - 파싱 이라고 부름
 				어떤 문자든 신경쓰지말고 스킵하게 하는 XML문법이 이씀
@@ -60,8 +77,79 @@
 		FROM 
 			TBL_ORDER
 		WHERE
+			<include refid="period"></include>
 			<include refid="criteria"></include>
 			ORD_CODE > 0		
+	</select>
+	
+	<!-- 주문 상태 변경 -->
+	<update id="updateOrderStatus">
+	
+		UPDATE
+			TBL_ORDER
+		SET
+			ORD_STATUS = #{ord_status}
+		WHERE
+			ORD_CODE = #{ord_code}
+	
+	</update>
+	
+	<!-- 결제 상태 변경 -->
+	<update id="updatePayStatus">
+	
+		UPDATE
+			TBL_ORDER
+		SET
+			PAY_STATUS = #{pay_status}
+		WHERE
+			ORD_CODE = #{ord_code}
+	
+	</update>
+	
+	<!-- CS 상태 변경 -->
+	<update id="updateCsStatus">
+	
+		UPDATE
+			TBL_ORDER
+		SET
+			CS_STATUS = #{cs_status}
+		WHERE
+			ORD_CODE = #{ord_code}
+	
+	</update>
+	
+	<!-- 회원이 주문취소할 경우 주문 삭제 -->
+	<delete id="deleteOrder">
+	
+		DELETE
+			TBL_ORDER
+		WHERE
+			ORD_CODE = #{ordCodeArr}
+		
+	</delete>
+	
+	<!-- 주문 정보 -->
+	<select id="getOrderInfo" resultType="com.psamall.domain.OrderVO">
+	
+		SELECT
+			ORD_CODE, M_ID, ORD_NAME, ORD_POSTCODE, ORD_ADDR, ORD_ADDR_D, ORD_TEL, ORD_TOTALCOST, ORD_DATE, ORD_MESSAGE, ORD_EMAIL, ORD_STATUS, PAY_STATUS, CS_STATUS
+		FROM
+			TBL_ORDER
+		WHERE
+			ORD_CODE = #{ord_code}
+	
+	</select>
+	
+	<!-- 결제 정보 -->
+	<select id="getPaymentInfo" resultType="com.psamall.domain.PaymentVO">
+	
+		SELECT
+			PAY_CODE, ORD_CODE, PAY_METHOD, PAY_DATE, PAY_TOT_PRICE, PAY_REST_PRICE, PAY_NOACCOUNT_PRICE, PAY_NOACCOUNT_USERNAME, PAY_NOACCOUNT_BANK
+		FROM
+			TBL_PAYMENT
+		WHERE
+			ORD_CODE = #{ord_code}
+	
 	</select>
 
 </mapper>

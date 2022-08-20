@@ -66,176 +66,100 @@ desired effect
     <!-- Main content -->
     <section class="content container-fluid">
 
-       <div class="row">
+      <div class="row">
       	<div class="col-md-12">      	
       		<div class="box box-primary">
       			<div class="box-header">
-      				LIST ORDER     
+      				LIST ORDER DETAIL    
       			</div>	
       			<div class="box-body">
-      				<form id="searchForm" action="/admin/order/adOrderList" method="get">
-					  <%-- 검색 단추를 누르면 - pageNum은 1로 돌아가게  --%>
-					    <select name="type" id="selectType">
-							 <option value="" <c:out value="${pageMaker.cri.type == null ? 'selected' : ''}" />>--</option> 
-							 <option value="O" <c:out value="${pageMaker.cri.type eq 'O' ? 'selected' : ''}" />>주문 상태</option>
-							 <option value="P" <c:out value="${pageMaker.cri.type eq 'P' ? 'selected' : ''}" />>결제 상태</option>
-							 <option value="C" <c:out value="${pageMaker.cri.type eq 'C' ? 'selected' : ''}" />>cs 상태</option>
-					  	</select>
-					  	<c:if test="${pageMaker.cri.type == 'O'}">
-					  		<select name="keyword">
-						      <option value="상품준비중"${pageMaker.cri.keyword eq '상품준비중' ? 'selected' : ''}>상품준비중</option>
-						      <option value="배송준비중"${pageMaker.cri.keyword eq '배송준비중' ? 'selected' : ''}>배송 준비 중</option>
-						      <option value="배송보류"${pageMaker.cri.keyword eq '배송보류' ? 'selected' : ''}>배송 보류</option>
-						      <option value="배송대기"${pageMaker.cri.keyword eq '배송대기' ? 'selected' : ''}>배송 대기</option>
-						      <option value="배송중"${pageMaker.cri.keyword eq '배송중' ? 'selected' : ''}>배송 중</option>
-						      <option value="배송완료"${pageMaker.cri.keyword eq '배송완료' ? 'selected' : ''}>배송 완료</option>
-						    </select>
-					  	</c:if>
-					  	<c:if test="${pageMaker.cri.type == 'P'}">
-					  		<select name="keyword">
-						      <option value="입금완료"${pageMaker.cri.keyword eq '입금완료' ? 'selected' : ''}>무통장 입금 완료</option>
-						      <option value="입금전"${pageMaker.cri.keyword eq '입금전' ? 'selected' : ''}>무통장 입금 전</option>
-						      <option value="추가입금대기 "${pageMaker.cri.keyword eq '추가입금대기 ' ? 'selected' : ''}>추가 입금 대기 </option>
-						      <option value="결제완료"${pageMaker.cri.keyword eq '결제완료' ? 'selected' : ''}>결제 완료</option>
-						      <option value="배송중"${pageMaker.cri.keyword eq '배송중' ? 'selected' : ''}>배송 중</option>
-						      <option value="배송완료"${pageMaker.cri.keyword eq '배송완료' ? 'selected' : ''}>배송 완료</option>
-						    </select>
-					  	</c:if>
-					  	<c:if test="${pageMaker.cri.type == 'C'}">
-					  		<select name="keyword">
-						      <option value="취소요청"${pageMaker.cri.keyword eq '취소요청' ? 'selected' : ''}>취소 요청</option>
-						      <option value="취소완료"${pageMaker.cri.keyword eq '취소완료' ? 'selected' : ''}>취소 완료</option>
-						      <option value="교환요청"${pageMaker.cri.keyword eq '교환요청' ? 'selected' : ''}>교환 요청</option>
-						      <option value="교환완료"${pageMaker.cri.keyword eq '교환완료' ? 'selected' : ''}>교환 완료</option>
-						      <option value="반품요청"${pageMaker.cri.keyword eq '반품요청' ? 'selected' : ''}>반품요청</option>
-						      <option value="반품완료"${pageMaker.cri.keyword eq '반품완료' ? 'selected' : ''}>반품완료</option>
-						      <option value="환불요청"${pageMaker.cri.keyword eq '환불요청' ? 'selected' : ''}>환불요청</option>
-						      <option value="환불완료"${pageMaker.cri.keyword eq '환불완료' ? 'selected' : ''}>환불완료</option>
-						    </select>
-					  	</c:if>
-					  	<%-- <input type="text" id="keywordTag" name="keyword" value="${pageMaker.cri.keyword}"> --%>
-					  	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
-					  	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
-					  	
-					  	주문 일자 <input type="date" name="startDate" value="${startDate }"> ~ <input type="date" name="endDate" value="${endDate }">
-					  	<button type="button" id="btnSearch" class="btn btn-info">Search</button>
-					  </form>
-					  <button type="button" name="btnDeleteCheck" class="btn btn-link">선택 삭제</button>
+      			<h3>주문 상세 조회</h3>
+      			
+      			  <h5 style="color:red; font-weight:bold">주문 정보</h5>
+				  <table class="table table-bordered">
+					  <thead>
+					    <tr>
+					      <th scope="col">주문번호</th>
+					      <td scope="col">${orderInfo.ord_code}</td>
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <tr>
+					      <th scope="col">주문일자</th>
+					      <td scope="col"><fmt:formatDate value="${orderInfo.ord_date}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
+					    </tr>
+					    <tr>
+					      <th scope="col">주문자</th>
+					      <td scope="col">${orderInfo.ord_name}</td>
+					    </tr>
+					    <tr>
+					      <th scope="col">주문 처리 상태</th>
+					      <td scope="col">${orderInfo.ord_status}</td>
+					    </tr>
+					    <tr>
+					      <th scope="col">배송 메시지</th>
+					      <td scope="col">${orderInfo.ord_message}</td>
+					    </tr>
+					  </tbody>
+					</table>
 					
-					
-					  <table class="table table-hover">
-						  <thead>
+					<h5 style="color:red; font-weight:bold">결제 정보</h5>
+					  <table class="table table-bordered">
+						  <tbody>
 						    <tr>
-						      <th scope="col"><input type="checkbox" id="checkAll" name="checkAll"></th>
-						      <th scope="col">주문 번호</th>
-						      <th scope="col">주문일시</th>
-						      <th scope="col">수령인 / 주문자 아이디 </th>
-						      <th scope="col">주문금액 / 배송비</th>
-						      <th scope="col">결제 방법 / 결제 상태</th>
-						      <th scope="col">주문 상태</th>
-						      <th scope="col">CS 상태</th>
-						      <th scope="col">주문 상세</th>
+						      <th scope="col">총 결제 금액</th>
+						      <td scope="col">${paymentInfo.pay_tot_price}</td>
+						    </tr>
+						    <tr>
+						      <th scope="col">결제 수단</th>
+						      <td scope="col">${paymentInfo.pay_method}</td>
+						    </tr>
+						    <tr>
+						      <th scope="col">결제 상태</th>
+						      <td scope="col">${orderInfo.pay_status}</td>
+						    </tr>
+						  </tbody>
+						</table>
+						
+						<h5 style="color:red; font-weight:bold">주문 상품 정보</h5>
+						<%-- 	<table class="table table-bordered">
+						  <thead>
+						  <!--  -->
+						    <tr>
+						      <th scope="col">이미지</th>
+						      <th scope="col">상품 정보</th>
+						      <th scope="col">수량</th>
+						      <th scope="col">상품 금액</th>
+						      <th scope="col">주문 처리 상태</th>
+						      <th scope="col">취소/교환/반품</th>
 						    </tr>
 						  </thead>
 						  <tbody>
-						  <c:forEach items="${orderList}" var="ordertVO">
-						    <tr>
-						      <!-- 비고 -->
-						      <td scope="row"><input type="checkbox" class="check" value="${ordertVO.ord_code }"></td>	
-						      <!-- 주문 번호 -->
-						      <td><c:out value="${ordertVO.ord_code}" /></td>
-						      <!-- 주문일시 -->				      
-						      <td>
-						      	<fmt:formatDate value="${ordertVO.ord_date}" pattern="yyyy-MM-dd hh:mm:ss"/>
-						      </td>							  
-						      <!-- 수령인 / 주문자 아이디 -->
-						      <td><c:out value="${ordertVO.ord_name}" /> / <c:out value="${ordertVO.m_id}" /></td>
-						      <!-- 주문금액 / 배송비 -->
-						      <td><c:out value="${ordertVO.ord_totalcost}"/></td>
-						      <!-- 결제 상태 -->
-						      <td>
-						      	<select class="form-control" id="pay_status" name="pay_status">
-							      <option value="입금완료"${ordertVO.pay_status eq '입금완료' ? 'selected' : ''}>무통장 입금 완료</option>
-							      <option value="입금전"${ordertVO.pay_status eq '입금전' ? 'selected' : ''}>무통장 입금 전</option>
-							      <option value="추가입금대기 "${ordertVO.pay_status eq '추가입금대기 ' ? 'selected' : ''}>추가 입금 대기 </option>
-							      <option value="결제완료"${ordertVO.pay_status eq '결제완료' ? 'selected' : ''}>결제 완료</option>
-							    </select>
-							    <button type="button" name="btnChangePayStatus" data-ord_code="${ordertVO.ord_code }" class="btn btn-link">변경</button>
-						      </td>
-						      <!-- 주문상태 -->
-						      <td>
-						      	<select class="form-control" id="ord_status" name="ord_status">
-							      <option value="상품준비중"${ordertVO.ord_status eq '상품준비중' ? 'selected' : ''}>상품준비중</option>
-							      <option value="배송준비중"${ordertVO.ord_status eq '배송준비중' ? 'selected' : ''}>배송 준비 중</option>
-							      <option value="배송보류"${ordertVO.ord_status eq '배송보류' ? 'selected' : ''}>배송 보류</option>
-							      <option value="배송대기"${ordertVO.ord_status eq '배송대기' ? 'selected' : ''}>배송 대기</option>
-							      <option value="배송중"${ordertVO.ord_status eq '배송중' ? 'selected' : ''}>배송 중</option>
-							      <option value="배송완료"${ordertVO.ord_status eq '배송완료' ? 'selected' : ''}>배송 완료</option>
-							    </select>
-							    <button type="button" name="btnChangeOrderStatus" data-ord_code="${ordertVO.ord_code }" class="btn btn-link">변경</button>
-						      </td>
-						      <!-- CS 상태 -->
-						      <td>
-						      	<select class="form-control" id="cs_status" name="cs_status">
-						      	  <option value="" selected>------------------</option>
-							      <option value="취소요청"${ordertVO.cs_status eq '취소요청' ? 'selected' : ''}>취소 요청</option>
-							      <option value="취소완료"${ordertVO.cs_status eq '취소완료' ? 'selected' : ''}>취소 완료</option>
-							      <option value="교환요청"${ordertVO.cs_status eq '교환요청' ? 'selected' : ''}>교환 요청</option>
-							      <option value="교환완료"${ordertVO.cs_status eq '교환완료' ? 'selected' : ''}>교환 완료</option>
-							      <option value="반품요청"${ordertVO.cs_status eq '반품요청' ? 'selected' : ''}>반품요청</option>
-							      <option value="반품완료"${ordertVO.cs_status eq '반품완료' ? 'selected' : ''}>반품완료</option>
-							      <option value="환불요청"${ordertVO.cs_status eq '환불요청' ? 'selected' : ''}>환불요청</option>
-							      <option value="환불완료"${ordertVO.cs_status eq '환불완료' ? 'selected' : ''}>환불완료</option>
-							     </select>
-							     <button type="button" name="btnChangeCsStatus" data-ord_code="${ordertVO.ord_code }" class="btn btn-link">변경</button>
-						      </td>
-						      
-						      <!-- 주문 관리 -->						      
-						      <td><button type="button" name="btnOrderDetail" data-ord_code="${ordertVO.ord_code}" class="btn btn-link">주문 상세</button></td>
-						      
-						     </tr>
-						   </c:forEach> 
-						   
-						  </tbody>
-						</table>
-						<nav aria-label="...">
-						  <ul class="pagination justify-content-center">
-						  
-						  	<%-- 이전표시 --%>
-						  	<c:if test="${pageMaker.prev}">
-							    <li class="page-item">
-							      <a class="page-link" href="${pageMaker.startPage-1}">이전</a>
-							    </li>
-						    </c:if>
-						    
-						    <%-- 페이지 번호 표시 ( 1 2 3 4 5) --%>
-						    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
-						    	<li class='page-item ${pageMaker.cri.pageNum == num ? "active" : ""}'><a class="page-link" href="${num}">${num}</a></li>
+						  	<c:forEach items="${orderProductMap }" var="orderProduct">
+							    <tr>
+							    <!-- MAP의 키를 대문자로 입력 -->
+							      
+							      <td scope="col">
+								      <img src="/admin/product/displayFile?folderName=${orderProduct.P_IMAGE_DATEFOLDER }&fileName=s_${orderProduct.P_IMAGE }" 
+							      		alt="" style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image.png'">
+							      		 
+							      </td>
+							      <td scope="col">${orderProduct.P_NAME}</td>
+							      <td scope="col">${orderProduct.O_AMOUNT}</td>
+							      <td scope="col">${orderProduct.O_UNITPRICE}</td>
+							      <td scope="col">${orderProduct.O_STATUS}</td>
+							      <td scope="col">
+							      	<button type="button" id="btnCancelProduct" class="btn btn-link">취소</button>
+							      </td>
+							    </tr>
 						    </c:forEach>
-						
-						    
-						    <%-- 다음표시 --%>
-						    <c:if test="${pageMaker.next}">
-							    <li class="page-item">
-							      <a class="page-link" href="${pageMaker.endPage +1}">다음</a>
-							    </li>
-						    </c:if>   
-						  </ul>
-						  <form id="actionForm" action="/admin/order/adOrderList" method="get">
-								<%-- 페이지 번호 클릭시 list주소로 보낼 파라미터 작업 - model 덕분에 ${pageMaker.cri.___} 사용 가능 --%>
-								<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
-								<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
-								<input type="hidden" name="type" value="${pageMaker.cri.type}">
-								<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
-                				<input type="hidden" name="startDate" value="${startDate}">
-                				<input type="hidden" name="endDate" value="${endDate}">
-								 <%--한 번 검색하면 list()메소드에 Criteria cri 에 값이 들어가게 되어 위 사용 가능 --%>
-							</form>
-						</nav>
+						  </tbody>
+						</table> --%>					
       			</div>		
       		</div>     
       	</div>      
       </div>
+
     </section>
     <!-- /.content -->
   </div>
@@ -453,7 +377,6 @@ desired effect
       searchForm.submit();
     });
     
-    let actionForm = $("#actionForm");
     //페이지 번호 
     $("ul.pagination li a.page-link").on("click", function(e){
     	e.preventDefault();
@@ -520,17 +443,7 @@ desired effect
       });
 
     });
-
-    //주문 상세 클릭
-    $("button[name='btnOrderDetail']").on("click", function(){
-      console.log("주문번호: " + $(this).data("ord_code"));
-      //상품코드를 자식으로 추가
-      actionForm.append("<input type='hidden' name='ord_code' value='" + $(this).data("ord_code") + "'>");
-      
-      //폼태그 주소 변경
-      actionForm.attr("action", "/admin/order/adOrderDetail");
-      actionForm.submit();
-    }); 
+  
 
   });
 </script>
