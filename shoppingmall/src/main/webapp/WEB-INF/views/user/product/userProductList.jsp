@@ -170,7 +170,7 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" name="btnBuyNow" class="btn btn-primary">바로 구매</button>
-			<form action="/user/order/orderList" method="get" id="orderForm">
+			<form action="/user/order/userOrderList" method="get" id="orderForm">
 				<input type="hidden" name="p_num" value="${productVO.p_num}">
 				<input type="hidden" name="cart_amount" value="">
 				<input type="hidden" name="type" value="directOrder">

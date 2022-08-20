@@ -93,11 +93,17 @@ public class CartController {
 	
 	//선택된 장바구니 상품 삭제
 	@GetMapping("/deleteCart")
-	public String deleteCart(@RequestParam(value="checkProduct")List<Long> checkProduct) {
+	public String deleteCart(@RequestParam(value="checkProduct")List<Long> checkProduct, HttpSession session) {
 		
+		//로그인 정보
+		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
+				
 		for(int i=0; i<checkProduct.size(); i++) {
 			cartService.deleteCart(checkProduct.get(i));
 		}
+		
+		session.removeAttribute("totalCart");
+		session.setAttribute("totalCart", cartService.totalCart(m_id));
 		
 		
 		return  "redirect:/user/cart/cartList";
@@ -111,6 +117,9 @@ public class CartController {
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		
 		cartService.clearCart(m_id);
+		
+		session.removeAttribute("totalCart");
+		session.setAttribute("totalCart", cartService.totalCart(m_id));
 		
 		return "/user/cart/cartList";
 	}

@@ -100,7 +100,7 @@ public class OrderController {
 	}
 */	
 	
-	@GetMapping("/orderList")
+	@GetMapping("/userOrderList")
 	public void orderList(@RequestParam(value="checkProduct", required = false)List<Integer> checkProduct, HttpSession session, Model model, 
 							@RequestParam(value="type", required = false) String type,
 							@RequestParam(value="p_num", required = false) Integer p_num, 
@@ -190,7 +190,7 @@ public class OrderController {
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		orderVO.setM_id(m_id);
 		
-		if(payVO.getPay_noAccount_bank() != null) {
+		if(payVO.getPay_method().equals("무통장 입금")) {
 			orderVO.setPay_status("입금전");
 			payVO.setPay_tot_price(orderVO.getOrd_totalcost()); //실제 총 결제금액
 			payVO.setPay_rest_price(0);	//추가 입금 금액
@@ -204,7 +204,7 @@ public class OrderController {
 			}
 		}
 		
-		return "redirect:/user/order/orderComplete";
+		return "redirect:/user/order/userOrderComplete";
 	}
 	
 	//카카오페이 결제요청. 바로구매는 에러발생된다.
@@ -259,11 +259,11 @@ public class OrderController {
 		
 		orderService.orderSave(orderVO, payVO);
 		
-		return "redirect:/user/order/orderComplete";
+		return "redirect:/user/order/userOrderComplete";
 	}
 	
 	//주문 완료 폼
-	@GetMapping("/orderComplete")
+	@GetMapping("/userOrderComplete")
 	public void orderComplete(HttpSession session, Model model) {
 		
 		String m_id = ((MemberVO) session.getAttribute("loginStatus")).getM_id();

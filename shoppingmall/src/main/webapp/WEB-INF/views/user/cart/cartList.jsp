@@ -168,10 +168,9 @@
 	      			<div class="box-footer text-center">
 	      				<c:if test="${!empty cartList}">
 							<button type="button" id="btnClearCart" class="btn btn-primary">장바구니 비우기</button>
+							<button type="button" id="btnSelectDelete" class="btn btn-primary">선택된 장바구니 삭제</button>
 							<button type="button" id="btnShopping"  class="btn btn-primary">계속 쇼핑하기</button>
 							<button type="button" id="btnOrder"  class="btn btn-primary">주문하기</button>
-							<form id="orderCheckForm" action="/user/order/orderSelected" method="get">									
-							</form>
 						</c:if>
 						<c:if test="${empty cartList}">
 							<button type="button" name="btnShopping"  class="btn btn-primary">쇼핑하기</button>
@@ -268,7 +267,7 @@
 			let productSelectedForm = $("#productSelectedForm");
 			
 			//선택된 상품 삭제
-			$("button[name='btnSelectDelete']").on("click", function(){
+			$("#btnSelectDelete").on("click", function(){
 				console.log("상품삭제");
 
 				if(!confirm("선택하신 상품을 삭제하시겠습니까?")){

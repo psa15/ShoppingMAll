@@ -50,7 +50,7 @@ public class AdProductController {
 	private AdProductService adProductService;
 	
 	//상품 등록 폼 + 1차 카테고리 불러오기
-	@GetMapping("/addProduct")
+	@GetMapping("/adAddProduct")
 	public void addProduct(Model model) {
 		model.addAttribute("firstCateList", adProductService.firstCateList());
 	}
@@ -118,7 +118,7 @@ public class AdProductController {
 	}
 		
 	//상품 저장
-	@PostMapping("/addProduct")
+	@PostMapping("/adAddProduct")
 	public String addProduct(ProductVO vo, RedirectAttributes rttr) {
 		
 		log.info("상품 등록 정보: " + vo);
@@ -134,11 +134,11 @@ public class AdProductController {
 		//상품 정보 저장
 		adProductService.insertProduct(vo);
 		
-		return "redirect:/admin/product/productList";
+		return "redirect:/admin/product/adProductList";
 	}
 	
 	//상품목록
-	@GetMapping("/productList")
+	@GetMapping("/adProductList")
 	public void productList(@ModelAttribute("cri") Criteria cri, Model model) {
 		
 		//날짜 폴더의 \를 /로 변환하여 저장
@@ -167,7 +167,7 @@ public class AdProductController {
 	}
 	
 	//상품 수정 폼
-	@GetMapping("/updateProduct")
+	@GetMapping("/adUpdateProduct")
 	public void updateProduct(@ModelAttribute("cri") Criteria cri, @RequestParam("p_num") Integer p_num, Model model) {
 		log.info("상품코드: " + p_num);
 		log.info("검색 및 페이징 정보: " + cri);
@@ -189,7 +189,7 @@ public class AdProductController {
 		model.addAttribute("secondCateList", adProductService.secondCateList(firstCategoryCode));
 	}
 	//상품 수정 저장
-	@PostMapping("/updateProduct")
+	@PostMapping("/adUpdateProduct")
 	public String updateProduct(ProductVO vo, Criteria cri, RedirectAttributes rttr) {
 		
 		//이미지 첨부파일이 수정되면 파일 업로드
@@ -209,7 +209,7 @@ public class AdProductController {
 		
 		adProductService.updateProduct(vo);
 		
-		return "redirect:/admin/product/productList" + cri.getListLink();
+		return "redirect:/admin/product/adProductList" + cri.getListLink();
 	}
 	
 	//상품 삭제
@@ -222,6 +222,6 @@ public class AdProductController {
 		//db정보 삭제
 		adProductService.deleteProduct(p_num);
 		
-		return "redirect:/admin/product/productList";
+		return "redirect:/admin/product/adProductList";
 	}
 }

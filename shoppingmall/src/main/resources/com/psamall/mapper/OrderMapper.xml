@@ -56,9 +56,9 @@
 		
 		INSERT INTO 
 			TBL_ORDER
-				(ORD_CODE, M_ID, ORD_NAME, ORD_POSTCODE, ORD_ADDR, ORD_ADDR_D, ORD_TEL, ORD_TOTALCOST, ORD_MESSAGE, ORD_EMAIL, PAY_STATUS) 
+				(ORD_CODE, M_ID, ORD_NAME, ORD_POSTCODE, ORD_ADDR, ORD_ADDR_D, ORD_TEL, ORD_TOTALCOST, ORD_MESSAGE, ORD_EMAIL) 
 			VALUES
-				(#{ord_code}, #{m_id}, #{ord_name}, #{ord_postcode}, #{ord_addr}, #{ord_addr_d}, #{ord_tel}, #{ord_totalcost}, #{ord_message}, #{ord_email}, #{pay_status})
+				(#{ord_code}, #{m_id}, #{ord_name}, #{ord_postcode}, #{ord_addr}, #{ord_addr_d}, #{ord_tel}, #{ord_totalcost}, #{ord_message}, #{ord_email})
 				
 	</insert>
 	

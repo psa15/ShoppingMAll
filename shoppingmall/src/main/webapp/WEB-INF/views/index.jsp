@@ -238,7 +238,7 @@
 				let p_num = $("div#modal_productDetail input#p_num").val();
 				let cart_amount = $("div#modal_productDetail input#p_amount").val();
 				
-				location.href = "/user/order/orderList?type=directOrder&p_num=" + p_num + "&cart_amount=" + cart_amount;
+				location.href = "/user/order/userOrderList?type=directOrder&p_num=" + p_num + "&cart_amount=" + cart_amount;
 				
 			});
 		});

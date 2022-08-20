@@ -112,7 +112,7 @@
       			수량: <input type="number" id="p_amount" min="1" value="1">
       		</p>
       		<button type="button" id="btnOrder"  class="btn btn-primary">구매하기</button>
-      		<form action="/user/order/orderList" method="get" id="orderForm">
+      		<form action="/user/order/userOrderList" method="get" id="orderForm">
 				<input type="hidden" name="p_num" value="${productVO.p_num}">
 				<input type="hidden" name="cart_amount" value="">
 				<input type="hidden" name="type" value="directOrder">
