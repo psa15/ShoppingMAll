@@ -2,6 +2,7 @@ package com.psamall.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,11 +32,6 @@ public class OrderServiceImpl implements OrderService {
 		return orderMapper.orderCartList(cart_code, m_id);
 	}
 
-	//장바구니 외 주문
-	@Override
-	public List<OrderCartListVO> orderDirectList(Integer p_num, int ord_amount) {
-		return orderMapper.orderDirectList(p_num, ord_amount);
-	}
 	
 	//주문하기(주문 정보 + 결제 정보)
 	@Transactional
@@ -61,18 +57,24 @@ public class OrderServiceImpl implements OrderService {
 		payVO.setOrd_code(ord_code);
 		orderMapper.insertPayment(payVO);
 		
-	}
-
-	//선택한 상품 주문
-	@Override
-	public OrderCartListVO getSelected( String m_id) {
-		return orderMapper.getSelected( m_id);
 	}	
 
 	//주문완료 후 주문 정보 불러오기
 	@Override
 	public OrderVO getOrderInfo(String m_id) {
 		return orderMapper.getOrderInfo(m_id);
+	}
+
+	//장바구니 외 목록
+	@Override
+	public List<OrderCartListVO> orderDirectList(Integer p_num, int ord_amount) {
+		return orderMapper.orderDirectList(p_num, ord_amount);
+	}
+
+	//주문내역
+	@Override
+	public List<Map<String, Object>> getOrderHistory(String m_id) {
+		return orderMapper.getOrderHistory(m_id);
 	}
 
 	

@@ -86,19 +86,15 @@ desired effect
 						      <option value="상품준비중"${pageMaker.cri.keyword eq '상품준비중' ? 'selected' : ''}>상품준비중</option>
 						      <option value="배송준비중"${pageMaker.cri.keyword eq '배송준비중' ? 'selected' : ''}>배송 준비 중</option>
 						      <option value="배송보류"${pageMaker.cri.keyword eq '배송보류' ? 'selected' : ''}>배송 보류</option>
-						      <option value="배송대기"${pageMaker.cri.keyword eq '배송대기' ? 'selected' : ''}>배송 대기</option>
 						      <option value="배송중"${pageMaker.cri.keyword eq '배송중' ? 'selected' : ''}>배송 중</option>
 						      <option value="배송완료"${pageMaker.cri.keyword eq '배송완료' ? 'selected' : ''}>배송 완료</option>
 						    </select>
 					  	</c:if>
 					  	<c:if test="${pageMaker.cri.type == 'P'}">
 					  		<select name="keyword">
-						      <option value="입금완료"${pageMaker.cri.keyword eq '입금완료' ? 'selected' : ''}>무통장 입금 완료</option>
 						      <option value="입금전"${pageMaker.cri.keyword eq '입금전' ? 'selected' : ''}>무통장 입금 전</option>
 						      <option value="추가입금대기 "${pageMaker.cri.keyword eq '추가입금대기 ' ? 'selected' : ''}>추가 입금 대기 </option>
 						      <option value="결제완료"${pageMaker.cri.keyword eq '결제완료' ? 'selected' : ''}>결제 완료</option>
-						      <option value="배송중"${pageMaker.cri.keyword eq '배송중' ? 'selected' : ''}>배송 중</option>
-						      <option value="배송완료"${pageMaker.cri.keyword eq '배송완료' ? 'selected' : ''}>배송 완료</option>
 						    </select>
 					  	</c:if>
 					  	<c:if test="${pageMaker.cri.type == 'C'}">
@@ -155,12 +151,11 @@ desired effect
 						      <!-- 결제 상태 -->
 						      <td>
 						      	<select class="form-control" id="pay_status" name="pay_status">
-							      <option value="입금완료"${ordertVO.pay_status eq '입금완료' ? 'selected' : ''}>무통장 입금 완료</option>
 							      <option value="입금전"${ordertVO.pay_status eq '입금전' ? 'selected' : ''}>무통장 입금 전</option>
 							      <option value="추가입금대기 "${ordertVO.pay_status eq '추가입금대기 ' ? 'selected' : ''}>추가 입금 대기 </option>
 							      <option value="결제완료"${ordertVO.pay_status eq '결제완료' ? 'selected' : ''}>결제 완료</option>
 							    </select>
-							    <button type="button" name="btnChangePayStatus" data-ord_code="${ordertVO.ord_code }" class="btn btn-link">변경</button>
+							    <button type="button" name="btnChangePayStatus" data-ord_totalcost="${ordertVO.ord_totalcost}" data-ord_code="${ordertVO.ord_code }" class="btn btn-link">변경</button>
 						      </td>
 						      <!-- 주문상태 -->
 						      <td>
@@ -168,7 +163,6 @@ desired effect
 							      <option value="상품준비중"${ordertVO.ord_status eq '상품준비중' ? 'selected' : ''}>상품준비중</option>
 							      <option value="배송준비중"${ordertVO.ord_status eq '배송준비중' ? 'selected' : ''}>배송 준비 중</option>
 							      <option value="배송보류"${ordertVO.ord_status eq '배송보류' ? 'selected' : ''}>배송 보류</option>
-							      <option value="배송대기"${ordertVO.ord_status eq '배송대기' ? 'selected' : ''}>배송 대기</option>
 							      <option value="배송중"${ordertVO.ord_status eq '배송중' ? 'selected' : ''}>배송 중</option>
 							      <option value="배송완료"${ordertVO.ord_status eq '배송완료' ? 'selected' : ''}>배송 완료</option>
 							    </select>
@@ -337,6 +331,7 @@ desired effect
       //주문 번호, 선택한 배송상태 값
       let ord_code = $(this).data("ord_code");
       let ord_status = $(this).parent().find("select#ord_status option:selected").val();
+     
       // console.log("주문 번호: " + o_code + " 배송상태: " + o_status);
       $.ajax({
         url: '/admin/order/orderStatusChange',
@@ -353,22 +348,27 @@ desired effect
 
     //결제 상태 변경 작업
     $("button[name='btnChangePayStatus']").on("click", function(){
-      //console.log("변경 버튼 클릭");
-      //주문 번호, 선택한 배송상태 값
+      console.log("변경 버튼 클릭");
+      
       let ord_code = $(this).data("ord_code");
       let pay_status = $(this).parent().find("select#pay_status option:selected").val();
-      // console.log("주문 번호: " + o_code + " 배송상태: " + o_status);
-      $.ajax({
+      let ord_totalcost = $(this).data("ord_totalcost");
+      
+      console.log(ord_code);
+      console.log(pay_status);
+      console.log(ord_totalcost);
+      
+       $.ajax({
         url: '/admin/order/orderPayChange',
         method: 'get',
-        data: {ord_code : ord_code, pay_status : pay_status},
+        data: {ord_code : ord_code, pay_status : pay_status, ord_totalcost : ord_totalcost},
         dataType: 'text',
         success: function(result) {
           if(result == "success"){
             alert("결제 상태가 변경 되었습니다.")
           }
         }
-      });
+      }); 
     });
 
     //CS 상태 변경 작업
@@ -399,14 +399,12 @@ desired effect
         let orderStatus = "<select id=orderStatusKeyword name='keyword'>";
         	orderStatus +=   "<option value='상품준비중'>상품준비중</option>";	      
        		orderStatus +=   "<option value='배송준비중'>배송 준비 중</option>";
-   			orderStatus +=   "<option value='배송보류'>배송 보류</option>";			      
-   			orderStatus +=   "<option value='배송대기'>배송 대기</option>";				      
+   			orderStatus +=   "<option value='배송보류'>배송 보류</option>";				      
    			orderStatus +=   "<option value='배송중'>배송 중</option>";				      
    			orderStatus +=   "<option value='배송완료'>배송 완료</option>";				      
    			orderStatus += "</select>";	
    		
-   		let payStatus = "<select id=payStatusKeyword name='keyword'>";
-	   		payStatus +=   "<option value='입금완료'>무통장 입금 완료</option>";	      
+   		let payStatus = "<select id=payStatusKeyword name='keyword'>";     
 	   		payStatus +=   "<option value='입금전'>무통장 입금 전</option>";
 	   		payStatus +=   "<option value='추가입금대기'>추가 입금 대기 </option>";			      
 	   		payStatus +=   "<option value='결제완료'>결제 완료</option>";				      

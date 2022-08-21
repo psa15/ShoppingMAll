@@ -3,6 +3,7 @@ package com.psamall.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -57,49 +58,7 @@ public class OrderController {
 	@Setter(onMethod_ = {@Autowired})
 	private com.psamall.service.KakaoPayServiceImpl kakaopayService;
 
-	/*
-	//주문하기 폼
-	@GetMapping("/orderList")
-	public void orderList(HttpSession session, Model model, RedirectAttributes rttr, @ModelAttribute("orderCartList")List<OrderCartListVO> orderCartList,
-							@RequestParam("type") String type, @RequestParam(value="p_num", required = false) Integer p_num, @RequestParam(value="cart_amount", required = false) Integer ord_amount ) {
-		
-	
-		log.info("cart_amount: " + ord_amount);
-		log.info("상품 번호: " + p_num);
-		log.info("상품 타입: " + type);
-		
-		
-		
-		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
-		List<OrderCartListVO> vo = null;
-		
-		if(type.equals("cartOrder")) {
-			//장바구니에서 주문하기
-			//vo = orderService.orderCartList(m_id);
-			
-		} else if(type.equals("directOrder")) {			
-			//장바구니 외에서 주문하기
-			vo = orderService.orderDirectList(p_num, ord_amount);
-			
-		CartVO cartVO = new CartVO();
-			cartVO.setM_id(m_id);
-			cartVO.setCart_amount(ord_amount);
-			cartVO.setP_num(p_num);
-			userCartService.addCart(cartVO);
-			
-		}
-		
-	for(int i=0; i<vo.size(); i++) {
-		String p_image_folder = vo.get(i).getP_image_folder().replace("\\", "/");
-			vo.get(i).setP_image_folder(p_image_folder);
-		}
-	
-		model.addAttribute("orderCartList", vo);
-	
-	
-	}
-*/	
-	
+	//주문하기 폼	
 	@GetMapping("/userOrderList")
 	public void orderList(@RequestParam(value="checkProduct", required = false)List<Integer> checkProduct, HttpSession session, Model model, 
 							@RequestParam(value="type", required = false) String type,
@@ -192,10 +151,11 @@ public class OrderController {
 		
 		if(payVO.getPay_method().equals("무통장 입금")) {
 			orderVO.setPay_status("입금전");
-			payVO.setPay_tot_price(orderVO.getOrd_totalcost()); //실제 총 결제금액
-			payVO.setPay_rest_price(0);	//추가 입금 금액
+			payVO.setPay_tot_price(0); //실제 총 결제금액
 		}
-				
+		System.out.println("주문 정보: " + orderVO);
+		System.out.println("결제 정보: " + payVO);
+		
 		orderService.orderSave(orderVO, payVO);
 		
 		if(cartCodeArr != null) {
@@ -270,4 +230,22 @@ public class OrderController {
 		
 		model.addAttribute("orderInfo", orderService.getOrderInfo(m_id));
 	}
+	
+	//주문 내역
+	@GetMapping("/userOrderHistory")
+	public void userOrderHistory(Model model, HttpSession session) {
+		
+		String m_id = ((MemberVO) session.getAttribute("loginStatus")).getM_id();
+		
+		List<Map<String, Object>> orderHistory = orderService.getOrderHistory(m_id);
+		
+		for(int i=0; i<orderHistory.size(); i++) {
+			Map<String, Object> orderProductInfo = orderHistory.get(i);
+			String img_forlder = String.valueOf(orderProductInfo.get("P_IMAGE_FOLDER")).replace("\\", "/");
+			
+			orderProductInfo.put("P_IMAGE_FOLDER", img_forlder);
+		}
+		model.addAttribute("orderHistory", orderHistory);
+	}
+	
 }

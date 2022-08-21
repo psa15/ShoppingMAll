@@ -1,9 +1,11 @@
 package com.psamall.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.psamall.domain.OrderVO;
 import com.psamall.domain.PaymentVO;
@@ -40,6 +42,11 @@ public class AdOrderServiceImpl implements AdOrderService {
 	public void updatePayStatus(Long ord_code, String pay_status) {
 		adOrderMapper.updatePayStatus(ord_code, pay_status);
 	}
+	//총 가격 수정
+	@Override
+	public void updatePrice(Long ord_code, int totalPrice) {
+		adOrderMapper.updatePrice(ord_code, totalPrice);
+	}
 	//CS 상태 변경
 	@Override
 	public void updateCsStatus(Long ord_code, String cs_status) {
@@ -63,8 +70,28 @@ public class AdOrderServiceImpl implements AdOrderService {
 	public PaymentVO getPaymentInfo(Long ord_code) {
 		return adOrderMapper.getPaymentInfo(ord_code);
 	}
-	
-	
+	//주문 상품 정보
+	@Override
+	public List<Map<String, Object>> getOrderProductInfo(Long ord_code) {
+		return adOrderMapper.getOrderProductInfo(ord_code);
+	}
+
+	//개별 상품 삭제
+	@Transactional
+	@Override
+	public void deleteProduct(Long ord_code, Integer p_num, int ord_unitprice) {
+		
+		//주문 상세 테이블 삭제
+		adOrderMapper.deleteTblOrderDetail(p_num, ord_code);
+		
+		//주문 테이블 총 가격 수정
+		adOrderMapper.updateTotalCost(ord_code, ord_unitprice);
+		
+		//결제 테이블 총 가격 수정
+		adOrderMapper.updatePayTotalCost(ord_code, ord_unitprice);
+		
+	}
+
 	
 
 }

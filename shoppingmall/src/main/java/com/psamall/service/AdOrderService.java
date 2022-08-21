@@ -1,6 +1,9 @@
 package com.psamall.service;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.psamall.domain.OrderVO;
 import com.psamall.domain.PaymentVO;
@@ -28,4 +31,11 @@ public interface AdOrderService {
 	OrderVO getOrderInfo(Long ord_code);
 	//결제 정보
 	PaymentVO getPaymentInfo(Long ord_code);
+	//총 가격 수정
+	void updatePrice(Long ord_code, int totalPrice);
+	//주문 상품 정보
+	List<Map<String, Object>> getOrderProductInfo(Long ord_code);
+	
+	//개별 상품 삭제
+	void deleteProduct(Long ord_code, Integer p_num, int ord_unitprice);
 }

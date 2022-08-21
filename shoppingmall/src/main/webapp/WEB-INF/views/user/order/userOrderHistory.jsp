@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!doctype html>
 <html lang="en">
   <head>
@@ -48,7 +47,7 @@
 
   <section class="jumbotron text-center">
     <div class="container">
-      <h1>CART</h1>
+      <h1>주문내역</h1>
     </div>
   </section>
 
@@ -57,125 +56,43 @@
 	      	<div class="col-md-12">      	
 	      		<div class="box box-primary">
 	      			<div class="box-header">
-	      				LIST CART     
+	      				<h5>ORDER HISTORY</h5>    
 	      			</div>	
-	      			<div class="box-body">
-	      				<div class="form-check">
-						  <input class="form-check-input" type="checkbox" id="checkAll" checked>
-						  <label class="form-check-label" for="checkAll">
-						    전체 선택
-						  </label>
-						  
-						</div>	
-						<form action="/user/order/userOrderList" method="get" id="productSelectedForm">      				
-					  <table class="table table-hover" id="tblCartList">
-						  <thead>
-						    <tr>
-						      <th scope="col"></th>
-						      <th scope="col">제품</th>
-						      <th scope="col">수량</th>
-						      <th scope="col">배송비</th>
-						      <th scope="col">가격</th>						      
-						      <th scope="col">적립</th>
-						      <th scope="col">취소</th>
-						    </tr>
-						  </thead>
-						  <tbody>
-							
-						  <c:forEach items="${cartList}" var="cartVO" varStatus="status">
-						  <c:set var="price" value="${cartVO.cart_amount * cartVO.p_cost}"></c:set>
-						    <tr>
-						      <!-- 체크박스 -->				      
-						      <td class="calCheckedProduct"> 						      	
-						      	<input class="form-check-input" type="checkbox" value="${cartVO.cart_code}" name="checkProduct" checked>
-						      	
-						      	<input type="hidden" class="productPriceForCal" value="${cartVO.p_cost}">
-						      	<input type="hidden" class="productAmountForCal" value="${cartVO.cart_amount}">
-						      	<input type="hidden" class="productTotalPriceForCal" value="${cartVO.p_cost * cartVO.cart_amount}">
-						      	<input type="hidden" class="productPointForCal" value="${cartVO.p_cost * 0.005}">
-								
-						      	
-						      </td>	
-						      <!-- 제품 : 이미지 및 상품이름 -->				      
-						      <td>						      	
-						      	<a class="move" href="${cartVO.p_num}">
-						      		<img src="/user/product/displayFile?folderName=${cartVO.p_image_folder}&fileName=s_${cartVO.p_image}" 
-						      		alt="" style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image.png'">
-						      		<c:out value="${cartVO.p_name}" />
-						      	</a>
-						      </td>
-						      <!-- 수량 -->
-						      <td>
-						      	<input type="number" name="cart_amount" value='<c:out value="${cartVO.cart_amount}" />' id="cart_amount${status.index}">
-								<input type="hidden" name="p_cost" value="${cartVO.p_cost}">
-						      	<button type="button" name="btnCartAmountChange" data-cart_code="${cartVO.cart_code}" class="btn btn-link">수량변경</button>
+	      			<div class="box-body">	
+					  <form action="/user/order/userOrderList" method="get" id="productSelectedForm">    
+					  	<c:forEach items="${orderHistory}" var="orderHistory" varStatus="status">
+					  		<hr>
+					  		<p><fmt:formatDate value="${orderHistory.ORD_DATE}" pattern="yyyy-MM-dd hh:mm:ss"/></p>  
+				  			<div class="row">          
+						       	<div class = "col-4">
+						  			<!-- 상품 이미지 -->
+						      		<a class="move" href="${orderHistory.P_NUM}">
+							      		<img src="/user/order/displayFile?folderName=${orderHistory.P_IMAGE_FOLDER}&fileName=s_${orderHistory.P_IMAGE}" 
+							      		alt="" style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image.png'">
+							      	</a>
+						      	</div>
+						      	<div class = "col-4">
+						      		<!-- 상품 정보 -->
+						      		<p>${orderHistory.P_NAME}</p>
+						      		<p>
+						      			판매가격: <fmt:formatNumber type="number" maxFractionDigits="3" value="${orderHistory.P_COST}" />
+						      			(${orderHistory.ORD_AMOUNT}개)
+						      		</p>
+						      	</div>
+						      	<div class = "col-2">
+						      		<!-- 주문 상태 -->
+						      		<p> ${orderHistory.ORD_STATUS} </p>
+						      	</div>
+						      	<div class = "col-2">
+						      		<!-- 리뷰쓰기 -->
+						      		<button type="button" class="btn btn-link" name="bunwriteReview">리뷰 쓰기</button>
+						      	</div>
+						      </div>
+						      
 						 
-						      </td>
-						      <!-- 배송비 -->	
-						      <td>
-						      	[기본배송] (30,000만원 이상 무료배송)
-						      </td>	
-								<!-- 상품 가격 * 수량 -->				      
-							  <td>
-								<span class="unitPrice">						      	
-									<fmt:formatNumber type="number" maxFractionDigits="3" value="${price}" />
-								</span>
-							  </td>						  
-						      <!-- 적립 -->
-						      <td>
-						      	<c:out value="${cartVO.m_point}" />
-						      </td>
-						      <!-- 삭제 -->
-						      <td>
-			                    <input type="hidden" name="p_image_dateFolder" value="${cartVO.p_image_folder}">
-			                    <input type="hidden" name="p_image" value="${cartVO.p_image}">
-			                    <button type="button" name="btnCartDelete" data-cart_code="${cartVO.cart_code}" class="btn btn-link">삭제</button></td>
-						    </tr>
-						    <c:set var="sum" value="${sum + price}"></c:set>
-						   </c:forEach>	
-						   
-						  </tbody>
-						  <tfoot>
-							<c:if test="${!empty cartList}">
-								<tr>
-									<td colspan="7" style="text-align: left"> 
-										총 상품 금액: <span id="productTotalPrice"></span><br>
-									</td>
-									
-								</tr>
-								<tr>
-									<td colspan="7" style="text-align: left"> 
-										배송비: <span id="deliveryPrice"></span>
-									</td>
-								</tr>
-								<tr>
-									<td colspan="7" style="text-align: right"> 
-										총 구매 금액: <span id="cartTotalPrice"></span><br>
-									</td>
-								</tr>
-							</c:if>
-							<c:if test="${empty cartList}">
-								<tr>
-									<td colspan="6" style="text-align: right"> 
-										장바구니가 비었습니다.
-									</td>
-								</tr>
-							</c:if>				
-						  </tfoot>
-						</table>
+							 </c:forEach>
 						</form>								
-	      			</div>
-	      			<div class="box-footer text-center">
-	      				<c:if test="${!empty cartList}">
-							<button type="button" id="btnClearCart" class="btn btn-primary">장바구니 비우기</button>
-							<button type="button" id="btnSelectDelete" class="btn btn-primary">선택된 장바구니 삭제</button>
-							<button type="button" id="btnShopping"  class="btn btn-primary">계속 쇼핑하기</button>
-							<button type="button" id="btnOrder"  class="btn btn-primary">주문하기</button>
-						</c:if>
-						<c:if test="${empty cartList}">
-							<button type="button" name="btnShopping"  class="btn btn-primary">쇼핑하기</button>
-						</c:if>
-				    </div>		
+	      			</div>	
 	      		</div>     
 	      	</div>      
 	      </div>

@@ -47,7 +47,7 @@
   			<a class="p-2 text-dark" href="/member/logout">로그아웃</a>
   			<a class="p-2 text-dark" href="#">마이페이지</a>
 		    <a class="p-2 text-dark" href="/member/confirmPw">수정하기</a>
-	    	<a class="p-2 text-dark" href="#">주문목록</a>
+	    	<a class="p-2 text-dark" href="/user/order/userOrderHistory">주문목록</a>
 		    <a class="p-2 text-dark" href="/user/cart/cartList">장바구니 [${sessionScope.totalCart}]</a>
 	    </c:if>
 	    

@@ -273,6 +273,7 @@
 							    </select>
 								<input type="text" name="ord_message" id="newMessage">
 								<input type="hidden" name="ord_totalcost" value="${sum}">
+								<input type="hidden" name="pay_tot_price" value="${sum}">								
 							  </div>
 							  <div class="form-group">
 								  <label for="exampleFormControlSelect1">결제 방법</label>
@@ -292,7 +293,7 @@
 								    <option value="하나-3333333333333">하나 은행(3333333333333)</option>
 								  </select>
 								  <input type="hidden" class="form-control" name="pay_noAccount_bank" id="pay_noAccount_bank" value="">
-								  <input type="hidden" class="form-control" name="pay_noAccount_price" id="pay_noAccount_price" value="${sum}">
+								  <input type="hidden" class="form-control" name="pay_noAccount_price" id="pay_noAccount_price" value="">
 								</div>
 								<div class="form-group row" id="noAccountUsername">
 								  <label for="pay_user" class="col-sm-2 col-form-label">입금자 명</label>
@@ -458,6 +459,7 @@
 				}
 
 				$("#pay_noAccount_bank").val($("#bank option:selected").text().substring(0,5));
+				$("#pay_noAccount_price").val("${sum}");
 			});
 
 			//주문하기 버튼 클릭 시

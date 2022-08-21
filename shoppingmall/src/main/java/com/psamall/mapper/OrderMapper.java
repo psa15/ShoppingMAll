@@ -1,6 +1,7 @@
 package com.psamall.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -15,9 +16,6 @@ public interface OrderMapper {
 	//장바구니 외 주문
 	List<OrderCartListVO> orderDirectList(@Param("p_num") Integer p_num, @Param("ord_amount") int ord_amount);
 	
-	//선택한 상품 주문
-	OrderCartListVO getSelected( String m_id);
-	
 	//최근 배송지 불러오기
 	OrderVO getRecentAddr(String m_id);
 	
@@ -31,4 +29,7 @@ public interface OrderMapper {
 	
 	//주문완료 후 주문 정보 불러오기
 	OrderVO getOrderInfo(String m_id);
+	
+	//주문내역
+	List<Map<String, Object>> getOrderHistory(String m_id);
 }

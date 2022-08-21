@@ -122,7 +122,7 @@ desired effect
 						</table>
 						
 						<h5 style="color:red; font-weight:bold">주문 상품 정보</h5>
-						<%-- 	<table class="table table-bordered">
+						<table class="table table-bordered">
 						  <thead>
 						  <!--  -->
 						    <tr>
@@ -135,26 +135,27 @@ desired effect
 						    </tr>
 						  </thead>
 						  <tbody>
-						  	<c:forEach items="${orderProductMap }" var="orderProduct">
+						  	<c:forEach items="${orderProductList }" var="orderProduct">
 							    <tr>
-							    <!-- MAP의 키를 대문자로 입력 -->
-							      
+							      <!-- MAP의 키를 대문자로 입력 -->							      
 							      <td scope="col">
-								      <img src="/admin/product/displayFile?folderName=${orderProduct.P_IMAGE_DATEFOLDER }&fileName=s_${orderProduct.P_IMAGE }" 
-							      		alt="" style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image.png'">
-							      		 
+								      <img src="/admin/product/displayFile?folderName=${orderProduct.P_IMAGE_FOLDER }&fileName=s_${orderProduct.P_IMAGE }" 
+							      		alt="" style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image.png'">							      		 
 							      </td>
 							      <td scope="col">${orderProduct.P_NAME}</td>
-							      <td scope="col">${orderProduct.O_AMOUNT}</td>
-							      <td scope="col">${orderProduct.O_UNITPRICE}</td>
-							      <td scope="col">${orderProduct.O_STATUS}</td>
+							      <td scope="col">${orderProduct.ORD_AMOUNT}</td>
+							      <td scope="col">${orderProduct.ORD_UNITPRICE}</td>
+							      <td scope="col">${orderProduct.ORD_STATUS}</td>
 							      <td scope="col">
-							      	<button type="button" id="btnCancelProduct" class="btn btn-link">취소</button>
+							      	<button type="button" name="btnCancelProduct" data-ord_code="${orderInfo.ord_code}" class="btn btn-link">취소</button>
+							      	<input type="hidden" name="ord_unitprice" value="${orderProduct.ORD_UNITPRICE}">
+							      	<input type="hidden" name="p_num" value="${orderProduct.P_NUM}">
+							      	<input type="hidden" name="pay_tot_price" value="${paymentInfo.pay_tot_price}">
 							      </td>
 							    </tr>
 						    </c:forEach>
 						  </tbody>
-						</table> --%>					
+						</table>					
       			</div>		
       		</div>     
       	</div>      
@@ -255,189 +256,32 @@ desired effect
 <script>
   $(document).ready(function(){
     
-    //주문 상태 변경 작업
-    $("button[name='btnChangeOrderStatus']").on("click", function(){
-      //console.log("변경 버튼 클릭");
-      //주문 번호, 선택한 배송상태 값
-      let ord_code = $(this).data("ord_code");
-      let ord_status = $(this).parent().find("select#ord_status option:selected").val();
-      // console.log("주문 번호: " + o_code + " 배송상태: " + o_status);
-      $.ajax({
-        url: '/admin/order/orderStatusChange',
-        method: 'get',
-        data: {ord_code : ord_code, ord_status : ord_status},
-        dataType: 'text',
-        success: function(result) {
-          if(result == "success"){
-            alert("주문 상태가 변경 되었습니다.")
-          }
-        }
-      });
-    });
-
-    //결제 상태 변경 작업
-    $("button[name='btnChangePayStatus']").on("click", function(){
-      //console.log("변경 버튼 클릭");
-      //주문 번호, 선택한 배송상태 값
-      let ord_code = $(this).data("ord_code");
-      let pay_status = $(this).parent().find("select#pay_status option:selected").val();
-      // console.log("주문 번호: " + o_code + " 배송상태: " + o_status);
-      $.ajax({
-        url: '/admin/order/orderPayChange',
-        method: 'get',
-        data: {ord_code : ord_code, pay_status : pay_status},
-        dataType: 'text',
-        success: function(result) {
-          if(result == "success"){
-            alert("결제 상태가 변경 되었습니다.")
-          }
-        }
-      });
-    });
-
-    //CS 상태 변경 작업
-    $("button[name='btnChangeCsStatus']").on("click", function(){
-      //console.log("변경 버튼 클릭");
-      //주문 번호, 선택한 배송상태 값
-      let ord_code = $(this).data("ord_code");
-      let cs_status = $(this).parent().find("select#cs_status option:selected").val();
-      // console.log("주문 번호: " + o_code + " 배송상태: " + o_status);
-      $.ajax({
-        url: '/admin/order/orderCsChange',
-        method: 'get',
-        data: {ord_code : ord_code, cs_status : cs_status},
-        dataType: 'text',
-        success: function(result) {
-          if(result == "success"){
-            alert("CS 상태가 변경 되었습니다.")
-          }
-        }
-      });
-    });
-    
-    //검색 선택 시
-    $("#selectType").change(function(){
-        let result = $("#selectType option:selected").val();
-        console.log(result);
-
-        let orderStatus = "<select id=orderStatusKeyword name='keyword'>";
-        	orderStatus +=   "<option value='상품준비중'>상품준비중</option>";	      
-       		orderStatus +=   "<option value='배송준비중'>배송 준비 중</option>";
-   			orderStatus +=   "<option value='배송보류'>배송 보류</option>";			      
-   			orderStatus +=   "<option value='배송대기'>배송 대기</option>";				      
-   			orderStatus +=   "<option value='배송중'>배송 중</option>";				      
-   			orderStatus +=   "<option value='배송완료'>배송 완료</option>";				      
-   			orderStatus += "</select>";	
-   		
-   		let payStatus = "<select id=payStatusKeyword name='keyword'>";
-	   		payStatus +=   "<option value='입금완료'>무통장 입금 완료</option>";	      
-	   		payStatus +=   "<option value='입금전'>무통장 입금 전</option>";
-	   		payStatus +=   "<option value='추가입금대기'>추가 입금 대기 </option>";			      
-	   		payStatus +=   "<option value='결제완료'>결제 완료</option>";				      
-	   		payStatus += "</select>";
-	   		
-	   	let csStatus = "<select id=csStatusKeyword name='keyword'>";
-		   	csStatus +=   "<option value='취소요청'>취소 요청</option>";
-		   	csStatus +=   "<option value='취소완료'>취소 완료</option>";
-		   	csStatus +=   "<option value='교환요청'>교환 요청</option>";			      
-		   	csStatus +=   "<option value='교환완료'>교환 완료</option>";	
-		   	csStatus +=   "<option value='반품요청'>반품 요청</option>";	
-		   	csStatus +=   "<option value='반품완료'>반품 완료</option>";	
-		   	csStatus +=   "<option value='환불요청'>환불 요청</option>";
-		   	csStatus +=   "<option value='환불완료'>환불 완료</option>";	
-		   	csStatus += "</select>";
-        
-        
-        //$(this).parent().find("input[name='keyword']").val("");
-        //$(this).parent().find("input[name='keyword']").remove();
-        
-        
-        $(this).parent().find("select[name='keyword']").remove();
-
-
-        if(result == "O") {
-          $(this).after(orderStatus);  
-         
-        } else if(result == "P") {
-        	$(this).after(payStatus); 
-        } else if(result == "C") {
-        	$(this).after(csStatus); 
-        }
-
-        //$(this).parent().find("input[name='keyword']").val("");
-        
-      });
-    
-    let searchForm = $("#searchForm");
-    
-    //search 클릭 시 페이지번호 1로 돌아가기
-    $("#btnSearch").on("click",function(){
-    	searchForm.find("input[name='pageNum']").val(1);
-      // searchForm.find("input[name='keyword']").val("");
-      searchForm.submit();
-    });
-    
-    //페이지 번호 
-    $("ul.pagination li a.page-link").on("click", function(e){
-    	e.preventDefault();
-    	
-    	let pageNum = $(this).attr("href");
-    	
-    	actionForm.find("input[name='pageNum']").val(pageNum);
-    	actionForm.submit();
-    });
-    
-  	//체크박스 전체선택
-    $("#checkAll").on("click", function(){
-      $(".check").prop("checked", this.checked);
-    });
-
-  	//데이터 행 체크박스
-    $(".check").on("click", function(){
-
-      //데이터 행의 체크박스가 전부 체크되어있다면 전체선택 체크박스도 체크!
-      $("#checkAll").prop("checked", this.checked);
-
-      //데이터 행의 체크박스의 선택자 해당하는 만큼 동작하는 구문
-      $(".check").each(function() {
-        if(!$(this).is(":checked")) {
-          //체크가 하나라도 존재시
-          $("#checkAll").prop("checked", false);
-        }
-      });
-    });
   	
-  //선택한 주문 삭제하기
-    $("button[name='btnDeleteCheck']").on("click", function(){
+    //상품 삭제버튼
+    $("button[name='btnCancelProduct']").on("click", function(){
 
-      if($(".check:checked").length == 0){
-        alert("삭제할 주문정보를 선택하세요.");
-        return;
-      }
+      //console.log("버튼 클릭");
 
-      let isOrderDel = confirm("선택하신 주문목록을 삭제하시겠습니까?");
-      if(!isOrderDel) return;
-
-      //삭제할 주문번호 배열로 받기
-      let ordCodeArr = [];
-      $(".check:checked").each(function(){
-        ordCodeArr.push($(this).val());
-      });
-
-      // console.log("선택된 주문번호: " + oCodeArr);
+      let ord_code = $(this).data("ord_code");
+      let p_num = $(this).parent().find("input[name='p_num']").val();
+      let ord_unitprice = $(this).parent().find("input[name='ord_unitprice']").val();
+      //console.log("ord_unitprice: " + ord_unitprice);
+      //console.log("p_num: " + p_num);
 
       $.ajax({
-        url: '/admin/order/deleteCheckOrder',
+        url: '/admin/order/deleteProduct',
         type: 'post',
         dataType: 'text',
         data: {
-          ordCodeArr : ordCodeArr
+          p_num : p_num,
+          ord_unitprice : ord_unitprice,
+          ord_code : ord_code
         },
         success: function(result) {
           if(result == "success") {
-            alert("선택하신 주문 목록이 삭제되었습니다.");
+            alert("선택하신 상품이 삭제되었습니다.");
             
-            location.href="/admin/order/adOrderList";
+            location.href="/admin/order/adOrderDetail";
           }
         }
       });
