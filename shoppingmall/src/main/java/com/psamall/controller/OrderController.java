@@ -86,32 +86,19 @@ public class OrderController {
 			//장바구니 외에서 주문하기
 			vo = orderService.orderDirectList(p_num, ord_amount);
 			
-//		CartVO cartVO = new CartVO();
-//			cartVO.setM_id(m_id);
-//			cartVO.setCart_amount(ord_amount);
-//			cartVO.setP_num(p_num);
-//			userCartService.addCart(cartVO);
+			//주문할 때 주문 상세페이지에 데이터를 추가하기 위해 장바구니에 추가하는 작업
+			CartVO cartVO = new CartVO();
+			cartVO.setM_id(m_id);
+			cartVO.setCart_amount(ord_amount);
+			cartVO.setP_num(p_num);
+			userCartService.addCart(cartVO);
 			
-		}
-		//
-
-			
-//			Integer[] amountArr = new Integer[ordAmountArr.size()];
-//			
-//			
-//			for(int i=0; i<ordAmountArr.size(); i++) {
-//				amountArr[i] = ordAmountArr.get(i);
-//			}
-			
-			
-			
-		
+		}							
 		
 		for(int i=0; i<vo.size(); i++) {
 			String p_image_folder = vo.get(i).getP_image_folder().replace("\\", "/");
 			vo.get(i).setP_image_folder(p_image_folder);
 			vo.get(i).setM_id(m_id);
-			//vo.get(i).setCart_amount(amountArr[i]);
 		}
 		
 		//System.out.println("선택한 상품 정보: " + vo);
@@ -141,7 +128,9 @@ public class OrderController {
 	
 	//주문 저장
 	@PostMapping("/addOrder")
-	public String addOrder(HttpSession session, OrderVO orderVO, PaymentVO payVO, @RequestParam(value="cartCodeArr", required = false) List<Long> cartCodeArr) {
+	public String addOrder(HttpSession session, OrderVO orderVO, PaymentVO payVO, 
+							@RequestParam(value="cartCodeArr", required = false) List<Long> cartCodeArr,
+							@RequestParam("pNumArr") List<Integer> pNumArr) {
 		
 		System.out.println("주문 정보: " + orderVO);
 		System.out.println("결제 정보: " + payVO);
@@ -149,20 +138,22 @@ public class OrderController {
 		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
 		orderVO.setM_id(m_id);
 		
-		if(payVO.getPay_method().equals("무통장 입금")) {
+		if(payVO.getPay_method() == "무통장 입금") {
 			orderVO.setPay_status("입금전");
+			payVO.setPay_noAccount_price(payVO.getPay_tot_price());
 			payVO.setPay_tot_price(0); //실제 총 결제금액
+		} else {
+			orderVO.setPay_status("결제완료");
+			payVO.setPay_noAccount_username("");
 		}
 		System.out.println("주문 정보: " + orderVO);
 		System.out.println("결제 정보: " + payVO);
 		
-		orderService.orderSave(orderVO, payVO);
-		
-		if(cartCodeArr != null) {
-			for (int i=0; i<cartCodeArr.size(); i++) {
-				userCartService.deleteCart(cartCodeArr.get(i));
-			}
+		for (int i=0; i<pNumArr.size(); i++) {
+			orderService.orderSave(orderVO, payVO, pNumArr.get(i));
+			userCartService.deleteCartOrder(pNumArr.get(i));
 		}
+		
 		
 		return "redirect:/user/order/userOrderComplete";
 	}

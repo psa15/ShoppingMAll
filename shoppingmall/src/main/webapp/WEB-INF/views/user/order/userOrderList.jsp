@@ -113,6 +113,7 @@
 							      <!-- 수량 -->
 							      <td>
 							      	<c:out value="${orderCartListVO.cart_amount}" />개
+									  <input type="hidden" name="cart_amount" value="${orderCartListVO.cart_amount}">
 							      </td>
 							      <!-- 적립 예정 금액 -->
 							      <td class="text-center" >
@@ -179,9 +180,7 @@
 		      	<div class="col-md-12">      	
 		      		<div class="box box-primary">
 		      			<div>
-		      				<form id="orderForm" method="post" action="">
-								<input type="hidden" class="form-control" name="p_num" id="pNumForOrder" >
-								
+		      				<form id="orderForm" method="post" action="">								
 		      				  <h5>주문자 정보</h5>
 		      				  <hr>
 							  <div class="form-group row">
@@ -273,7 +272,6 @@
 							    </select>
 								<input type="text" name="ord_message" id="newMessage">
 								<input type="hidden" name="ord_totalcost" value="${sum}">
-								<input type="hidden" name="pay_tot_price" value="${sum}">								
 							  </div>
 							  <div class="form-group">
 								  <label for="exampleFormControlSelect1">결제 방법</label>
@@ -293,7 +291,8 @@
 								    <option value="하나-3333333333333">하나 은행(3333333333333)</option>
 								  </select>
 								  <input type="hidden" class="form-control" name="pay_noAccount_bank" id="pay_noAccount_bank" value="">
-								  <input type="hidden" class="form-control" name="pay_noAccount_price" id="pay_noAccount_price" value="">
+								  <input type="hidden" class="form-control" name="pay_noAccount_price" id="pay_noAccount_price" value="0">
+								  <input type="hidden" class="form-control" name="pay_tot_price" id="pay_tot_price" value="${sum}">
 								</div>
 								<div class="form-group row" id="noAccountUsername">
 								  <label for="pay_user" class="col-sm-2 col-form-label">입금자 명</label>
@@ -459,7 +458,6 @@
 				}
 
 				$("#pay_noAccount_bank").val($("#bank option:selected").text().substring(0,5));
-				$("#pay_noAccount_price").val("${sum}");
 			});
 
 			//주문하기 버튼 클릭 시
@@ -490,7 +488,27 @@
 				
 				orderForm.append(url);
 
-				$("#pNumForOrder").val($(".move").attr("href"));
+				//상품번호
+				let pNumValueLength = $("input[name='p_num']").length;
+				console.log(pNumValueLength);
+				//배열 생성
+				let pNumArr = new Array(pNumValueLength);
+				//배열에 값 주입
+				for(let i=0; i<pNumValueLength; i++){                          
+					pNumArr[i] = $("input[name='p_num']").eq(i).val();
+				}
+				console.log(pNumArr[0]);
+				console.log(pNumArr[1]);
+
+				url = "";
+
+				for(let i=0; i<pNumValueLength; i++){
+					url += "<input type='hidden' class='form-control' name='pNumArr' value='" + pNumArr[i] + "'>"
+				}
+				console.log(url);
+
+				orderForm.append(url);
+				
 
 				let ord_message = $("select[name='selectBox']").val();
 				if(ord_message != 'newMessage') {

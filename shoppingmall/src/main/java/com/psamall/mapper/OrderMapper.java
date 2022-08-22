@@ -22,8 +22,10 @@ public interface OrderMapper {
 	//주문 저장
 	//1)주문테이블
 	void insertOrder(OrderVO vo);
-	//2)주문 상세 테이블
-	void insertOrderDetail(@Param("ord_code") Long ord_code, @Param("m_id") String m_id);
+	//2-1)주문 상세 테이블 - 장바구니 테이블 사용
+	void insertOrderDetail(@Param("ord_code") Long ord_code, @Param("m_id") String m_id, @Param("pNumArr") Integer p_num);
+	//2-2)상품번호 사용
+	void insertOrderDetailByPNum(@Param("ord_code") Long ord_code, @Param("pNumArr") Integer p_num, @Param("cartAmountArr") Integer cart_amount);
 	//3) 결제 테이블
 	void insertPayment(PaymentVO vo);
 	

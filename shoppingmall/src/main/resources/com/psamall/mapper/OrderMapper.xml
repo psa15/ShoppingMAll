@@ -62,19 +62,33 @@
 				
 	</insert>
 	
-	<!-- 주문 저장 2)주문 상세테이블 -->
+	<!-- 주문 저장 2-1)주문 상세테이블 - 장바구니 테이블 사용 -->
 	<insert id="insertOrderDetail">
 	
 		INSERT INTO
 			TBL_ORDER_D(ORD_CODE, P_NUM, ORD_AMOUNT, ORD_COST)
 		SELECT 
-			#{ord_code}, C.P_NUM, C.CART_AMOUNT, C.P_NUM * P.P_COST
+			#{ord_code}, C.P_NUM, C.CART_AMOUNT, C.CART_AMOUNT * P.P_COST
 		FROM 
 			TBL_CART C INNER JOIN TBL_PRODUCT P
 	        ON 
 	        	C.P_NUM = P.P_NUM
 	        WHERE 
-	        	M_ID = #{m_id} <!-- AND C.P_NUM = #{p_num} -->
+	        	M_ID = #{m_id}  AND C.P_NUM = #{p_num}
+	
+	</insert>
+	
+	<!-- 주문 저장 2-2)주문 상세테이블 - 상품 번호 사용 -->
+	<insert id="insertOrderDetailByPNum">
+	
+		INSERT INTO
+			TBL_ORDER_D(ORD_CODE, P_NUM, ORD_AMOUNT, ORD_COST)
+		SELECT 
+			#{ord_code}, #{p_num}, #{cart_amount}, #{cart_amount} * P_COST
+		FROM 
+			TBL_PRODUCT
+        where
+            p_num = #{p_num}
 	
 	</insert>
 	
@@ -83,9 +97,17 @@
 	
 		INSERT INTO 
 			TBL_PAYMENT
-				(PAY_CODE, ORD_CODE, PAY_METHOD, PAY_DATE, PAY_TOT_PRICE, PAY_REST_PRICE, PAY_NOACCOUNT_PRICE, PAY_NOACCOUNT_USERNAME, PAY_NOACCOUNT_BANK) 
+				(PAY_CODE, ORD_CODE, PAY_METHOD, PAY_DATE, PAY_TOT_PRICE, PAY_REST_PRICE
+				<if test="pay_noAccount_username != null and !pay_noAccount_username.equals('')">
+					, PAY_NOACCOUNT_PRICE, PAY_NOACCOUNT_USERNAME, PAY_NOACCOUNT_BANK
+				</if>
+				) 
 			VALUES
-				(SEQ_PAYMENT_CODE.nextval, #{ord_code}, #{pay_method}, SYSDATE, #{pay_tot_price}, #{pay_rest_price}, #{pay_noAccount_price}, #{pay_noAccount_username}, #{pay_noAccount_bank})
+				(SEQ_PAYMENT_CODE.nextval, #{ord_code}, #{pay_method}, SYSDATE, #{pay_tot_price}, #{pay_rest_price}
+				<if test="pay_noAccount_username != null and !pay_noAccount_username.equals('')">
+					, #{pay_noAccount_price}, #{pay_noAccount_username}, #{pay_noAccount_bank}
+				</if>
+				)
 				
 	
 	</insert>
