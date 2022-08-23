@@ -21,5 +21,5 @@ public interface OrderService {
 	OrderVO getOrderInfo(String m_id);
 	
 	//주문내역
-	List<Map<String, Object>> getOrderHistory(String m_id);
+	List<Map<String, Object>> getOrderHistory(String m_id, String startDate, String endDate);
 }

@@ -124,9 +124,25 @@
 	
 	</select>
 	
+	<!-- 날짜 조건 쿼리 -->
+	<sql id="period">
+		<!-- 
+		startDate와 endDate가 존재하면
+		TO_DATE : 오라클db의 변환 함수
+		 -->
+		<if test="startDate != null and !startDate.equals('') and endDate != null and !endDate.equals('')">
+		<![CDATA[
+			ORD_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
+			AND
+			ORD_DATE < TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1
+			AND
+		]]>
+		</if>
+	</sql>
+	
 	<!-- 주문내역 -->
 	<select id="getOrderHistory" resultType="map">
-	
+		
 		SELECT
 		    O.ORD_CODE, O.ORD_DATE, O.ORD_STATUS, O.PAY_STATUS, D.ORD_AMOUNT, P.P_NAME, P.P_NUM, P.P_COST, P.P_IMAGE, P.P_IMAGE_FOLDER
 		FROM 
@@ -135,6 +151,7 @@
 		    INNER JOIN TBL_PRODUCT P
 		    	ON D.P_NUM = P.P_NUM
 		WHERE
+			<include refid="period"></include>
 		    O.M_ID = #{m_id}
 	
 	</select>

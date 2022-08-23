@@ -1,7 +1,10 @@
 package com.psamall.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +30,7 @@ import com.psamall.domain.MemberVO;
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
 import com.psamall.domain.PaymentVO;
+import com.psamall.dto.Criteria;
 import com.psamall.kakaopay.ApproveResponse;
 import com.psamall.kakaopay.ReadyResponse;
 import com.psamall.service.OrderService;
@@ -160,7 +164,7 @@ public class OrderController {
 	
 	//카카오페이 결제요청. 바로구매는 에러발생된다.
 	@GetMapping("/orderPay")
-	public @ResponseBody ReadyResponse payReady(OrderVO orderVO, PaymentVO payVO, int totalAmount, HttpSession session, Model model) {
+	public @ResponseBody ReadyResponse payReady(OrderVO orderVO, PaymentVO payVO, int totalAmount, @RequestParam("pNumArr") List<Integer> pNumArr, HttpSession session, Model model) {
 		
 		//장바구니테이블에서 상품정보(상품명, 상품코드, 수량, 상품가격*수량=단위별 금액)
 		String m_id = ((MemberVO) session.getAttribute("loginStatus")).getM_id();
@@ -168,6 +172,14 @@ public class OrderController {
 		List<CartListVO> cartList = userCartService.getCartList(m_id);
 		String itemName = cartList.get(0).getP_name() + "외 " + String.valueOf(cartList.size() - 1) + " 개";
 		int quantity = cartList.size() - 1;
+		
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		session.setAttribute("pnum", list);
+		
+		
+		for(int i=0; i<pNumArr.size(); i++) {
+			list.add(pNumArr.get(i));
+		}
 		
 		
 		// 카카오페이서버에서 보낸온 정보.
@@ -197,10 +209,13 @@ public class OrderController {
 		String tid = (String) session.getAttribute("tid");
 		OrderVO orderVO = (OrderVO) session.getAttribute("order");
 		PaymentVO payVO = (PaymentVO) session.getAttribute("payment");
+		@SuppressWarnings("unchecked")
+		ArrayList<Integer> pNumArr = (ArrayList<Integer>) session.getAttribute("pnum");
 		
 		session.removeAttribute("tid"); //세션 제거 - 반드시 처리! 로그인 상태에서 세션정보가 필요하지 않게되면 불필요하게 서버측의 메모리를 사용하게 됨
 		session.removeAttribute("order");
 		session.removeAttribute("payment");
+		session.removeAttribute("pnum");
 		
 		log.info("결제 고유번호2: " + tid);
 		
@@ -208,7 +223,9 @@ public class OrderController {
 		ApproveResponse approveResponse =kakaopayService.payApprove(tid, pgToken, m_id);
 		log.info("appreveResponse: " + approveResponse);
 		
-		orderService.orderSave(orderVO, payVO);
+		for (int i=0; i<pNumArr.size(); i++) {
+			orderService.orderSave(orderVO, payVO, pNumArr.get(i));
+		}
 		
 		return "redirect:/user/order/userOrderComplete";
 	}
@@ -224,11 +241,30 @@ public class OrderController {
 	
 	//주문 내역
 	@GetMapping("/userOrderHistory")
-	public void userOrderHistory(Model model, HttpSession session) {
+	public void userOrderHistory(Model model, HttpSession session, Criteria cri,
+									@RequestParam(value="startDate", required = false) String startDate,
+									@RequestParam(value="endDate", required = false) String endDate) {
 		
 		String m_id = ((MemberVO) session.getAttribute("loginStatus")).getM_id();
 		
-		List<Map<String, Object>> orderHistory = orderService.getOrderHistory(m_id);
+		System.out.println(startDate);
+		System.out.println(endDate);
+		
+		if(startDate == null && endDate == null) {
+			//Date today = new Date();
+			//일주일 전
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar calender = Calendar.getInstance();
+			endDate = sdf.format(calender.getTime());
+			calender.add(calender.DATE, -7);
+			startDate = sdf.format(calender.getTime());
+		}
+		
+		
+		log.info(startDate);
+		log.info(endDate);
+		
+		List<Map<String, Object>> orderHistory = orderService.getOrderHistory(m_id, startDate, endDate);
 		
 		for(int i=0; i<orderHistory.size(); i++) {
 			Map<String, Object> orderProductInfo = orderHistory.get(i);
@@ -237,6 +273,10 @@ public class OrderController {
 			orderProductInfo.put("P_IMAGE_FOLDER", img_forlder);
 		}
 		model.addAttribute("orderHistory", orderHistory);
+		
+		//검색한 값이 남게
+		model.addAttribute("startDate", startDate);
+		model.addAttribute("endDate", endDate);
 	}
 	
 }

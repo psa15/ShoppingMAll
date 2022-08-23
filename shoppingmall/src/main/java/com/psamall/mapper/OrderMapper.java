@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.psamall.domain.OrderCartListVO;
 import com.psamall.domain.OrderVO;
 import com.psamall.domain.PaymentVO;
+import com.psamall.dto.Criteria;
 
 public interface OrderMapper {
 
@@ -33,5 +34,5 @@ public interface OrderMapper {
 	OrderVO getOrderInfo(String m_id);
 	
 	//주문내역
-	List<Map<String, Object>> getOrderHistory(String m_id);
+	List<Map<String, Object>> getOrderHistory( @Param("m_id") String m_id, @Param("startDate")String startDate, @Param("endDate")String endDate);
 }

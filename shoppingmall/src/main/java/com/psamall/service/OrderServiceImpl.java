@@ -68,8 +68,8 @@ public class OrderServiceImpl implements OrderService {
 
 	//주문내역
 	@Override
-	public List<Map<String, Object>> getOrderHistory(String m_id) {
-		return orderMapper.getOrderHistory(m_id);
+	public List<Map<String, Object>> getOrderHistory(String m_id, String startDate, String endDate) {
+		return orderMapper.getOrderHistory(m_id, startDate, endDate);
 	}
 
 	

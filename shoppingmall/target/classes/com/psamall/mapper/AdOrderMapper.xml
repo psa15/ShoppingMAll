@@ -35,9 +35,9 @@
 		 -->
 		<if test="startDate != null and !startDate.equals('') and endDate != null and !endDate.equals('')">
 		<![CDATA[
-			O_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
+			ORD_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
 			AND
-			O_DATE < TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1
+			ORD_DATE < TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1
 			AND
 		]]>
 		</if>

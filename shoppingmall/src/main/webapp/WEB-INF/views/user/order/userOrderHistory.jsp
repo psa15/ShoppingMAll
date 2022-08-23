@@ -59,10 +59,21 @@
 	      				<h5>ORDER HISTORY</h5>    
 	      			</div>	
 	      			<div class="box-body">	
+	      			<form id="searchForm" action="/user/order/userOrderHistory" method="get">
+					  
+					  	<%-- 주문 일자
+					  	https://beforb.tistory.com/23   --%>
+					  	<button type="button" id="btnToday" class="btn btn-info">오늘</button>
+					  	<button type="button" id="btnOneMonth" class="btn btn-info">한 달</button>
+					  	<button type="button" id="btnThreeMonth" class="btn btn-info">3개월</button>
+					  	<button type="button" id="btnSixMonth" class="btn btn-info">6개월</button>
+					  	그 외 날짜 검색<input type="date" name="startDate" value="${startDate }"> ~ <input type="date" name="endDate" value="${endDate }">
+					  	<button type="submit" id="btnSearch" class="btn btn-info">검색</button>
+					  </form>
 					  <form action="/user/order/userOrderList" method="get" id="productSelectedForm">    
 					  	<c:forEach items="${orderHistory}" var="orderHistory" varStatus="status">
 					  		<hr>
-					  		<p><fmt:formatDate value="${orderHistory.ORD_DATE}" pattern="yyyy-MM-dd hh:mm:ss"/></p>  
+					  		  
 				  			<div class="row">          
 						       	<div class = "col-4">
 						  			<!-- 상품 이미지 -->
@@ -78,6 +89,7 @@
 						      			판매가격: <fmt:formatNumber type="number" maxFractionDigits="3" value="${orderHistory.P_COST}" />
 						      			(${orderHistory.ORD_AMOUNT}개)
 						      		</p>
+						      		<p>주문 날짜: <fmt:formatDate value="${orderHistory.ORD_DATE}" pattern="yyyy-MM-dd"/></p>
 						      	</div>
 						      	<div class = "col-2">
 						      		<!-- 주문 상태 -->
