@@ -119,94 +119,6 @@
 
 		$(function(){
 
-			totalInfo();
-			
-			//체크박스 전체선택(제목 행 체크박스)
-			$("#checkAll").on("click", function(){
-			  
-			  $("input[name='checkProduct']").prop("checked", this.checked);
-			  //attr()메소드 사용 X
-			  
-			
-			});
-			
-			//데이터 행 체크박스
-			$("input[name='checkProduct']").on("click", function(){
-			
-			  //데이터 행의 체크박스가 전부 체크되어있다면 전체선택 체크박스도 체크!
-			  $("#checkAll").prop("checked", this.checked);
-			
-			  //데이터 행의 체크박스의 선택자 해당하는 만큼 동작하는 구문
-			  $("input[name='checkProduct']").each(function() {
-			    if(!$(this).is(":checked")) {
-			      //체크가 하나라도 존재
-			      $("#checkAll").prop("checked", false);
-			    }
-			  });
-			});
-
-			//선택 여부에 따른 금액 변화
-			$("input[name='checkProduct']").on("change", function(){
-				// console.log("체크변화");
-				totalInfo();
-			});
-
-			//장바구니 페이지에서 상품 수량 변경
-			$("button[name='btnCartAmountChange']").on("click", function(){
-				console.log("수량 변경 버튼 클릭");
-
-				let btnCartAmountChange = $(this);
-
-				let cart_code = $(this).data("cart_code");
-				let cart_amount = $(this).parent().find("input[name='cart_amount']").val();
-
-				$.ajax({
-					url: '/user/cart/changeCartAmount',
-					data: {cart_code : cart_code, cart_amount : cart_amount},
-					dataType: 'text',
-					success: function(result) {
-						if(result == "success") {
-							alert("선택하신 상품의 수량이 변경되었습니다.");
-							
-							//개별 상품 금액 변경
-							//상품 가격 참조
-							let p_cost = btnCartAmountChange.parent().find("input[name='p_cost']").val();
-							btnCartAmountChange.parents("tr").find("span.unitPrice").html($.numberWithCommas(p_cost * cart_amount));
-							
-							//새로고침 안하려고 ajax를 사용했으나 수량 수정 후 총구매금액 변경이 안됨...
-							location.href="/user/cart/cartList";
-
-							//총 구매금액 변경
-							// let totalPrice = 0;
-							/* $("table#tblCartList tr td span.unitPrice").each(function(index, item){
-								// console.log("단위가격: " + $(item).html());
-								// console.log("단위가격: " + $(item).text());
-								
-								// totalPrice += parseInt($.withoutCommas($(item).text())); //무언갈 읽어오는 데이터는 전부 text(String)
-								// $("table#tblCartList tr td span#cartTotalPrice").text($.numberWithCommas(totalPrice));
-							});  */
-						}
-					}
-
-					
-				});
-
-			});
-
-			let productSelectedForm = $("#productSelectedForm");
-			
-			//선택된 상품 삭제
-			$("#btnSelectDelete").on("click", function(){
-				console.log("상품삭제");
-
-				if(!confirm("선택하신 상품을 삭제하시겠습니까?")){
-					return;
-				}
-
-				productSelectedForm.attr("action","/user/cart/deleteCart");
-				productSelectedForm.submit();
-			});
-
 			//장바구니 비우기
 			$("button#btnClearCart").on("click", function(){
 				console.log("장바구니 비우기");
@@ -218,87 +130,48 @@
 				location.href = "/user/cart/clearCart";
 			});
 			
-			//주문하기 버튼 클릭			
- 			$("#btnOrder").on("click", function(){
- 				console.log("주문하기");
- 				
- 				let type = "cartOrder";
- 				//productSelectedForm.attr("action","/user/order/orderList");
- 				productSelectedForm.submit();
-			}); 
-			
-			//선택한 상품 주문하기
- 			/*$("button#btnOrder").on("click", function(){
-				// console.log("주문하기");
-				
-				if(!confirm("선택하신 상품을 주문하시겠습니까?")) return;
+			/* 버튼 클릭으로 날짜 검색 */
+			let searchForm = $("#searchForm");
+			//오늘 날짜
+			let today = new Date();
+			let year = today.getFullYear();
+			let month = today.getMonth() + 1;
+			let date = today.getDate();
 
-				//선택한 상품 값 가져오기
-				let checkArr = [];
-				$("input[name='checkProduct']:checked").each(function(){
-					checkArr.push($(this).val());
-				}); 
-				
-				 console.log(checkArr);
+			//오늘 날짜
+			let endDate = year + "-" + (("0"+month.toString()).slice(-2)) + "-" + (("0"+date.toString()).slice(-2));
 
-				let ordAmountArr = [];
-				$(".productAmountForCal").each(function(){
-					ordAmountArr.push($(this).val());
-				});
-				console.log(ordAmountArr);
+			let startDate = "";
+			//오늘 버튼 클릭 시
+			$("#btnToday").on("click", function(){
 
- 				 $.ajax({
-					url: '/user/order/orderList',
-					type: 'post',
-					data: {
-						checkArr : checkArr, ordAmountArr : ordAmountArr
-					},
-					 success: function(result) {
-						if(result == "success") {
-							alert("주문 페이지로 이동합니다.");
-							location.href="/user/order/orderList";
-						}
-						
-					}  
-				
-				}); 
- 			});*/
 				
 				
-				/*
-				let pNumStr = "";
-				$("input[name='checkProduct']:checked").each(function(index, item){
-					pNumStr += "<input type='hidden' name='checkedValue' value='" + $(item).val() + "'>";
-				});
-					//" + index + "
-				
-				$("#orderCheckForm").append(pNumStr);
-				$("#orderCheckForm").attr("action", "/user/order/orderSelected");
-				$("#orderCheckForm").submit();*/
-				
-				/* let orderInfoStr = "";
-				let orderNumber = 0;
-				let orderInfoForm = $("#orderInfoForm");
-				
-				$(".calCheckedProduct").each(function(index, item){
-					
-					if($(item).find("input[name='checkProduct']").is(":checked") == true) {
+				startDate = dateFormatter(today, startDate);
+				console.log(startDate);
+				$("input[name='startDate']").val(startDate);
+				$("input[name='endDate']").val(endDate);
+			});
 
-						let p_num = $(item).find(".productNum").val();
-						let cart_amount = $(item).find(".productAmountForCal").val();
+			//한 달 버튼 클릭 시
+			$("#btnOneMonth").on("click", function(){
 
-						orderInfoStr += "<input type='hidden' value='" + p_num + "' name='orderProduct[" + orderNumber + "].p_num'>";
+				oneMonthAgo = new Date(today.setDate(today.getMonth() - 1)); //실패
+				startDate = dateFormatter(oneMonthAgo, startDate);
+				console.log(startDate);
+				$("input[name='startDate']").val(startDate);
+				$("input[name='endDate']").val(endDate);
+			});
 
-						orderInfoStr += "<input type='hidden' value='" + cart_amount + "' name='orderProduct[" + orderNumber + "].cart_amount'>";
+			dateFormatter = function(today, startDate) {
+				let year = today.getFullYear();
+				let month = today.getMonth() + 1;
+				let day = today.getDate();
 
-						orderNumber += 1;
-					}			
+				startDate = year + "-" + (("0"+month.toString()).slice(-2)) + "-" + (("0"+date.toString()).slice(-2));
 
-				});
-
-				orderInfoForm.html(orderInfoStr);
-				orderInfoForm.attr("action", "/user/order/orderSelected");
-				orderInfoForm.submit(); });*/
+				return startDate;
+			}
 
 				
 			
@@ -313,48 +186,6 @@
 		//3자리마다 콤마 제거하기
 		$.withoutCommas = function (x) {
 			return x.toString().replace(",", '');
-		}
-
-		//변경될때마다 초기화
-		//선택한 상품의 정보만 계산하기(배송비, 총 가격, 적립금)
-		function totalInfo(){
-
- 			let totalCost = 0; //주문할 상품 총 가격
-			let deliveryCost = 0; //배송비
-			let totalPoint = 0; //상품 주문시 적립될 포인트 
-			let realTotalCost = 0; //상품 총 가격 + 배송비
-			
-			
-
-			//선택된 상품 계산
-			$(".calCheckedProduct").each(function(index, item){			
-				
-				if($(item).find("input[name='checkProduct']").is(":checked") == true) {
-
-					totalCost += parseInt($(item).find(".productTotalPriceForCal").val());
-					totalPoint += parseInt($(item).find(".productPointForCal").val());
-				} 
-								
-			});
-			
-
-			//배송비
-			if(totalCost >= 30000) {
-				deliveryCost = 0;
-			} else if(totalCost == 0) {
-				deliveryCost = 0;
-			} else {
-				deliveryCost = 3000;
-			}
-
-			realTotalCost = totalCost + deliveryCost;
-
-			//선택된 상품 총 금액
-			$("#productTotalPrice").text($.numberWithCommas(totalCost));
-			//배송비
-			$("#deliveryPrice").text($.numberWithCommas(deliveryCost));
-			//총 구매 금액
-			$("#cartTotalPrice").text($.numberWithCommas(realTotalCost));
 		}
 	</script>
 
