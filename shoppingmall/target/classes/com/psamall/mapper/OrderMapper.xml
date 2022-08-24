@@ -74,7 +74,7 @@
 	        ON 
 	        	C.P_NUM = P.P_NUM
 	        WHERE 
-	        	M_ID = #{m_id}  AND C.P_NUM = #{p_num}
+	        	M_ID = #{m_id}  AND C.P_NUM = #{pNumArr}
 	
 	</insert>
 	
@@ -153,6 +153,8 @@
 		WHERE
 			<include refid="period"></include>
 		    O.M_ID = #{m_id}
+		ORDER BY
+			ORD_DATE DESC
 	
 	</select>
 	

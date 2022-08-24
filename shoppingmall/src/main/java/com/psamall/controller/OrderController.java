@@ -153,6 +153,8 @@ public class OrderController {
 		System.out.println("주문 정보: " + orderVO);
 		System.out.println("결제 정보: " + payVO);
 		
+		System.out.println(pNumArr.get(0));
+		
 		for (int i=0; i<pNumArr.size(); i++) {
 			orderService.orderSave(orderVO, payVO, pNumArr.get(i));
 			userCartService.deleteCartOrder(pNumArr.get(i));

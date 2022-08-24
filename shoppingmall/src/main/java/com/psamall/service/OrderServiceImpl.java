@@ -36,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
 	//주문하기(주문 정보 + 결제 정보)
 	@Transactional
 	@Override
-	public void orderSave(OrderVO orderVO, PaymentVO payVO, Integer p_num) {
+	public void orderSave(OrderVO orderVO, PaymentVO payVO, Integer pNumArr) {
 
 		//1) 주문테이블
 		orderMapper.insertOrder(orderVO);
@@ -45,8 +45,8 @@ public class OrderServiceImpl implements OrderService {
 		//시퀀스 값 확보
 		Long ord_code = orderVO.getOrd_code();
 		String m_id = orderVO.getM_id();
-		
-		orderMapper.insertOrderDetail(ord_code, m_id, p_num);
+		System.out.println(pNumArr);
+		orderMapper.insertOrderDetail(ord_code, m_id, pNumArr);
 		
 		//3) 결제 정보
 		payVO.setOrd_code(ord_code);
