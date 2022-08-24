@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!doctype html>
 <html lang="en">
   <head>
@@ -70,7 +71,11 @@
 					  	그 외 날짜 검색<input type="date" name="startDate" value="${startDate }"> ~ <input type="date" name="endDate" value="${endDate }">
 					  	<button type="submit" id="btnSearch" class="btn btn-info">검색</button>
 					  </form>
-					  <form action="/user/order/userOrderList" method="get" id="productSelectedForm">    
+					  <form action="/user/order/userOrderList" method="get" id="productSelectedForm">
+					  <c:forEach var="i" begin="0" end="${fn:length(orderHistory)}" >
+					  	<fmt:formatDate value="${orderHistory[i].ORD_DATE}" pattern="yyyy-MM-dd"/>
+					  	
+					     
 					  	<c:forEach items="${orderHistory}" var="orderHistory" varStatus="status">
 					  		<hr>
 					  		  
@@ -102,6 +107,7 @@
 						      </div>
 						      
 						 
+							 </c:forEach>
 							 </c:forEach>
 						</form>								
 	      			</div>	
