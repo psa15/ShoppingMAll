@@ -135,20 +135,19 @@
 			//오늘 날짜
 			let today = new Date();
 			let year = today.getFullYear();
-			let month = today.getMonth() + 1;
+			let month = today.getMonth();
 			let date = today.getDate();
 
 			//오늘 날짜
-			let endDate = year + "-" + (("0"+month.toString()).slice(-2)) + "-" + (("0"+date.toString()).slice(-2));
+			let endDate = year + "-" + (("0"+(month + 1).toString()).slice(-2)) + "-" + (("0"+date.toString()).slice(-2));
 
 			let startDate = "";
 			//오늘 버튼 클릭 시
 			$("#btnToday").on("click", function(){
 
-				
-				
 				startDate = dateFormatter(today, startDate);
-				console.log(startDate);
+				//console.log(startDate);
+
 				$("input[name='startDate']").val(startDate);
 				$("input[name='endDate']").val(endDate);
 			});
@@ -156,17 +155,44 @@
 			//한 달 버튼 클릭 시
 			$("#btnOneMonth").on("click", function(){
 
-				oneMonthAgo = new Date(today.setDate(today.getMonth() - 1)); //실패
-				startDate = dateFormatter(oneMonthAgo, startDate);
-				console.log(startDate);
+				MonthAgo = new Date(year, month - 1, date); //실패
+				//console.log("month: " + MonthAgo.getMonth());
+				startDate = dateFormatter(MonthAgo, startDate);
+				//console.log(startDate);
+
 				$("input[name='startDate']").val(startDate);
 				$("input[name='endDate']").val(endDate);
 			});
 
-			dateFormatter = function(today, startDate) {
-				let year = today.getFullYear();
-				let month = today.getMonth() + 1;
-				let day = today.getDate();
+			//3개월 버튼 클릭 시
+			$("#btnThreeMonth").on("click", function(){
+
+				MonthAgo = new Date(year, month - 3, date); //실패
+				//console.log("month: " + MonthAgo.getMonth());
+				startDate = dateFormatter(MonthAgo, startDate);
+				//console.log(startDate);
+
+				$("input[name='startDate']").val(startDate);
+				$("input[name='endDate']").val(endDate);
+			});
+
+			//6개월 버튼 클릭 시
+			$("#btnSixMonth").on("click", function(){
+
+				MonthAgo = new Date(year, month - 6, date); //실패
+				//console.log("month: " + MonthAgo.getMonth());
+				startDate = dateFormatter(MonthAgo, startDate);
+				//console.log(startDate);
+
+				$("input[name='startDate']").val(startDate);
+				$("input[name='endDate']").val(endDate);
+			});
+
+			//startDate 값 구하는 함수
+			dateFormatter = function(dateForSearch, startDate) {
+				let year = dateForSearch.getFullYear();
+				let month = dateForSearch.getMonth() + 1;
+				let date = dateForSearch.getDate();
 
 				startDate = year + "-" + (("0"+month.toString()).slice(-2)) + "-" + (("0"+date.toString()).slice(-2));
 
