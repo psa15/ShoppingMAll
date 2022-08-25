@@ -106,16 +106,13 @@
       	<div class = "col-6">
       		<!-- 상품 이미지 필드 정보 -->
       		<h5>${productVO.p_name}</h5>
-      		<p>판매가격: <fmt:formatNumber type="number" maxFractionDigits="3" value="${productVO.p_cost}" /></p>
-      		<p>
-      			<input type="hidden" id="p_num" value="${productVO.p_num}">
-      			수량: <input type="number" id="p_amount" min="1" value="1">
-      		</p>
-      		<button type="button" id="btnOrder"  class="btn btn-primary">구매하기</button>
-      		<form action="/user/order/userOrderList" method="get" id="orderForm">
-				<input type="hidden" name="p_num" value="${productVO.p_num}">
-				<input type="hidden" name="cart_amount" value="">
-				<input type="hidden" name="type" value="directOrder">
+      		<form action="/user/order/userDirectOrderList" method="get" id="orderForm">
+	      		<p>판매가격: <fmt:formatNumber type="number" maxFractionDigits="3" value="${productVO.p_cost}" /></p>
+	      		<p>
+	      			<input type="hidden" id="p_num" name="p_num" value="${productVO.p_num}">
+	      			수량: <input type="number" id="p_amount" name="p_amount" min="1" value="1">
+	      		</p>
+	      		<button type="button" id="btnOrder"  class="btn btn-primary">구매하기</button>
 			</form>
 			<button type="button" id="btnCart"  class="btn btn-primary">장바구니</button>
       	</div>
@@ -244,8 +241,6 @@
 
 			$("#btnOrder").on("click", function(){
 				console.log("바로구매 클릭");
-
-				$("input[name='cart_amount']").val($("input#p_amount").val());
 				
 				orderForm.submit();
 			});

@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.psamall.domain.OrderVO;
-import com.psamall.domain.PaymentVO;
 import com.psamall.dto.Criteria;
 import com.psamall.dto.PageDTO;
-import com.psamall.mapper.AdOrderMapper;
 import com.psamall.service.AdOrderService;
 import com.psamall.utils.UploadFileUtils;
 

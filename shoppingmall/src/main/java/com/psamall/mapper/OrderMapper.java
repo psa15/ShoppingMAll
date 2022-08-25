@@ -15,7 +15,7 @@ public interface OrderMapper {
 	//주문 페이지 주문 상품 목록 - 장바구니에서 주문
 	OrderCartListVO orderCartList(@Param("cart_code") Integer cart_code,@Param("m_id")  String m_id);
 	//장바구니 외 주문
-	List<OrderCartListVO> orderDirectList(@Param("p_num") Integer p_num, @Param("ord_amount") int ord_amount);
+	OrderCartListVO orderDirectList(@Param("p_num") Integer p_num, @Param("ord_amount") int ord_amount);
 	
 	//최근 배송지 불러오기
 	OrderVO getRecentAddr(String m_id);
@@ -24,9 +24,9 @@ public interface OrderMapper {
 	//1)주문테이블
 	void insertOrder(OrderVO vo);
 	//2-1)주문 상세 테이블 - 장바구니 테이블 사용
-	void insertOrderDetail(@Param("ord_code") Long ord_code, @Param("m_id") String m_id, @Param("pNumArr") Integer pNumArr);
-	//2-2)상품번호 사용
-	void insertOrderDetailByPNum(@Param("ord_code") Long ord_code, @Param("pNumArr") Integer p_num, @Param("cartAmountArr") Integer cart_amount);
+	void insertOrderDetail(@Param("ord_code") Long ord_code, @Param("m_id") String m_id);
+	//2-2)주문 상세 테이블 - 바로구매
+	void insertDirectOrderDetail(@Param("ord_code") Long ord_code, @Param("p_num") Integer p_num, @Param("ord_amount") Integer ord_amount);
 	//3) 결제 테이블
 	void insertPayment(PaymentVO vo);
 	

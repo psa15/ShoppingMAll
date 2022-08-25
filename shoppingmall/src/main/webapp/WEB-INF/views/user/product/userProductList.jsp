@@ -48,7 +48,7 @@
 
   <section class="jumbotron text-center">
     <div class="container">
-      <h1>${ct_name}</h1>
+      <h1> ${ct_name} </h1>
       <c:forEach items="${cateName}" var="category">
       	<a href="/user/product/userProductList/${category.ct_p_code}/${category.ct_code}/${category.ct_name}" class="btn btn-light">${category.ct_name}</a> 	
 	  </c:forEach>
@@ -170,9 +170,9 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" name="btnBuyNow" class="btn btn-primary">바로 구매</button>
-			<form action="/user/order/userOrderList" method="get" id="orderForm">
+			<form action="/user/order/userDirectOrderList" method="get" id="orderForm">
 				<input type="hidden" name="p_num" value="${productVO.p_num}">
-				<input type="hidden" name="cart_amount" value="">
+				<input type="hidden" name="p_amount" value="">
 				<input type="hidden" name="type" value="directOrder">
 			</form>
 	        <button type="button" name="btnAddCart" class="btn btn-primary">장바구니 담기</button>
@@ -247,7 +247,7 @@
 			$("button[name='btnBuyNow']").on("click", function(){
 				console.log("바로구매 클릭");
 				
-				$("input[name='cart_amount']").val($("input#p_amount").val());
+				$("input[name='p_amount']").val($("input#p_amount").val());
 				$("input[name='p_num']").val($("input#p_num").val());
 				
 				orderForm.submit();
@@ -260,10 +260,13 @@
 		    	e.preventDefault();
 		    	
 		    	let pageNum = $(this).attr("href");
+		    	console.log(pageNum);
 		    	
 		    	actionForm.find("input[name='pageNum']").val(pageNum);
+		    	let pageNo = actionForm.find("input[name='pageNum']").val();
+		    	console.log(pageNo);
 		    	
-		    	let url = "/user/product/userProductList/${ct_code}/${ct_name}";
+		    	let url = "/user/product/userProductList/${f_ct_code}/${s_ct_code}/${ct_name}";
 		    	actionForm.attr("action", url);
 		    	
 		    	actionForm.submit();

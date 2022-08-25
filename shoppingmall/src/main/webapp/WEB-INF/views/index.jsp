@@ -236,9 +236,9 @@
 				console.log("바로구매 클릭");
 				
 				let p_num = $("div#modal_productDetail input#p_num").val();
-				let cart_amount = $("div#modal_productDetail input#p_amount").val();
+				let p_amount = $("div#modal_productDetail input#p_amount").val();
 				
-				location.href = "/user/order/userOrderList?type=directOrder&p_num=" + p_num + "&cart_amount=" + cart_amount;
+				location.href = "/user/order/userDirectOrderList?p_num=" + p_num + "&p_amount=" + p_amount;
 				
 			});
 		});

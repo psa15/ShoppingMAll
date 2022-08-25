@@ -74,17 +74,17 @@
 	        ON 
 	        	C.P_NUM = P.P_NUM
 	        WHERE 
-	        	M_ID = #{m_id}  AND C.P_NUM = #{pNumArr}
+	        	M_ID = #{m_id}
 	
 	</insert>
 	
 	<!-- 주문 저장 2-2)주문 상세테이블 - 상품 번호 사용 -->
-	<insert id="insertOrderDetailByPNum">
+	<insert id="insertDirectOrderDetail">
 	
 		INSERT INTO
 			TBL_ORDER_D(ORD_CODE, P_NUM, ORD_AMOUNT, ORD_COST)
 		SELECT 
-			#{ord_code}, #{p_num}, #{cart_amount}, #{cart_amount} * P_COST
+			#{ord_code}, #{p_num}, #{ord_amount}, #{ord_amount} * P_COST
 		FROM 
 			TBL_PRODUCT
         where

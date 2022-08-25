@@ -12,10 +12,12 @@ public interface OrderService {
 	//주문 페이지 주문 상품 목록
 	OrderCartListVO orderCartList(Integer cart_code, String m_id);
 	//장바구니 외 주문
-	List<OrderCartListVO> orderDirectList(Integer p_num, int ord_amount);
+	OrderCartListVO orderDirectList(Integer p_num, int ord_amount);
 	
-	//주문하기(주문 정보 + 결제 정보)
-	void orderSave(OrderVO orderVO, PaymentVO payVO, Integer pNumArr);
+	//주문하기(주문 정보 + 결제 정보) - 장바구니
+	void orderSave(OrderVO orderVO, PaymentVO payVO);
+	//주문하기 - 바로구매
+	void orderDirectSave(OrderVO orderVO, PaymentVO payVO, Integer p_num, Integer ord_amount);
 	
 	//주문완료 후 주문 정보 불러오기
 	OrderVO getOrderInfo(String m_id);

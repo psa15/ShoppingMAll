@@ -94,30 +94,28 @@
 							    </tr>
 							  </thead>
 							  <tbody>
-							  <c:forEach items="${orderCartList}" var="orderCartListVO">
-							  <c:set var="price" value="${orderCartListVO.cart_amount * orderCartListVO.p_cost}"></c:set>
+							  <c:set var="price" value="${order.cart_amount * order.p_cost}"></c:set>
 							    <tr>	
 							      <!-- 상품 : 이미지 및 상품이름 -->				      
 							      <td>						      	
-							      	<a class="move" href="${orderCartListVO.p_num}">
-							      		<img src="/user/product/displayFile?folderName=${orderCartListVO.p_image_folder}&fileName=s_${orderCartListVO.p_image}" 
+							      	<a class="move" href="${order.p_num}">
+							      		<img src="/user/product/displayFile?folderName=${order.p_image_folder}&fileName=s_${order.p_image}" 
 							      		alt="" style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image.png'">
-							      		<c:out value="${orderCartListVO.p_name}" />
+							      		<c:out value="${order.p_name}" />
 							      	</a>
 							      </td>
 							      <!-- 판매 가격 -->
 							      <td>
-							      	￦ <fmt:formatNumber type="number" maxFractionDigits="3" value="${orderCartListVO.p_cost}" />
-									<input type="hidden" name="p_cost" value="${orderCartListVO.p_cost}">
+							      	￦ <fmt:formatNumber type="number" maxFractionDigits="3" value="${order.p_cost}" />
+									<input type="hidden" id="p_cost" name="p_cost" value="${order.p_cost}">
 							      </td>
 							      <!-- 수량 -->
 							      <td>
-							      	<c:out value="${orderCartListVO.cart_amount}" />개
-									  <input type="hidden" name="cart_amount" value="${orderCartListVO.cart_amount}">
+							      	<c:out value="${order.cart_amount}" />개
 							      </td>
 							      <!-- 적립 예정 금액 -->
 							      <td class="text-center" >
-							      	<fmt:formatNumber type="number" maxFractionDigits="3" value="${orderCartListVO.p_cost * 0.001}" />
+							      	<fmt:formatNumber type="number" maxFractionDigits="3" value="${order.p_cost * 0.001}" />
 							      </td>	
 								  <!-- 상품 가격 * 수량 -->				      
 								  <td>
@@ -126,22 +124,14 @@
 									</span>
 								  </td>
 							      <!-- 삭제 -->
-							      <td class="calProduct">
-				                    <input type="hidden" name="p_image_dateFolder" value="${orderCartListVO.p_image_folder}">
-				                    <input type="hidden" name="p_image" value="${orderCartListVO.p_image}">
-				                    <input type="hidden" name="ord_cost" value="${orderCartListVO.p_cost * orderCartListVO.cart_amount}" >
-								    <input type="hidden" name="p_num" value="${orderCartListVO.p_num}" >
-								    <input type="hidden" name="ord_amount" value="${orderCartListVO.cart_amount}" >
-								    <input type="hidden" name="cart_code" value="${orderCartListVO.cart_code}" >
-								    <input type="hidden" class="productPointForCal" value="${cartVO.p_cost * 0.001}">
-				                    <button type="button" name="btnCartDelete" data-cart_code="${orderCartListVO.cart_code}" class="btn btn-link">X</button>
+							      <td>
+				                    <button type="button" name="btnCartDelete" data-cart_code="${order.cart_code}" class="btn btn-link">X</button>
 								  </td>
 							      </tr>
-							    <c:set var="sum" value="${sum + price}"></c:set>
-							   </c:forEach>					   
+							    <c:set var="sum" value="${sum + price}"></c:set>				   
 							  </tbody>
 							  <tfoot>
-							  	<c:if test="${!empty orderCartList}">
+							  	<c:if test="${!empty order}">
 									<tr>
 										<td colspan="5" style="text-align: left"> 
 											총 상품 금액: <span id="productTotalPrice"></span><br>
@@ -158,7 +148,7 @@
 										</td>
 									</tr>
 								</c:if>
-								<c:if test="${empty orderCartList}">
+								<c:if test="${empty order}">
 									<tr>
 										<td colspan="5" style="text-align: right"> 
 											주문내역이 비었습니다.
@@ -271,7 +261,6 @@
 							      <option value="newMessage">직접 입력</option>
 							    </select>
 								<input type="text" name="ord_message" id="newMessage">
-								<input type="hidden" name="ord_totalcost" value="">
 							  </div>
 							  <div class="form-group">
 								  <label for="exampleFormControlSelect1">결제 방법</label>
@@ -293,7 +282,9 @@
 								  <input type="hidden" class="form-control" name="pay_noAccount_bank" id="pay_noAccount_bank" value="">
 								  <input type="hidden" class="form-control" name="pay_noAccount_price" id="pay_noAccount_price" value="0">
 								  <input type="hidden" class="form-control" name="pay_tot_price" id="pay_tot_price" value="">
-								  <input type="hidden" class="form-control" name="odr_amount" id="pay_tot_price" value="">
+								  <input type="hidden" class="form-control" name="ord_amount" value="${order.cart_amount}">
+								  <input type="hidden" class="form-control" name="p_num" value="${order.p_num}">
+								  <input type="hidden" name="ord_totalcost" value="">
 								</div>
 								<div class="form-group row" id="noAccountUsername">
 								  <label for="pay_user" class="col-sm-2 col-form-label">입금자 명</label>
@@ -310,12 +301,12 @@
 	      </div>
       	
 		<div class="box-footer text-center">
-		<c:if test="${!empty orderCartList}">
+		<c:if test="${!empty order}">
 			<button type="button" id="btnCancelOrder"  class="btn btn-primary">주문취소</button>
 			<img id="kakao_pay" alt="kakaoPay" src="/image/payment_icon_yellow_medium.png" style="display: none;">
 			<button type="button" id="btnOrder"  class="btn btn-primary">주문하기</button>
 		</c:if>
-		<c:if test="${empty orderCartList}">
+		<c:if test="${empty order}">
 			<button type="button" name="btnShopping"  class="btn btn-primary">쇼핑하기</button>
 		</c:if>
     </div>	
@@ -468,49 +459,6 @@
 				//console.log("버튼클릭");
 				//유효성 검사
 				
-				//카트 코드 받아서 orderForm에 추가해주기???
-				//값들의 갯수 -> 배열 길이를 지정
-				let valueLength = $("input[name='cart_code']").length;
-				//배열 생성
-				let cartCodeArr = new Array(valueLength);
-				//배열에 값 주입
-				for(let i=0; i<valueLength; i++){                          
-					cartCodeArr[i] = $("input[name='cart_code']").eq(i).val();
-				}
-				//console.log(cartCodeArr[0]);
-				//console.log(cartCodeArr[1]);
-
-				let url = "";
-
-				for(let i=0; i<valueLength; i++){
-					url += "<input type='hidden' class='form-control' name='cartCodeArr' value='" + cartCodeArr[i] + "'>"
-				}
-				//console.log(url);
-				
-				orderForm.append(url);
-
-				//상품번호
-				let pNumValueLength = $("input[name='p_num']").length;
-				console.log(pNumValueLength);
-				//배열 생성
-				let pNumArr = new Array(pNumValueLength);
-				//배열에 값 주입
-				for(let i=0; i<pNumValueLength; i++){                          
-					pNumArr[i] = $("input[name='p_num']").eq(i).val();
-				}
-				console.log(pNumArr[0]);
-				console.log(pNumArr[1]);
-
-				url = "";
-
-				for(let i=0; i<pNumValueLength; i++){
-					url += "<input type='hidden' class='form-control' name='pNumArr' value='" + pNumArr[i] + "'>"
-				}
-				console.log(url);
-
-				orderForm.append(url);
-				
-
 				let ord_message = $("select[name='selectBox']").val();
 				if(ord_message != 'newMessage') {
 					$("#newMessage").val(ord_message);
@@ -524,7 +472,7 @@
 				$("input[name='ord_totalcost']").val(total);
 				$("#pay_tot_price").val(total);
 				
-				orderForm.attr("action", "/user/order/addOrder");
+				orderForm.attr("action", "/user/order/addDirectOrder");
 				orderForm.submit();
 			}); 
 
@@ -538,25 +486,16 @@
 		//총 가격 계산하기(배송비, 총 가격, 적립금)
 		function totalInfo(){
 
-			let totalCost = 0; //주문할 상품 총 가격
+			let amount = $("input[name='ord_amount']").val();
+			let totalCost = parseInt($("#p_cost").val()) * parseInt(amount); //주문할 상품 총 가격
 			let deliveryCost = 0; //배송비
 			let totalPoint = 0; //상품 주문시 적립될 포인트
 			let realTotalCost = 0; //상품 총 가격 + 배송비
-
-			//상품 계산
-			$(".calProduct").each(function(index, item){		
 			
-				totalCost += parseInt($(item).find("input[name='ord_cost']").val());
-				totalPoint += parseInt($(item).find(".productPointForCal").val());
-								
-			});
-
 			//배송비
 			if(totalCost >= 30000) {
 				deliveryCost = 0;
-			} else if(totalCost == 0) {
-				deliveryCost = 0;
-			} else {
+			}  else {
 				deliveryCost = 3000;
 			}
 
