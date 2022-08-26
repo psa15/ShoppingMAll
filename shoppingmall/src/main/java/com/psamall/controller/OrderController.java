@@ -191,7 +191,8 @@ public class OrderController {
 	
 	//카카오페이 결제요청. 바로구매는 에러발생된다.
 	@GetMapping("/orderPay")
-	public @ResponseBody ReadyResponse payReady(OrderVO orderVO, PaymentVO payVO, int totalAmount, @RequestParam("pNumArr") List<Integer> pNumArr, HttpSession session, Model model) {
+	public @ResponseBody ReadyResponse payReady(OrderVO orderVO, PaymentVO payVO, int totalAmount, 
+												@RequestParam(value="pNumArr", required = false) List<Integer> pNumArr, HttpSession session, Model model) {
 		
 		//장바구니테이블에서 상품정보(상품명, 상품코드, 수량, 상품가격*수량=단위별 금액)
 		String m_id = ((MemberVO) session.getAttribute("loginStatus")).getM_id();
