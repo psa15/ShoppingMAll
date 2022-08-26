@@ -192,7 +192,7 @@ public class OrderController {
 	//카카오페이 결제요청. 바로구매는 에러발생된다.
 	@GetMapping("/orderPay")
 	public @ResponseBody ReadyResponse payReady(OrderVO orderVO, PaymentVO payVO, int totalAmount, 
-												@RequestParam(value="pNumArr", required = false) List<Integer> pNumArr, HttpSession session, Model model) {
+												/*@RequestParam(value="pNumArr", required = false) List<Integer> pNumArr, */ HttpSession session, Model model) {
 		
 		//장바구니테이블에서 상품정보(상품명, 상품코드, 수량, 상품가격*수량=단위별 금액)
 		String m_id = ((MemberVO) session.getAttribute("loginStatus")).getM_id();
@@ -201,14 +201,12 @@ public class OrderController {
 		String itemName = cartList.get(0).getP_name() + "외 " + String.valueOf(cartList.size() - 1) + " 개";
 		int quantity = cartList.size() - 1;
 		
-		ArrayList<Integer> list = new ArrayList<Integer>();
-		session.setAttribute("pnum", list);
-		
-		
-		for(int i=0; i<pNumArr.size(); i++) {
-			list.add(pNumArr.get(i));
-		}
-		
+		/*
+		 * ArrayList<Integer> list = new ArrayList<Integer>();
+		 * 
+		 * for(int i=0; i<pNumArr.size(); i++) { list.add(pNumArr.get(i)); }
+		 * session.setAttribute("pnum", list);
+		 */
 		
 		// 카카오페이서버에서 보낸온 정보.
 		ReadyResponse readyResponse = kakaopayService.payReady(itemName, quantity, m_id, totalAmount);
@@ -243,7 +241,7 @@ public class OrderController {
 		session.removeAttribute("tid"); //세션 제거 - 반드시 처리! 로그인 상태에서 세션정보가 필요하지 않게되면 불필요하게 서버측의 메모리를 사용하게 됨
 		session.removeAttribute("order");
 		session.removeAttribute("payment");
-		session.removeAttribute("pnum");
+		//session.removeAttribute("pnum");
 		
 		log.info("결제 고유번호2: " + tid);
 		
@@ -251,9 +249,12 @@ public class OrderController {
 		ApproveResponse approveResponse =kakaopayService.payApprove(tid, pgToken, m_id);
 		log.info("appreveResponse: " + approveResponse);
 		
-		for (int i=0; i<pNumArr.size(); i++) {
-			orderService.orderSave(orderVO, payVO);
-		}
+		/*
+		 * for (int i=0; i<pNumArr.size(); i++) { orderService.orderSave(orderVO,
+		 * payVO); }
+		 */
+		
+		orderService.orderSave(orderVO, payVO);
 		
 		return "redirect:/user/order/userOrderComplete";
 	}
