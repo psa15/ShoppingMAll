@@ -50,7 +50,7 @@
 	<!-- header -->
 	<%@include file="/WEB-INF/views/include/header.jsp" %>
 	
-	<h3>임시 비밀번호 발급</h3>
+	<h3>비밀번호 확인</h3>
 	
 	<div class="container">
 	  <div class=" mb-3 text-center">

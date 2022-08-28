@@ -29,6 +29,19 @@
           font-size: 3.5rem;
         }
       }
+      
+    /*상품 후기 별 평점*/	
+	/*별점 기본 스타일*/  
+	#star_r_score a.r_score {
+		font-size: 22px;
+		text-decoration: none;
+		color: lightgray;
+	}
+	/*별점 클릭 시 jquery의 addClass(), removeClass()메소드를 이용하여 사용하여 색 변경
+	.on을 클래스로! */
+	#star_r_score a.r_score.on {
+		color: black;
+	}
     </style>
 
     
@@ -72,11 +85,13 @@
 					  	<button type="submit" id="btnSearch" class="btn btn-info">검색</button>
 					  </form>
 					  <form action="/user/order/userOrderList" method="get" id="productSelectedForm">
+					  <%-- 
 					  <c:forEach var="i" begin="0" end="${fn:length(orderHistory)}" >
-					  	<fmt:formatDate value="${orderHistory[i].ORD_DATE}" pattern="yyyy-MM-dd"/>
+					  	<fmt:formatDate value="${orderHistory[i].ORD_DATE}" pattern="yyyy-MM-dd"/> --%>
 					  	
 					     
 					  	<c:forEach items="${orderHistory}" var="orderHistory" varStatus="status">
+			
 					  		<hr>
 					  		  
 				  			<div class="row">          
@@ -98,17 +113,24 @@
 						      	</div>
 						      	<div class = "col-2">
 						      		<!-- 주문 상태 -->
-						      		<p> ${orderHistory.ORD_STATUS} </p>
+						      		<c:if test="${orderHistory.PAY_STATUS == '결제완료'}">
+						      			<p> ${orderHistory.ORD_STATUS} </p>
+						      		</c:if>
+						      		<c:if test="${orderHistory.PAY_STATUS == '입금전'}">
+						      			<p> ${orderHistory.PAY_STATUS} </p>
+						      		</c:if>
 						      	</div>
 						      	<div class = "col-2">
 						      		<!-- 리뷰쓰기 -->
-						      		<button type="button" class="btn btn-link" name="bunwriteReview">리뷰 쓰기</button>
+						      		<c:if test="${orderHistory.ORD_STATUS == '배송완료'}">
+						      			<button type="button" class="btn btn-link" name="bunwriteReview">리뷰 쓰기</button>
+						      		</c:if>
 						      	</div>
 						      </div>
 						      
 						 
 							 </c:forEach>
-							 </c:forEach>
+							<%--  </c:forEach> --%>
 						</form>								
 	      			</div>	
 	      		</div>     
@@ -121,19 +143,69 @@
   <%@include file="/WEB-INF/views/include/footer.jsp" %>
 </footer>
 
+	<!-- 리뷰 작성할 모달 -->
+	<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">상품 후기</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <form>
+	          <div class="form-group">
+	            <label for="recipient-name" class="col-form-label">상품평점:</label>
+	            <p id="star_r_score">
+	            	<a class="r_score" href="#">★</a>
+	            	<a class="r_score" href="#">★</a>
+	            	<a class="r_score" href="#">★</a>
+	            	<a class="r_score" href="#">★</a>
+	            	<a class="r_score" href="#">★</a>
+	            </p>
+	          </div>
+	          <div class="form-group">
+	            <label for="r_content" class="col-form-label">리뷰내용:</label>
+	            <textarea class="form-control" id="r_content"></textarea>
+				<input type="hidden" name="r_num" id="r_num">
+	          </div>
+	        </form>
+	      </div>
+	      <div class="modal-footer">		        
+	        <button type="button" id="btnReviewWrite" class="btn btn-primary btnReview">상품 리뷰 저장</button>
+			<button type="button" id="btnReviewModify" class="btn btn-primary btnReview">상품 리뷰 수정</button>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
 	<script>
 
 		$(function(){
 
-			//장바구니 비우기
-			$("button#btnClearCart").on("click", function(){
-				console.log("장바구니 비우기");
+			//상품 리뷰 쓰기 버튼 클릭
+			$("button[name='bunwriteReview']").on("click", function(){
 
-				if(!confirm("장바구니를 비우시겠습니까?")){
-					return;
-				}
+				$("#star_r_score a.r_score").parent().children().removeClass("on"); 
+				$("#r_content").val("");
 
-				location.href = "/user/cart/clearCart";
+				$(".btnReview").hide();
+				$("#btnReviewWrite").show();
+
+				$("#reviewModal").modal('show');
+			});
+			
+			//평점 별 클릭시 색상 변경
+			$("#star_r_score a.r_score").on("click", function(e){
+				
+				e.preventDefault();
+	
+				$(this).parent().children().removeClass("on"); 
+				//별 선택시 클래스에 추가되어 있던 on 선택자를 제거(처음에는 제거할 on선택자가 없지만 다시 별을 선택하게 되면 on선택자 제거해야 함)
+				$(this).addClass("on").prevAll("a").addClass("on"); 
+				//제거된 on선택자를 선택한 별의 태그에 on선택자를 추가하고, 그 이전 a태그에 on선택자를 다시 추가
 			});
 			
 			/* 버튼 클릭으로 날짜 검색 */

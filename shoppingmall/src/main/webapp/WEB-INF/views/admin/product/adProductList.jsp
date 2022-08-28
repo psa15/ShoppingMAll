@@ -276,7 +276,7 @@ desired effect
     $("button[name='btnUpdateProduct']").on("click", function(){
 
       actionForm.append("<input type='hidden' name='p_num' value='" + $(this).data("p_num") + "'>");
-      actionForm.attr("action", "/admin/product/updateProduct");
+      actionForm.attr("action", "/admin/product/adUpdateProduct");
 
       actionForm.submit();
     });

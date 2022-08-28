@@ -26,6 +26,7 @@
 	
 	<!-- CKEditor -->
 	<resources mapping="/ckeditor/**" location="/resources/bower_components/ckeditor/" />
+	<resources mapping="/ckeditor2/**" location="/resources/bower_components/ckeditor2/" />
 	
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -47,4 +48,24 @@
 	<!-- 파일 업로드 bean 설정, multipartResolver : 예약어 -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"></beans:bean>
 			
+	<!-- 로그인 인터셉터 설정 -->
+	<beans:bean id="userInterceptor" class="com.psamall.interceptor.UserInterceptor"></beans:bean>
+	<beans:bean id="adminInterceptor" class="com.psamall.interceptor.AdminInterceptor"></beans:bean>
+	
+	
+	<interceptors>
+		<!-- 사용자 -->
+		<interceptor>
+			<mapping path="/user/cart/*"/>
+			<mapping path="/user/order/*"/>
+			<beans:ref bean="userInterceptor"/>
+		</interceptor>
+		<!-- 관리자 -->
+		<interceptor>
+			<mapping path="/admin/**"/>
+			<exclude-mapping path="/admin/"/>
+			<exclude-mapping path="/admin/adLogin"/>
+			<beans:ref bean="adminInterceptor"/>
+		</interceptor>
+	</interceptors>
 </beans:beans>

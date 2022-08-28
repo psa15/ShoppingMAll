@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psamall.mapper.QuestionMapper">
+
+	<!-- 질문 저장 -->
+	<insert id="insertQuestion">
+		<selectKey resultType="INTEGER" order="BEFORE" keyProperty="q_num">
+			SELECT SEQ_Q_NUM.nextval FROM dual
+		</selectKey>
+		
+		INSERT INTO
+			TBL_QNA
+				(Q_NUM, M_ID, Q_TITLE, Q_CONTENT, Q_REGDATE, Q_OPEN 
+				<if test='q_open.equals("N")'>
+					, Q_PASSWORD
+				</if>				
+				)
+				
+			VALUES
+				(#{q_num}, #{m_id}, #{q_title}, #{q_content}, SYSDATE, #{q_open}  
+				<if test='q_open.equals("N")'>
+					, #{q_password}
+				</if>
+				)
+	
+	</insert>
+	
+	<!-- 파일 정보 저장 -->
+	<insert id="insertFileInfo">
+		
+		INSERT INTO
+			TBL_QNA_ATTACH
+				(UUID, UPLOADPATH, FILENAME, Q_NUM)
+			VALUES
+				(#{uuid}, #{uploadpath}, #{filename}, #{q_num})
+				
+	</insert>
+
+</mapper>

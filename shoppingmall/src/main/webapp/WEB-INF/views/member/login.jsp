@@ -52,28 +52,39 @@
 	<!-- header -->
 	<%@include file="/WEB-INF/views/include/header.jsp" %>
 	
-	<h3>로그인</h3>
-	
 	<div class="container">
+		<h3>로그인</h3>
 	  <div class=" mb-3 text-center">
-	    <form id="loginForm" class="form-signin" action="login" method="post">
-		  <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-		  <label for="m_id" class="sr-only">아이디</label>
-		  <input type="text" id="m_id" class="form-control" name="m_id" placeholder="ID" required autofocus>
-		  <div class="m_id regex"></div>
-		  <label for="m_passwd" class="sr-only">비밀번호</label>
-		  <input type="password" id="m_passwd" class="form-control" name="m_passwd" placeholder="Password" required>
-		  <div class="m_passwd regex"></div>
-		  <div class="checkbox mb-3">
-		    <label>
-		      <input type="checkbox" value="remember-me"> Remember me
-		    </label>
-		  </div>
-		  <button class="btn btn-lg btn-primary btn-block" id="btnsignIn" type="submit">Sign in</button>
-		  <a href="/member/lostId">아이디 찾기</a> |
-		  <a href="/member/newPw">비밀번호 발급받기</a>
-		</form>
+	    <div class="col-6">
+	 		<form id="loginForm" class="form-signin" action="login" method="post">
+			  <div class="form-group row">
+			    <label for="m_id" class="col-sm-4 col-form-label">아이디</label>
+			    <div class="col-sm-6">
+			      <input type="text" id="m_id" class="form-control" name="m_id" placeholder="ID" required autofocus>
+			    </div>
+			   </div>		    
+			  <div class="form-group row">
+			    <label for="m_passwd" class="col-sm-4 col-form-label">비밀번호</label>
+			    <div class="col-sm-6">
+			      <input type="password" id="m_passwd" class="form-control" name="m_passwd" placeholder="Password" required>
+			    </div>
+			  </div>		  
+			  <div class="form-group">
+			    <div class="text-center">
+					<button class="btn btn-lg btn-primary" id="btnsignIn" type="submit">Sign in</button>
+			    </div>
+			  </div>
+			  <div class="form-group">
+				<div class="text-center">
+					<a href="/member/lostId">아이디 찾기</a> |
+		  			<a href="/member/newPw">비밀번호 발급받기</a>
+			    </div>
+			  </div>			  
+			</form>
+		</div>
 	  </div>
+	
+	
 	
 	  <!-- footer -->
 	  <%@include file="/WEB-INF/views/include/footer.jsp" %>

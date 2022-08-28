@@ -98,9 +98,9 @@
 		    </div>
 		  </div>
 		  <div class="form-group row">
-		    <label for="m_postnum" class="col-sm-2 col-form-label">우편번호</label>
+		    <label for="m_postcode" class="col-sm-2 col-form-label">우편번호</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_postnum" name="m_postncode" value="${memberVO.m_postncode}">
+		      <input type="text" class="form-control" id="m_postcode" name="m_postcode" value="${memberVO.m_postcode}">
 		      <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
 		    </div>
 		  </div>
