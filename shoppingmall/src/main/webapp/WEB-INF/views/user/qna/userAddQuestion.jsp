@@ -112,7 +112,7 @@
 						    <label for="p_amount" class="col-sm-2 col-form-label">비밀글 설정</label>
 						    <div class="col-sm-10">
 						      <input type="radio" name="q_open" value="Y">공개글
-						      <input type="radio" name="q_open" value="Y">비밀글			     
+						      <input type="radio" name="q_open" value="N">비밀글			     
 						    </div>
 						  </div>					
 	      			</div>

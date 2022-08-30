@@ -12,14 +12,14 @@
 			TBL_QNA
 				(Q_NUM, M_ID, Q_TITLE, Q_CONTENT, Q_REGDATE, Q_OPEN 
 				<if test='q_open.equals("N")'>
-					, Q_PASSWORD
+					, Q_PASSWORD, Q_FILE_EXIT
 				</if>				
 				)
 				
 			VALUES
 				(#{q_num}, #{m_id}, #{q_title}, #{q_content}, SYSDATE, #{q_open}  
 				<if test='q_open.equals("N")'>
-					, #{q_password}
+					, #{q_password}, #{q_file_exist}
 				</if>
 				)
 	

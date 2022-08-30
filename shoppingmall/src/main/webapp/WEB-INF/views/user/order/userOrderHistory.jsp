@@ -123,7 +123,7 @@
 						      	<div class = "col-2">
 						      		<!-- 리뷰쓰기 -->
 						      		<c:if test="${orderHistory.ORD_STATUS == '배송완료'}">
-						      			<button type="button" class="btn btn-link" name="bunwriteReview">리뷰 쓰기</button>
+						      			<button type="button" class="btn btn-link" data-p_num="${orderHistory.P_NUM}" name="btnWriteReview">리뷰 쓰기</button>
 						      		</c:if>
 						      	</div>
 						      </div>
@@ -174,7 +174,6 @@
 	      </div>
 	      <div class="modal-footer">		        
 	        <button type="button" id="btnReviewWrite" class="btn btn-primary btnReview">상품 리뷰 저장</button>
-			<button type="button" id="btnReviewModify" class="btn btn-primary btnReview">상품 리뷰 수정</button>
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
@@ -186,7 +185,7 @@
 		$(function(){
 
 			//상품 리뷰 쓰기 버튼 클릭
-			$("button[name='bunwriteReview']").on("click", function(){
+			$("button[name='btnWriteReview']").on("click", function(){
 
 				$("#star_r_score a.r_score").parent().children().removeClass("on"); 
 				$("#r_content").val("");
@@ -215,27 +214,83 @@
 			let year = today.getFullYear();
 			let month = today.getMonth();
 			let date = today.getDate();
+			
+			//상품 리뷰 저장 버튼 클릭
+			$("#btnReviewWrite").on("click", function(){
+				
+				//리뷰 저장할 때 필요한 정보들 - r_score, r_content, p_num, m_id
+				let r_score = 0;
+				let r_content = $("#r_content").val();
+				let p_num = $("button[name='btnWriteReview']").data("p_num");
 
-			//오늘 날짜
+				console.log(p_num);
+				
+				$("#star_r_score a.r_score").each(function(index, item){
+
+					if($(this).attr("class") == 'r_score on') {
+						r_score += 1;
+					}
+				});
+				//console.log("별 평점: " + r_score);
+
+				if(r_score == 0) {
+					alert("별점을 선택해 주세요");
+					return;
+				}
+
+				if(r_content == "") {
+					alert("상품 후기를 작성해 주세요.");
+					return;
+				}
+
+				let data = JSON.stringify({ r_score : r_score, r_content : r_content, p_num : p_num });
+				
+				$.ajax({
+					url: '/user/review/addReview',
+					data: data,
+					dataType: 'text',
+					method: 'post',
+					headers: {
+						"Content-type" : "application/json", "X-HTTP-Method_Override" : "POST"
+					},
+					success: function(result){
+						if(result == "success") {
+							alert("상품 후기가 등록되었습니다.");
+							
+							//후기가 등록되고 초기화
+							$("#reviewModal").modal('hide');
+							$("#star_r_score a.r_score").parent().children().removeClass("on"); 
+							$("#r_content").val("");
+							
+							$("button[name='btnWriteReview']").attr("disabled", "true");
+							$("button[name='btnWriteReview']").text("리뷰 작성 완료");
+							
+							
+						}
+					}
+				});
+			});
+			
+
+			//기간 버튼
 			let endDate = year + "-" + (("0"+(month + 1).toString()).slice(-2)) + "-" + (("0"+date.toString()).slice(-2));
-
 			let startDate = "";
 			//오늘 버튼 클릭 시
 			$("#btnToday").on("click", function(){
 
-				startDate = dateFormatter(today, startDate);
+				startDate = calStartDate(today, startDate);
 				//console.log(startDate);
 
 				$("input[name='startDate']").val(startDate);
 				$("input[name='endDate']").val(endDate);
-			});
+			});			
 
 			//한 달 버튼 클릭 시
 			$("#btnOneMonth").on("click", function(){
 
 				MonthAgo = new Date(year, month - 1, date); //실패
 				//console.log("month: " + MonthAgo.getMonth());
-				startDate = dateFormatter(MonthAgo, startDate);
+				startDate = calStartDate(MonthAgo, startDate);
 				//console.log(startDate);
 
 				$("input[name='startDate']").val(startDate);
@@ -247,7 +302,7 @@
 
 				MonthAgo = new Date(year, month - 3, date); //실패
 				//console.log("month: " + MonthAgo.getMonth());
-				startDate = dateFormatter(MonthAgo, startDate);
+				startDate = calStartDate(MonthAgo, startDate);
 				//console.log(startDate);
 
 				$("input[name='startDate']").val(startDate);
@@ -259,7 +314,7 @@
 
 				MonthAgo = new Date(year, month - 6, date); //실패
 				//console.log("month: " + MonthAgo.getMonth());
-				startDate = dateFormatter(MonthAgo, startDate);
+				startDate = calStartDate(MonthAgo, startDate);
 				//console.log(startDate);
 
 				$("input[name='startDate']").val(startDate);
@@ -267,7 +322,7 @@
 			});
 
 			//startDate 값 구하는 함수
-			dateFormatter = function(dateForSearch, startDate) {
+			calStartDate = function(dateForSearch, startDate) {
 				let year = dateForSearch.getFullYear();
 				let month = dateForSearch.getMonth() + 1;
 				let date = dateForSearch.getDate();

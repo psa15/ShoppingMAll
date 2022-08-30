@@ -50,6 +50,11 @@ public class QuestionController {
 		// 질문 저장
 		String m_id = ((MemberVO) session.getAttribute("loginStatus")).getM_id();
 		vo.setM_id(m_id);
+		
+		/*
+		 * //질문 공개 여부 비공개 체크 시 if(vo.getQ_open().equals("N")) {
+		 * vo.setQ_password(vo.getQ_password()); }
+		 */
 
 		String uploadDateFolderPath = UploadFileUtils.getFolder();
 
@@ -66,6 +71,8 @@ public class QuestionController {
 			//System.out.println(uploadFile[i].getOriginalFilename());
 			
 			  if(!uploadFile[i].isEmpty()) { 
+				  
+				  vo.setQ_file_exist("Y");
 				  UUID uuid = UUID.randomUUID();
 				  QuestionFileVO fileInfo = new QuestionFileVO(uuid.toString(),
 				  uploadpath.toString(), uploadFile[i].getOriginalFilename());
