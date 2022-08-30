@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.psamall.domain.OrderVO;
 import com.psamall.dto.Criteria;
@@ -116,7 +117,7 @@ public class AdOrderController {
 		for(int i=0; i<ordCodeArr.size(); i++) {
 			
 			//주문번호를 이용하여 삭제구문 진행
-			adOrderService.deleteOrder(ordCodeArr.get(i));
+			adOrderService.deleteTblOrder(ordCodeArr.get(i));
 			
 		}
 		
@@ -164,17 +165,16 @@ public class AdOrderController {
 	}
 	
 	//개별 상품 삭제
-	@PostMapping("/deleteProduct")
-	@ResponseBody
-	public ResponseEntity<String> deleteProduct(@RequestParam("ord_code") Long ord_code, @RequestParam("p_num") Integer p_num, @RequestParam("ord_unitprice") int ord_unitprice){
-		
-		ResponseEntity<String> entity = null;
-		
+	@GetMapping("/deleteProduct")
+	public String deleteProduct(@RequestParam("ord_code") Long ord_code, @RequestParam("p_num") Integer p_num, 
+												@RequestParam("ord_unitprice") int ord_unitprice, @RequestParam("pay_tot_price") int pay_tot_price,
+												RedirectAttributes rttr){
+		log.info(p_num);
 		//상품 삭제
-		adOrderService.deleteProduct(ord_code, p_num, ord_unitprice);
+		adOrderService.deleteProduct(ord_code, p_num, ord_unitprice, pay_tot_price);
 		
-		entity = new ResponseEntity<String>("success", HttpStatus.OK);
+		rttr.addAttribute("ord_code", ord_code);
 		
-		return entity;
+		return "redirect:/admin/order/adOrderDetail";
 	}
 }

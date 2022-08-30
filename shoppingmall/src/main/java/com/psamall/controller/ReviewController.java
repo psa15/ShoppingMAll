@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.psamall.domain.MemberVO;
@@ -37,7 +38,7 @@ public class ReviewController {
 	
 	//리뷰 작성하기
 	@PostMapping("/addReview")
-	public ResponseEntity<String> addReview(@RequestBody ReviewVO vo, HttpSession session){
+	public ResponseEntity<String> addReview(@RequestBody ReviewVO vo, HttpSession session, @RequestParam(value="ord_code", required = false) Long ord_code){
 		
 		ResponseEntity<String> entity = null;
 		
@@ -45,6 +46,13 @@ public class ReviewController {
 		vo.setM_id(m_id);
 		
 		reviewSerice.insertReview(vo);
+		
+		log.info(ord_code);
+		System.out.println(ord_code);
+		
+		if(ord_code != null ) {
+			reviewSerice.updatePReview(vo.getP_num(), ord_code);
+		}
 		
 		entity = new ResponseEntity<String>("success", HttpStatus.OK);
 		

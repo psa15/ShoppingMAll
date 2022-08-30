@@ -24,7 +24,7 @@ public interface AdOrderService {
 	void updateCsStatus(Long ord_code, String cs_status);
 	
 	//회원이 주문취소할 경우 주문 삭제
-	void deleteOrder(Long ordCodeArr);
+	void deleteTblOrder(Long ordCodeArr);
 	
 	//주문 상세 페이지
 	//주문 정보
@@ -37,5 +37,6 @@ public interface AdOrderService {
 	List<Map<String, Object>> getOrderProductInfo(Long ord_code);
 	
 	//개별 상품 삭제
-	void deleteProduct(Long ord_code, Integer p_num, int ord_unitprice);
+	void deleteProduct(Long ord_code, Integer p_num, int ord_unitprice, int pay_tot_price);
+	
 }

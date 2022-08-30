@@ -97,13 +97,16 @@
 				  			<div class="row">          
 						       	<div class = "col-4">
 						  			<!-- 상품 이미지 -->
-						      		<a class="move" href="${orderHistory.P_NUM}">
+						      		<a class="move" href="/user/product/userProductDetail?p_num=${orderHistory.P_NUM}">
 							      		<img src="/user/order/displayFile?folderName=${orderHistory.P_IMAGE_FOLDER}&fileName=s_${orderHistory.P_IMAGE}" 
 							      		alt="" style="width: 80px; height: 80px" onerror="this.onerror=null; this.src='/image/no_image.png'">
 							      	</a>
 						      	</div>
 						      	<div class = "col-4">
 						      		<!-- 상품 정보 -->
+						      		<p>
+						      			주문번호: ${orderHistory.ORD_CODE}
+						      		</p>
 						      		<p>${orderHistory.P_NAME}</p>
 						      		<p>
 						      			판매가격: <fmt:formatNumber type="number" maxFractionDigits="3" value="${orderHistory.P_COST}" />
@@ -122,8 +125,11 @@
 						      	</div>
 						      	<div class = "col-2">
 						      		<!-- 리뷰쓰기 -->
-						      		<c:if test="${orderHistory.ORD_STATUS == '배송완료'}">
-						      			<button type="button" class="btn btn-link" data-p_num="${orderHistory.P_NUM}" name="btnWriteReview">리뷰 쓰기</button>
+						      		<c:if test="${orderHistory.ORD_STATUS == '배송완료' && orderHistory.P_REVIEW == 'N'}">
+						      			<button type="button" class="btn btn-link" data-p_num="${orderHistory.P_NUM}" data-ord_code="${orderHistory.ORD_CODE}" name="btnWriteReview">리뷰 쓰기</button>
+						      		</c:if>
+						      		<c:if test="${orderHistory.P_REVIEW == 'Y'}">
+						      			<button type="button" class="btn btn-link" disabled>리뷰 작성 완료</button>
 						      		</c:if>
 						      	</div>
 						      </div>
@@ -222,6 +228,7 @@
 				let r_score = 0;
 				let r_content = $("#r_content").val();
 				let p_num = $("button[name='btnWriteReview']").data("p_num");
+				let ord_code = $("button[name='btnWriteReview']").data("ord_code");
 
 				console.log(p_num);
 				
@@ -243,10 +250,10 @@
 					return;
 				}
 
-				let data = JSON.stringify({ r_score : r_score, r_content : r_content, p_num : p_num });
+				let data = JSON.stringify({ r_score : r_score, r_content : r_content, p_num : p_num});
 				
 				$.ajax({
-					url: '/user/review/addReview',
+					url: '/user/review/addReview?ord_code=' + ord_code,
 					data: data,
 					dataType: 'text',
 					method: 'post',

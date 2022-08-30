@@ -11,6 +11,8 @@ public interface ReviewMapper {
 
 	//리뷰 등록
 	void insertReview(ReviewVO vo);
+	//리뷰 등록 시 주문상세 테이블의 상품 리뷰 컬럼 'Y'로 변경 
+	void updatePReview(@Param("p_num") Integer p_num, @Param("ord_code") Long ord_code);
 	
 	//리뷰 목록 불러오기 + 페이징(검색은 X)
 	List<ReviewVO> getReviewList(@Param("p_num") Integer p_num, @Param("cri") Criteria cri);

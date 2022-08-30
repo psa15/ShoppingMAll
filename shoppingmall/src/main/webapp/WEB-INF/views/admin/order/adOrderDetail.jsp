@@ -110,6 +110,12 @@ desired effect
 						      <th scope="col">총 결제 금액</th>
 						      <td scope="col">${paymentInfo.pay_tot_price}</td>
 						    </tr>
+						    <c:if test="${paymentInfo.pay_tot_price == 0}">
+						    	<tr>
+							      <th scope="col">무통장 입금 예정 금액</th>
+							      <td scope="col">${paymentInfo.pay_noAccount_price}</td>
+							    </tr>
+						    </c:if>
 						    <tr>
 						      <th scope="col">결제 수단</th>
 						      <td scope="col">${paymentInfo.pay_method}</td>
@@ -265,26 +271,13 @@ desired effect
       let ord_code = $(this).data("ord_code");
       let p_num = $(this).parent().find("input[name='p_num']").val();
       let ord_unitprice = $(this).parent().find("input[name='ord_unitprice']").val();
+      let pay_tot_price = $(this).parent().find("input[name='pay_tot_price']").val();
       //console.log("ord_unitprice: " + ord_unitprice);
       //console.log("p_num: " + p_num);
+      
+      if(!confirm("상품을 삭제하시겠습니까?")) return;
 
-      $.ajax({
-        url: '/admin/order/deleteProduct',
-        type: 'post',
-        dataType: 'text',
-        data: {
-          p_num : p_num,
-          ord_unitprice : ord_unitprice,
-          ord_code : ord_code
-        },
-        success: function(result) {
-          if(result == "success") {
-            alert("선택하신 상품이 삭제되었습니다.");
-            
-            location.href="/admin/order/adOrderDetail";
-          }
-        }
-      });
+      location.href="/admin/order/deleteProduct?ord_code=" + ord_code + "&p_num=" + p_num + "&ord_unitprice=" + ord_unitprice + "&pay_tot_price=" + pay_tot_price;
 
     });
   

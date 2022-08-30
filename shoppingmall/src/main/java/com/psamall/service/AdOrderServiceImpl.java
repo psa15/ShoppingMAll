@@ -55,8 +55,8 @@ public class AdOrderServiceImpl implements AdOrderService {
 
 	//회원이 주문취소할 경우 주문 삭제
 	@Override
-	public void deleteOrder(Long ordCodeArr) {
-		adOrderMapper.deleteOrder(ordCodeArr);
+	public void deleteTblOrder(Long ordCodeArr) {
+		adOrderMapper.deleteTblOrder(ordCodeArr);
 	}
 
 	//주문 상세 페이지
@@ -79,7 +79,18 @@ public class AdOrderServiceImpl implements AdOrderService {
 	//개별 상품 삭제
 	@Transactional
 	@Override
-	public void deleteProduct(Long ord_code, Integer p_num, int ord_unitprice) {
+	public void deleteProduct(Long ord_code, Integer p_num, int ord_unitprice, int pay_tot_price) {
+		
+		/* 개별 상품 삭제 시 주문 상세 테이블의 데이터가 1개이면 주문 테이블과 결제 테이블 데이터 삭제 진행 */
+		if(adOrderMapper.getOrderDProductCount(ord_code) == 1) {
+			
+			//주문 테이블 삭제
+			adOrderMapper.deleteTblOrder(ord_code);
+			
+			//결제 테이블 삭제
+			adOrderMapper.deleteTblPayment(ord_code);
+		}
+		
 		
 		//주문 상세 테이블 삭제
 		adOrderMapper.deleteTblOrderDetail(p_num, ord_code);
@@ -88,7 +99,7 @@ public class AdOrderServiceImpl implements AdOrderService {
 		adOrderMapper.updateTotalCost(ord_code, ord_unitprice);
 		
 		//결제 테이블 총 가격 수정
-		adOrderMapper.updatePayTotalCost(ord_code, ord_unitprice);
+		adOrderMapper.updatePayTotalCost(ord_code, ord_unitprice, pay_tot_price);
 		
 	}
 

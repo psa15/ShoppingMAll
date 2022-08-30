@@ -119,7 +119,7 @@
 	</update>
 	
 	<!-- 회원이 주문취소할 경우 주문 삭제 -->
-	<delete id="deleteOrder">
+	<delete id="deleteTblOrder">
 	
 		DELETE
 			TBL_ORDER
@@ -208,15 +208,37 @@
 		UPDATE
 			TBL_PAYMENT
 		SET
-			<if test="PAY_TOT_PRICE == 0">
+			<if test="pay_tot_price == 0">
 				PAY_NOACCOUNT_PRICE = PAY_NOACCOUNT_PRICE - #{ord_unitprice}
 			</if>
-			<if test="PAY_TOT_PRICE != 0">
+			<if test="pay_tot_price != 0">
 				PAY_TOT_PRICE = PAY_TOT_PRICE - #{ord_unitprice}
 			</if>
 		WHERE
 			ORD_CODE = #{ord_code}
 	
 	</update>
+	
+	<!-- 주문 상세 테이블의 데이터가 1개라면 결제 테이블과 주문 테이블 삭제 진행 -->
+	<!-- 데이터 확인 -->
+	<select id="getOrderDProductCount" resultType="int">
+	 
+	 	SELECT
+	 		COUNT(*)
+	 	FROM
+	 		TBL_ORDER_D
+	 	WHERE
+	 		ORD_CODE = #{ord_code}
+	 
+	 </select>	 
+	 <!-- 결제테이블 삭제-->
+	 <delete id="deleteTblPayment">
+	 
+	 	DELETE
+	 		TBL_PAYMENT
+	 	WHERE
+	 		ORD_CODE = #{ord_code}
+	 
+	 </delete>
 
 </mapper>

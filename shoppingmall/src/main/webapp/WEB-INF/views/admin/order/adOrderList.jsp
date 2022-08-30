@@ -88,6 +88,7 @@ desired effect
 						      <option value="배송보류"${pageMaker.cri.keyword eq '배송보류' ? 'selected' : ''}>배송 보류</option>
 						      <option value="배송중"${pageMaker.cri.keyword eq '배송중' ? 'selected' : ''}>배송 중</option>
 						      <option value="배송완료"${pageMaker.cri.keyword eq '배송완료' ? 'selected' : ''}>배송 완료</option>
+						      <option value="구매확정"${pageMaker.cri.keyword eq '구매확정' ? 'selected' : ''}>구매확정</option>
 						    </select>
 					  	</c:if>
 					  	<c:if test="${pageMaker.cri.type == 'P'}">
@@ -165,6 +166,7 @@ desired effect
 							      <option value="배송보류"${ordertVO.ord_status eq '배송보류' ? 'selected' : ''}>배송 보류</option>
 							      <option value="배송중"${ordertVO.ord_status eq '배송중' ? 'selected' : ''}>배송 중</option>
 							      <option value="배송완료"${ordertVO.ord_status eq '배송완료' ? 'selected' : ''}>배송 완료</option>
+							      <option value="구매확정"${ordertVO.ord_status eq '구매확정' ? 'selected' : ''}>구매확정</option>
 							    </select>
 							    <button type="button" name="btnChangeOrderStatus" data-ord_code="${ordertVO.ord_code }" class="btn btn-link">변경</button>
 						      </td>

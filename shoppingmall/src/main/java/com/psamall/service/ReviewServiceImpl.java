@@ -34,6 +34,12 @@ public class ReviewServiceImpl implements ReviewService {
 		Integer p_num = vo.getP_num();
 		userProductMapper.plusReviewCount(p_num);
 	}
+	//리뷰 등록 시 주문상세 테이블의 상품 리뷰 컬럼 'Y'로 변경 
+	@Override
+	public void updatePReview(Integer p_num, Long ord_code) {
+		reviewMapper.updatePReview(p_num, ord_code);
+		
+	}
 
 	//리뷰 목록 불러오기 + 페이징(검색은 X)
 	@Override

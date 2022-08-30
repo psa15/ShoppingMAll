@@ -13,6 +13,19 @@
 	
 	</insert>
 	
+	<!-- 리뷰 등록 시 주문상세 테이블의 상품 리뷰 컬럼 'Y'로 변경 -->
+	<update id="updatePReview">
+	
+		UPDATE
+			TBL_ORDER_D
+		SET
+			P_REVIEW = 'Y'
+		WHERE
+			P_NUM = #{p_num} AND ORD_CODE = #{ord_code}
+
+	
+	</update>
+	
 	<!-- 리뷰 목록 불러오기 + 페이징(검색은 X) -->
 	<select id="getReviewList" resultType="com.psamall.domain.ReviewVO">
 	
