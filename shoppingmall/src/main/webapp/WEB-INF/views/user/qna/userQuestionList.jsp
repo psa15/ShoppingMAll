@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!doctype html>
 <html lang="en">
@@ -46,17 +47,116 @@
 
 <main role="main" style="margin-top: 75px">
 
+
   <section class="jumbotron text-center">
     <div class="container">
       <h1>질문</h1>
+      	
     </div>
   </section>
-
- <div class="container">
-	<div class="row">  
-      		
-      </div>
-	</div>
+  <div class="container">
+      
+      <!-- 주문 상품 -->
+      <div class="row">
+	      	<div class="col-md-12">      	
+	      		<div class="box box-primary">
+	      			<div class="box-header">
+	      				<hr>
+	      				<h5>Q&A </h5>
+	      			</div>	
+	      			<div class="box-body">
+	      				<form id="searchForm" action="/board/list" method="get">
+						  <%-- 검색 단추를 누르면  --%>
+						    <select name="type">
+								 <option value="" <c:out value="${pageMaker.cri.type == null ? 'selected' : ''}" />>--</option> 
+								 <option value="T" <c:out value="${pageMaker.cri.type eq 'T' ? 'selected' : ''}" />>제목</option> <%-- Title --%>
+								 <option value="C" <c:out value="${pageMaker.cri.type eq 'C' ? 'selected' : ''}" />>내용</option> <%-- Content --%>
+								 <option value="W" <c:out value="${pageMaker.cri.type eq 'W' ? 'selected' : ''}" />>작성자</option> <%-- Writer --%>
+								 <option value="TC" <c:out value="${pageMaker.cri.type eq 'TC' ? 'selected' : ''}" />>제목  or 내용</option>
+								 <option value="TW" <c:out value="${pageMaker.cri.type eq 'TW' ? 'selected' : ''}" />>제목  or 작성자</option>
+								 <option value="TCW" <c:out value="${pageMaker.cri.type eq 'TCW' ? 'selected' : ''}" />>제목  or 작성자  or 내용</option>
+						  	</select>
+						  	<input type="text" name="keyword" value="${pageMaker.cri.keyword}">
+						  	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+						  	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+						  	<button class="btn btn-info">Search</button>
+						  </form>
+					
+					
+						  <table class="table table-hover">
+							  <thead>
+							    <tr>
+							      <th scope="col">번호</th>
+							      <th scope="col">제목</th>
+							      <th scope="col">작성자</th>
+							      <th scope="col">작성일</th>
+							    </tr>
+							  </thead>
+							  <tbody>
+							  <c:forEach items="${questionList}" var="questionVO">
+							    <tr>
+							      <td scope="row">
+							      	<c:out value="${questionVO.q_num}" />
+							      </td>
+							      <td scope="row">
+							      	<a class="move" href="${productVO.q_num}">
+							      		<c:out value="${questionVO.q_title}" />
+							      	</a>
+							      </td>
+							      <td scope="row">
+							      	<c:out value="${fn:substring(questionVO.m_id, 0, fn:length(questionVO.m_id) - 4)}" /> ****
+							      </td>
+							      <td scope="row">
+							      	<fmt:formatDate value="${questionVO.q_regdate}" pattern="yyyy-MM-dd"/>
+							      </td>
+							    </tr>
+							   </c:forEach> 
+							  </tbody>
+							</table>
+							
+							<div class="text-right">
+								<button type="button" name="btnWriteQuestion" id="btnWriteQuestion" class="btn btn-dark">글쓰기</button>
+								<br>
+							</div>
+							<div>
+							<nav aria-label="pagination">
+							  <ul class="pagination justify-content-center">
+							  
+							  	<%-- 이전표시 --%>
+							  	<c:if test="${pageMaker.prev}">
+								    <li class="page-item">
+								      <a class="page-link" href="${pageMaker.startPage-1}">이전</a>
+								    </li>
+							    </c:if>
+							    
+							    <%-- 페이지 번호 표시 ( 1 2 3 4 5) --%>
+							    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
+							    	<li class='page-item ${pageMaker.cri.pageNum == num ? "active" : ""}'><a class="page-link" href="${num}">${num}</a></li>
+							    </c:forEach>
+							    
+							    <%-- 다음표시 --%>
+							    <c:if test="${pageMaker.next}">
+								    <li class="page-item">
+								      <a class="page-link" href="${pageMaker.endPage +1}">다음</a>
+								    </li>
+							    </c:if>   
+							  </ul>
+							  
+							  <form id="actionForm" action="/board/list" method="get">
+									<%-- 페이지 번호 클릭시 list주소로 보낼 파라미터 작업 - model 덕분에 ${pageMaker.cri.___} 사용 가능 --%>
+									<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+									<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+									<input type="hidden" name="type" value="${pageMaker.cri.type}">
+									<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
+									<%-- 한 번 검색하면 list()메소드에 Criteria cri 에 값이 들어가게 되어 위 사용 가능 --%>
+								</form>
+							</nav>					
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+  </div>
+  </div>
 </main>
 
 <footer class="text-muted">
@@ -64,81 +164,52 @@
 </footer>
 
 	<script>
-
-		$(function(){
-
-			//장바구니 페이지에서 상품 수량 변경
-			$("button[name='btnCartAmountChange']").on("click", function(){
-				console.log("수량 변경 버튼 클릭");
-
-				let btnCartAmountChange = $(this);
-
-				let cart_code = $(this).data("cart_code");
-				let cart_amount = $(this).parent().find("input[name='cart_amount']").val();
-
-				$.ajax({
-					url: '/user/cart/changeCartAmount',
-					data: {cart_code : cart_code, cart_amount : cart_amount},
-					dataType: 'text',
-					success: function(result) {
-						if(result == "success") {
-							alert("선택하신 상품의 수량이 변경되었습니다.");
+		$(document).ready(function(){
+			let actionForm = $("#actionForm");
+			//id가 actionForm인  form태그를 참조, 전역변수로 선언
+			//페이지 번호 클릭하면 동작하는 기능
+			$("li.page-item a.page-link").on("click", function(e){
+				//a태그는 클릭하면 걸린 링크로 이동, 우리는 파라미터값으로 제공해야 함
+				//e : 이벤트 변수
+				e.preventDefault(); //태그의 기본특성을 제거 지금은 <a>태그의 링크기능을 제거
+									
+				/* 검색기능이 추가되어 아래구문 사용 X
+					let url = "list?pageNum=" + $(this).attr("href") + "&amount=10"; 
+					location.href=url;
+				*/
 							
-							//개별 상품 금액 변경
-							//상품 가격 참조
-							let p_cost = btnCartAmountChange.parent().find("input[name='p_cost']").val();
-							btnCartAmountChange.parents("tr").find("span.unitPrice").html($.numberWithCommas(p_cost * cart_amount));
-
-							//총 구매금액 변경
-							let totalPrice = 0;
-							$("table#tblCartList tr td span.unitPrice").each(function(index, item){
-								console.log("단위가격: " + $(item).html());
-								// console.log("단위가격: " + $(item).text());
-
-								totalPrice += parseInt($.withoutCommas($(item).text())); //무언갈 읽어오는 데이터는 전부 text(String)
-								$("table#tblCartList tr td span#cartTotalPrice").text($.numberWithCommas(totalPrice));
-							});
-						}
-					}
-				});
-
-
+				//현재 선택한 페이지번호 변경작업 <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+				actionForm.find("input[name='pageNum']").val($(this).attr("href")); //find() : actionForm이 폼태그를 참조하고, 폼태그의 하위 태그들을 찾고자할 때 쓰는 메소드
+				
+				//뒤로가기 누를 때 글번호가 주소에 저장되어 페이지 번호를 눌러도 유지되는 것을 지우는 코드
+				//글번호 저장된 태그는 주소가 변하는 순간 사라지기 때문에(list페이지가 새로고침????)
+				actionForm.find("input[name='bno']").remove();
+				//목록에서 제목을 클릭할 때 주소를 /board/get으로 변경헤 놔서 뒤로가기로 페이지목록으로 돌아가면 그대로 유지되는 것
+				actionForm.attr("action", "/board/list");
+				
+				actionForm.submit(); //<form>태그 내용 전송
 			});
-
-			//상품 삭제
-			$("button[name='btnCartDelete']").on("click", function(){
-				console.log("상품삭제");
-
-				if(!confirm("선택하신 상품을 삭제하시겠습니까?")){
-					return;
-				}
-
-				let cart_code = $(this).data("cart_code");
-				location.href = "/user/cart/deleteCart?cart_code=" + cart_code;
-			});
-
-			//장바구니 비우기
-			$("button[name='btnClearCart']").on("click", function(){
-				console.log("장바구니 비우기");
-
-				if(!confirm("장바구니를 비우시겠습니까?")){
-					return;
-				}
-
-				location.href = "/user/cart/clearCart";
+			//목록에서 제목을 클릭시 동작 (페이징 + 검색 파라미터 + 글번호)
+			$("a.move").on("click", function(e) {
+				e.preventDefault(); //a태그를 클릭하면 동작하는 기능이 e인데 e의 기본 동작을 못하게 하는 것
+				//a태그의 href에는 글번호 값이 있음
+				let bno = $(this).attr("href"); //$(this) = $("a.move")
+				actionForm.find("input[name='bno']").remove();
+				//추가된 input태그가 캐쉬에 남지 않게 삭제
+				//actionForm 의 정보 + 글번호 추가하자
+				//DOM 작업
+				actionForm.append("<input type='hidden' name='bno' value='" + bno + "'>"); //actionForm에 추가
+				actionForm.attr("action", "/board/get");
+				actionForm.submit();
+			
 			});
 			
+			//글쓰기 버튼 클릭 시
+			$("#btnWriteQuestion").on("click", function(){
+				
+				location.href="/user/qna/userAddQuestion";
+			});
 		});
-
-		//숫자값을 천단위 마다 콤마 찍기
-		$.numberWithCommas = function(x) {
-			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-		}
-
-		//3자리마다 콤마 제거하기
-		$.withoutCommas = function (x) {
-			return x.toString().replace(",", '');
-		}
 	</script>
 
 <!-- bootstrap에 포함되어 있던 스크립트, 없어도 영향이 없어서 주석처리 

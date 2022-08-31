@@ -1,9 +1,12 @@
 package com.psamall.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.psamall.domain.QuestionVO;
+import com.psamall.dto.Criteria;
 import com.psamall.mapper.QuestionMapper;
 
 import lombok.Setter;
@@ -32,6 +35,18 @@ public class QuestionServiceImpl implements QuestionService {
 			questionMapper.insertFileInfo(attach);
 		});
 		
+	}
+
+	//질문 목록
+	@Override
+	public List<QuestionVO> getQuestionList(Criteria cri) {
+		return questionMapper.getQuestionList(cri);
+	}
+
+	//질문 총 개수
+	@Override
+	public int getQuestionTotalCount(Criteria cri) {
+		return questionMapper.getQuestionTotalCount(cri);
 	}
 
 }

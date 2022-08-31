@@ -1,4 +1,4 @@
-package com.psamall.controller;
+ package com.psamall.controller;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.psamall.domain.MemberVO;
 import com.psamall.domain.QuestionFileVO;
 import com.psamall.domain.QuestionVO;
+import com.psamall.dto.Criteria;
+import com.psamall.dto.PageDTO;
 import com.psamall.service.QuestionService;
 import com.psamall.utils.UploadFileUtils;
 
@@ -97,7 +100,14 @@ public class QuestionController {
 
 	// 질문 리스트
 	@GetMapping("/userQuestionList")
-	public void userQuestionList() {
+	public void userQuestionList(Model model, Criteria cri) {
 
+		model.addAttribute("questionList", questionService.getQuestionList(cri));
+		
+		int total = questionService.getQuestionTotalCount(cri);
+		
+		PageDTO pageDTO = new PageDTO(cri, total);
+		
+		model.addAttribute("pageMaker", pageDTO);
 	}
 }
