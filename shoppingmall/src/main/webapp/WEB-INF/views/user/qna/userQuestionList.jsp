@@ -99,8 +99,9 @@
 							      	<c:out value="${questionVO.q_num}" />
 							      </td>
 							      <td scope="row">
-							      	<a class="move" href="${productVO.q_num}">
+							      	<a class="move" href="${questionVO.q_num}">
 							      		<c:out value="${questionVO.q_title}" />
+							      		<input type="hidden" name="q_open" value="${questionVO.q_open}">
 							      	</a>
 							      </td>
 							      <td scope="row">
@@ -142,7 +143,7 @@
 							    </c:if>   
 							  </ul>
 							  
-							  <form id="actionForm" action="/board/list" method="get">
+							  <form id="actionForm" action="/user/qna" method="get">
 									<%-- 페이지 번호 클릭시 list주소로 보낼 파라미터 작업 - model 덕분에 ${pageMaker.cri.___} 사용 가능 --%>
 									<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
 									<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
@@ -165,41 +166,42 @@
 
 	<script>
 		$(document).ready(function(){
+			
 			let actionForm = $("#actionForm");
-			//id가 actionForm인  form태그를 참조, 전역변수로 선언
-			//페이지 번호 클릭하면 동작하는 기능
+			
 			$("li.page-item a.page-link").on("click", function(e){
-				//a태그는 클릭하면 걸린 링크로 이동, 우리는 파라미터값으로 제공해야 함
-				//e : 이벤트 변수
-				e.preventDefault(); //태그의 기본특성을 제거 지금은 <a>태그의 링크기능을 제거
-									
-				/* 검색기능이 추가되어 아래구문 사용 X
-					let url = "list?pageNum=" + $(this).attr("href") + "&amount=10"; 
-					location.href=url;
-				*/
-							
-				//현재 선택한 페이지번호 변경작업 <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+				e.preventDefault(); 
+				
 				actionForm.find("input[name='pageNum']").val($(this).attr("href")); //find() : actionForm이 폼태그를 참조하고, 폼태그의 하위 태그들을 찾고자할 때 쓰는 메소드
 				
-				//뒤로가기 누를 때 글번호가 주소에 저장되어 페이지 번호를 눌러도 유지되는 것을 지우는 코드
-				//글번호 저장된 태그는 주소가 변하는 순간 사라지기 때문에(list페이지가 새로고침????)
-				actionForm.find("input[name='bno']").remove();
-				//목록에서 제목을 클릭할 때 주소를 /board/get으로 변경헤 놔서 뒤로가기로 페이지목록으로 돌아가면 그대로 유지되는 것
-				actionForm.attr("action", "/board/list");
+				actionForm.attr("action", "/user/qna/userQuestionList");
 				
 				actionForm.submit(); //<form>태그 내용 전송
 			});
+			
 			//목록에서 제목을 클릭시 동작 (페이징 + 검색 파라미터 + 글번호)
 			$("a.move").on("click", function(e) {
-				e.preventDefault(); //a태그를 클릭하면 동작하는 기능이 e인데 e의 기본 동작을 못하게 하는 것
-				//a태그의 href에는 글번호 값이 있음
-				let bno = $(this).attr("href"); //$(this) = $("a.move")
-				actionForm.find("input[name='bno']").remove();
-				//추가된 input태그가 캐쉬에 남지 않게 삭제
-				//actionForm 의 정보 + 글번호 추가하자
-				//DOM 작업
-				actionForm.append("<input type='hidden' name='bno' value='" + bno + "'>"); //actionForm에 추가
-				actionForm.attr("action", "/board/get");
+				e.preventDefault();
+				
+				let q_num = $(this).attr("href"); 
+				let q_open = $(this).find($("input[name='q_open']")).val();
+				console.log(q_open);
+				console.log(q_num);
+
+				
+				//전에 추가된 태그가 있다면 지우기
+				actionForm.find("input[name='q_num']").remove();
+				actionForm.find("input[name='q_open']").remove();
+				
+				actionForm.append("<input type='hidden' name='q_num' value='" + q_num + "'>");
+				
+				if(q_open == "N") {
+					actionForm.append("<input type='hidden' name='q_open' value='" + q_open + "'>");
+					actionForm.attr("action", "/user/qna/userQuestionCheck");
+				} else {
+					actionForm.attr("action", "/user/qna/userQuestionDetail");
+				}
+				
 				actionForm.submit();
 			
 			});

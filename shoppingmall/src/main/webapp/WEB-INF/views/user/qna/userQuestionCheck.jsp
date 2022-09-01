@@ -44,28 +44,29 @@
       } 
     </script>
     
+    <!-- bootstrap 버전 및 여러 파일들 -->
+	<%@include file="/WEB-INF/views/include/common.jsp" %>
   </head>
   <body>
     
-	<!-- header -->
-	<%@include file="/WEB-INF/views/include/header.jsp" %>
+	<header>
+		<%@include file="/WEB-INF/views/include/header.jsp" %>
+	</header>
 	
 	<h3>비밀번호 확인</h3>
 	
 	<div class="container">
 	  <div class=" mb-3 text-center">
-	    <div class="col-6">
-	 		<form id="loginForm" method="post" action="confirmPw">
+	    <div class="row">
+	 		<form id="pwCheckForm" method="post" action="/user/qna/userQuestionCheck">
 			  <div class="form-group row">
-			    <label for="m_id" class="col-sm-4 col-form-label">아이디</label>
-			    <div class="col-sm-6">
-			      <input type="text" class="form-control" id="m_id" name="m_id" value="${sessionScope.loginStatus.m_id}">
-			    </div>
-			   </div>		    
+			    <p>질문 작성 시 입력하셨던 비밀번호를 입력해 주세요.</p>
+			  </div>		    
 			  <div class="form-group row">
 			    <label for="m_passwd" class="col-sm-4 col-form-label">비밀번호</label>
 			    <div class="col-sm-6">
-			      <input type="password" class="form-control" id="m_passwd" name="m_passwd">
+			      <input type="text" class="form-control" id="q_password" name="q_password">
+			      <input type="hidden" class="form-control" id="q_num" name="q_num" value="${q_num}">
 			    </div>
 			  </div>		  
 			  <div class="form-group">
@@ -80,10 +81,8 @@
 	  <!-- footer -->
 	  <%@include file="/WEB-INF/views/include/footer.jsp" %>
 	</div>
-	
-	<!-- bootstrap 버전 및 여러 파일들 -->
-	<%@include file="/WEB-INF/views/include/common.jsp" %>
-    
+
+   
     
   </body>
 </html>

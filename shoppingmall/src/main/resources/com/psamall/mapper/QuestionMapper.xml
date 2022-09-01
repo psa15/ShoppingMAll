@@ -97,5 +97,7 @@
 			<include refid="criteria"></include>
 			Q_NUM > 0		
 	</select>
+	
+	<!--  -->
 
 </mapper>

@@ -16,7 +16,9 @@ public interface QuestionMapper {
 	
 	//질문 목록
 	List<QuestionVO> getQuestionList(Criteria cri);
-	
 	//질문 총 개수
 	int getQuestionTotalCount(Criteria cri);
+	
+	//질문 상세
+	QuestionVO getQuestionByQNum(Integer q_num);
 }

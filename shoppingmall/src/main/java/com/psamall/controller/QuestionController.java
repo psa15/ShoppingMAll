@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -109,5 +110,25 @@ public class QuestionController {
 		PageDTO pageDTO = new PageDTO(cri, total);
 		
 		model.addAttribute("pageMaker", pageDTO);
+	}
+	
+	//질문상세 페이지 전 비밀번호 입력 페이지
+	@GetMapping("/userQuestionCheck")
+	public void userQuestionCheck(@ModelAttribute("q_num") Integer q_num) {
+		
+	}
+	//질문 비밀번호 확인
+	@PostMapping("/userQuestionCheck")
+	public String userQuestionCheck(@RequestParam("q_num") Integer q_num, @RequestParam("q_password") String q_password) {
+		
+		
+		
+		return "";
+	}
+	
+	//질문 상세 페이지
+	@GetMapping("/userQuestionDetail")
+	public void userQuestionDetail() {
+		
 	}
 }
