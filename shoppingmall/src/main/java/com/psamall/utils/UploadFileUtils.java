@@ -144,4 +144,6 @@ public class UploadFileUtils {
 		//썸네일 이미지 삭제
 		new File(uploadPath + fileName.replace("/", File.separator)).delete();
 	}
+	
+	
 }

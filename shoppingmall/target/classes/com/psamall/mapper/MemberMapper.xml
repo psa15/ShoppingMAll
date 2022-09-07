@@ -26,7 +26,7 @@
 	<select id="login_ok" resultType="com.psamall.domain.MemberVO">
 		
 		SELECT M_ID, M_NAME, M_PASSWD, M_POSTCODE, M_ADDR, 
-				M_ADDR_D, M_TEL, M_EMAIL, M_EMAIL_ACCEPT, M_POINT, 
+				M_ADDR_D, M_TEL, M_EMAIL, M_EMAIL_ACCEPT,
 				M_REGDATE, M_UPDATEDATE, M_LASTDATE, M_AUTHCODE
 		FROM TBL_MEMBER
 		WHERE M_ID = #{m_id}

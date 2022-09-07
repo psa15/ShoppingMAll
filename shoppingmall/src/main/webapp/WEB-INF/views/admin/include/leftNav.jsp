@@ -67,6 +67,18 @@
             <li><a href="#">회원목록</a></li>
           </ul>
         </li>
+        <li class="treeview">
+		  <a href="#"><i class="fa fa-link"></i> <span>통계차트</span>
+		    <span class="pull-right-container">
+		        <i class="fa fa-angle-left pull-right"></i>
+		      </span>
+		  </a>
+		  <ul class="treeview-menu">
+		    <li><a href="/admin/chart/orderOverall">전체 통계차트</a></li>
+		    <li><a href="/admin/chart/monthlyOrder">월별 주문 통계</a></li>
+		    <li><a href="/admin/chart/">월별 회원 통계</a></li>
+		  </ul>
+		</li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>

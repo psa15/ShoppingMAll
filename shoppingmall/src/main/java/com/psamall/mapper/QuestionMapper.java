@@ -21,4 +21,6 @@ public interface QuestionMapper {
 	
 	//질문 상세
 	QuestionVO getQuestionByQNum(Integer q_num);
+	//질문 파일 첨부 목록 가져오기
+	List<QuestionFileVO> getFileInfo(Integer q_num);
 }

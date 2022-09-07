@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.psamall.domain.QuestionFileVO;
 import com.psamall.domain.QuestionVO;
 import com.psamall.dto.Criteria;
 import com.psamall.mapper.QuestionMapper;
@@ -47,6 +48,18 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public int getQuestionTotalCount(Criteria cri) {
 		return questionMapper.getQuestionTotalCount(cri);
+	}
+
+	//질문 상세
+	@Override
+	public QuestionVO getQuestionByQNum(Integer q_num) {
+		return questionMapper.getQuestionByQNum(q_num);
+	}
+
+	//질문 파일 첨부 목록 가져오기
+	@Override
+	public List<QuestionFileVO> getFileInfo(Integer q_num) {
+		return questionMapper.getFileInfo(q_num);
 	}
 
 }

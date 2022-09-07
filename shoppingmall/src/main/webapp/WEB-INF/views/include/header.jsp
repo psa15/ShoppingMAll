@@ -43,12 +43,10 @@
 	    
 	    
 	    <!-- 로그인 후 -->
-	  	<c:if test="${sessionScope.loginStatus != null}">	  		
+	  	<c:if test="${sessionScope.loginStatus != null}">	
+	  		 <b>${sessionScope.loginStatus.m_name}님  </b>		
   			<a class="p-2 text-dark" href="/member/logout">로그아웃</a>
-  			<a class="p-2 text-dark" href="#">마이페이지</a>
-		    <a class="p-2 text-dark" href="/member/confirmPw">수정하기</a>
-	    	<a class="p-2 text-dark" href="/user/order/userOrderHistory">주문목록</a>
-	    	<a class="p-2 text-dark" href="/user/qna/userQuestionList">QnA</a>
+  			<a class="p-2 text-dark" href="/user/order/userOrderHistory">마이페이지</a>
 		    <a class="p-2 text-dark" href="/user/cart/cartList">장바구니 [${sessionScope.totalCart}]</a>
 	    </c:if>
 	    

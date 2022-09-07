@@ -44,46 +44,82 @@
       } 
     </script>
     
-  </head>
-  <body>
+    <!-- Custom styles for this template -->
+    <link href="/css/album.css" rel="stylesheet">
     
-	<!-- header -->
-	<%@include file="/WEB-INF/views/include/header.jsp" %>
+    <!-- bootstrap 버전 및 여러 파일들 -->
+	<%@include file="/WEB-INF/views/include/common.jsp" %>
+  </head>
+  
+ <body>
+    
+	<header>
+		<%@include file="/WEB-INF/views/include/header.jsp" %>
+	</header>
 	
-	<h3>비밀번호 확인</h3>
+	<div class="container-fluid">
+	  <div class="row">
+	    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse" style="background-color: #e3f2fd;">
+	      <div class="sidebar-sticky pt-3">
+	        <ul class="nav flex-column">
+	          <li class="nav-item">
+	            <a class="nav-link active" href="/user/order/userOrderHistory">
+	              	주문내역 
+	            </a>
+	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link" href="/member/confirmPw">
+	             	 회원 정보 수정
+	            </a>
+	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link active" href="/user/qna/userQuestionList">
+	              	Q&A 
+	            </a>
+	          </li>
+	        </ul>
+	      </div>
+	    </nav>
 	
-	<div class="container">
-	  <div class=" mb-3 text-center">
-	    <div class="col-6">
-	 		<form id="loginForm" method="post" action="confirmPw">
-			  <div class="form-group row">
-			    <label for="m_id" class="col-sm-4 col-form-label">아이디</label>
-			    <div class="col-sm-6">
-			      <input type="text" class="form-control" id="m_id" name="m_id" value="${sessionScope.loginStatus.m_id}">
-			    </div>
-			   </div>		    
-			  <div class="form-group row">
-			    <label for="m_passwd" class="col-sm-4 col-form-label">비밀번호</label>
-			    <div class="col-sm-6">
-			      <input type="password" class="form-control" id="m_passwd" name="m_passwd">
-			    </div>
-			  </div>		  
-			  <div class="form-group">
-			    <div class="text-center">
-					<button class="btn btn-lg btn-primary" type="submit">확인</button>
-			    </div>
-			  </div>		  
-			</form>
-		</div>
+	    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+		  <section class="text-center" style="margin: 100px">
+		    <div class="container">
+		      <h3>비밀번호 확인</h3>
+		    </div>
+		  </section>
+      	  <div class="container">
+			  <div class="row text-center">
+			    <div class="col-12">
+			 		<form id="loginForm" method="post" action="confirmPw">
+					  <div class="form-group row">
+					    <label for="m_id" class="col-sm-4 col-form-label">아이디</label>
+					    <div class="col-sm-6">
+					      <input type="text" class="form-control" id="m_id" name="m_id" value="${sessionScope.loginStatus.m_id}">
+					    </div>
+					   </div>		    
+					  <div class="form-group row">
+					    <label for="m_passwd" class="col-sm-4 col-form-label">비밀번호</label>
+					    <div class="col-sm-6">
+					      <input type="password" class="form-control" id="m_passwd" name="m_passwd">
+					    </div>
+					  </div>		  
+					  <div class="form-group">
+					    <div class="text-center">
+							<button class="btn btn-lg btn-primary" type="submit">확인</button>
+					    </div>
+					  </div>		  
+					</form>
+				</div>
+			  </div>
+	      </div>
+	    </main>
 	  </div>
-	
-	  <!-- footer -->
-	  <%@include file="/WEB-INF/views/include/footer.jsp" %>
 	</div>
 	
-	<!-- bootstrap 버전 및 여러 파일들 -->
-	<%@include file="/WEB-INF/views/include/common.jsp" %>
-    
-    
+	
+	<footer class="text-muted">
+	  <%@include file="/WEB-INF/views/include/footer.jsp" %>
+	</footer>
+	
   </body>
 </html>

@@ -8,17 +8,11 @@ import lombok.NoArgsConstructor;
 public class QuestionFileVO {
 
 	//uuid, uploadpath, filename, q_num
-	private String uuid;
-	private String uploadpath;
 	private String filename;
+	private String fileFolder;
 	private Integer q_num;
 	
-	public QuestionFileVO(String uuid, String uploadpath, String filename) {
-		super();
-		this.uuid = uuid;
-		this.uploadpath = uploadpath;
-		this.filename = filename;
-	}
+	
 	
 	
 }

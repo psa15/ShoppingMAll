@@ -36,105 +36,132 @@
       }
     </style>
 
-   
+    <!-- Custom styles for this template -->
+    <link href="/css/album.css" rel="stylesheet">
     
+    <!-- bootstrap 버전 및 여러 파일들 -->
+	<%@include file="/WEB-INF/views/include/common.jsp" %>
   </head>
-  <body>
+  
+ <body>
     
-	<!-- header -->
-	<%@include file="/WEB-INF/views/include/header.jsp" %>
+	<header>
+		<%@include file="/WEB-INF/views/include/header.jsp" %>
+	</header>
 	
-	<h3>회원 정보 수정</h3>
+	<div class="container-fluid">
+	  <div class="row">
+	    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse" style="background-color: #e3f2fd;">
+	      <div class="sidebar-sticky pt-3">
+	        <ul class="nav flex-column">
+	          <li class="nav-item">
+	            <a class="nav-link active" href="/user/order/userOrderHistory">
+	              	주문내역 
+	            </a>
+	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link" href="/member/confirmPw">
+	             	 회원 정보 수정
+	            </a>
+	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link active" href="/user/qna/userQuestionList">
+	              	Q&A 
+	            </a>
+	          </li>
+	        </ul>
+	      </div>
+	    </nav>
 	
-	<div class="container">
-	  <div class=" mb-3 text-center">
-	    <form action="modify" method="post" id="modifyForm">
-		  <div class="form-group row">
-		    <label for="m_id" class="col-sm-2 col-form-label">아이디</label>
-		    <div class="col-sm-5">
-		      <input type="text" class="form-control" id="m_id" name="m_id" value="${memberVO.m_id}" readonly>
+	    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+		  <section class="text-center" style="margin: 100px">
+		    <div class="container">
+		      <h3>회원 정보 수정</h3>
 		    </div>
-		  </div>
-		  <div class="form-group row">
-		    <label for="m_passwd" class="col-sm-2 col-form-label">비밀번호</label>
-		    <div class="col-sm-10">
-		      <input type="password" class="form-control" id="m_passwd" name="m_passwd" >
-		    </div>
-		  </div>
-		  <div class="form-group row">
-		    <label for="m_passwd2" class="col-sm-2 col-form-label">비밀번호 확인</label>
-		    <div class="col-sm-10">
-		      <input type="password" class="form-control" id="m_passwd2" name="m_passwd2">
-		    </div>
-		  </div>
-		  <div class="form-group row">
-		    <label for="m_name" class="col-sm-2 col-form-label">이름</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_name" name="m_name" value="${memberVO.m_name}">
-		    </div>
-		  </div>
-		  <div class="form-group row">
-		    <label for="m_email" class="col-sm-2 col-form-label">이메일</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_email" name="m_email" value="${memberVO.m_email}">
-		    </div>
-		  </div>
-		  <div class="form-group row">
-		  	<label for="m_authcode" class="col-sm-2 col-form-label">이메일 인증코드</label>
-		  	<div class="col-sm-3">
-		      <button type="button" class="form-control btn btn-info" id="btnAuthcode" > 메일 인증 요청 </button>
-		    </div>		    
-		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="m_authcode" name="m_authcode">
-		    </div>
-		    <div class="col-sm-3">
-		      <button type="button" class="form-control btn btn-info" id="btnConfirmAuthcode">메일 인증 확인 </button>
-		    </div>
-		  </div>
-		  <div class="form-group row">
-		    <label for="m_tel" class="col-sm-2 col-form-label">휴대폰 번호</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_tel" name="m_tel" value="${memberVO.m_tel}">
-		    </div>
-		  </div>
-		  <div class="form-group row">
-		    <label for="m_postcode" class="col-sm-2 col-form-label">우편번호</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_postcode" name="m_postcode" value="${memberVO.m_postcode}">
-		      <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
-		    </div>
-		  </div>
-		  <div class="form-group row">
-		    <label for="m_addr" class="col-sm-2 col-form-label">주소</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_addr" name="m_addr" value="${memberVO.m_addr}">
-		    </div>
-		  </div>
-		  <div class="form-group row">
-		    <label for="m_addr_d" class="col-sm-2 col-form-label">상세주소</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="m_addr_d" name="m_addr_d" value="${memberVO.m_addr_d}">
-		      <input type="hidden" id="extraAddress" placeholder="참고항목">
-		    </div>
-		  </div>	
-		  <div class="form-group row">
-	      	<label class="form-check-label col-sm-2" for="m_email_accept">메일 수신 동의</label>
-	      	<div class="col-sm-10 text-left">
-		    	<input type="checkbox" class="form-check-input" id="m_email_accept" name="m_email_accept" value="${memberVO.m_email_accept}" >		
-		    </div>	    		    
-		  </div>
-		  
-	      <button type="button" class="btn btn-dark text-center" id="btnModify">수정하기</button>
-	      		
-		</form>
+		  </section>
+      	  <div class="container">
+			  <div class="row">
+	      		<div class="col-md-12"> 
+			    <form action="modify" method="post" id="modifyForm">
+				  <div class="form-group row">
+				    <label for="m_id" class="col-sm-2 col-form-label">아이디</label>
+				    <div class="col-sm-5">
+				      <input type="text" class="form-control" id="m_id" name="m_id" value="${memberVO.m_id}" readonly>
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="m_passwd" class="col-sm-2 col-form-label">비밀번호</label>
+				    <div class="col-sm-10">
+				      <input type="password" class="form-control" id="m_passwd" name="m_passwd" >
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="m_passwd2" class="col-sm-2 col-form-label">비밀번호 확인</label>
+				    <div class="col-sm-10">
+				      <input type="password" class="form-control" id="m_passwd2" name="m_passwd2">
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="m_name" class="col-sm-2 col-form-label">이름</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="m_name" name="m_name" value="${memberVO.m_name}">
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="m_email" class="col-sm-2 col-form-label">이메일</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="m_email" name="m_email" value="${memberVO.m_email}">
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="m_tel" class="col-sm-2 col-form-label">휴대폰 번호</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="m_tel" name="m_tel" value="${memberVO.m_tel}">
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="m_postcode" class="col-sm-2 col-form-label">우편번호</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="m_postcode" name="m_postcode" value="${memberVO.m_postcode}">
+				      <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="m_addr" class="col-sm-2 col-form-label">주소</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="m_addr" name="m_addr" value="${memberVO.m_addr}">
+				    </div>
+				  </div>
+				  <div class="form-group row">
+				    <label for="m_addr_d" class="col-sm-2 col-form-label">상세주소</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="m_addr_d" name="m_addr_d" value="${memberVO.m_addr_d}">
+				      <input type="hidden" id="extraAddress" placeholder="참고항목">
+				    </div>
+				  </div>	
+				  <div class="form-group row">
+			      	<label class="form-check-label col-sm-2" for="m_email_accept">메일 수신 동의</label>
+			      	<div class="col-sm-10 text-left">
+				    	<input type="checkbox" class="form-check-input" id="m_email_accept" name="m_email_accept" value="${memberVO.m_email_accept}" >		
+				    </div>	    		    
+				  </div>
+				  <div class="text-right">
+			      	<button type="button" class="btn btn-dark text-center" id="btnModify">수정하기</button>
+			      </div>	
+				</form>
+			  </div>
+			 </div>
+	      </div>
+	    </main>
 	  </div>
-	
-	  <!-- footer -->
-	  <%@include file="/WEB-INF/views/include/footer.jsp" %>
 	</div>
 	
-	<!-- bootstrap 버전 및 여러 파일들 -->
-	<%@include file="/WEB-INF/views/include/common.jsp" %>
+	
+	
+<footer class="text-muted">
+  <%@include file="/WEB-INF/views/include/footer.jsp" %>
+</footer>
+	
 
 	<script>
 

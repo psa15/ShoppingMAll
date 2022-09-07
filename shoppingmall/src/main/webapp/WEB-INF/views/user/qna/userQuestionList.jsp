@@ -45,120 +45,141 @@
 	<%@include file="/WEB-INF/views/include/header.jsp" %>
 </header>
 
-<main role="main" style="margin-top: 75px">
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse" style="background-color: #e3f2fd;"> 
+      <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="/user/order/userOrderHistory">
+              	주문내역 
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/member/confirmPw">
+             	 회원 정보 수정
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/user/qna/userQuestionList">
+              	Q&A 
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-
-  <section class="jumbotron text-center">
-    <div class="container">
-      <h1>질문</h1>
-      	
-    </div>
-  </section>
-  <div class="container">
-      
-      <!-- 주문 상품 -->
-      <div class="row">
-	      	<div class="col-md-12">      	
-	      		<div class="box box-primary">
-	      			<div class="box-header">
-	      				<hr>
-	      				<h5>Q&A </h5>
-	      			</div>	
-	      			<div class="box-body">
-	      				<form id="searchForm" action="/board/list" method="get">
-						  <%-- 검색 단추를 누르면  --%>
-						    <select name="type">
-								 <option value="" <c:out value="${pageMaker.cri.type == null ? 'selected' : ''}" />>--</option> 
-								 <option value="T" <c:out value="${pageMaker.cri.type eq 'T' ? 'selected' : ''}" />>제목</option> <%-- Title --%>
-								 <option value="C" <c:out value="${pageMaker.cri.type eq 'C' ? 'selected' : ''}" />>내용</option> <%-- Content --%>
-								 <option value="W" <c:out value="${pageMaker.cri.type eq 'W' ? 'selected' : ''}" />>작성자</option> <%-- Writer --%>
-								 <option value="TC" <c:out value="${pageMaker.cri.type eq 'TC' ? 'selected' : ''}" />>제목  or 내용</option>
-								 <option value="TW" <c:out value="${pageMaker.cri.type eq 'TW' ? 'selected' : ''}" />>제목  or 작성자</option>
-								 <option value="TCW" <c:out value="${pageMaker.cri.type eq 'TCW' ? 'selected' : ''}" />>제목  or 작성자  or 내용</option>
-						  	</select>
-						  	<input type="text" name="keyword" value="${pageMaker.cri.keyword}">
-						  	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
-						  	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
-						  	<button class="btn btn-info">Search</button>
-						  </form>
-					
-					
-						  <table class="table table-hover">
-							  <thead>
-							    <tr>
-							      <th scope="col">번호</th>
-							      <th scope="col">제목</th>
-							      <th scope="col">작성자</th>
-							      <th scope="col">작성일</th>
-							    </tr>
-							  </thead>
-							  <tbody>
-							  <c:forEach items="${questionList}" var="questionVO">
-							    <tr>
-							      <td scope="row">
-							      	<c:out value="${questionVO.q_num}" />
-							      </td>
-							      <td scope="row">
-							      	<a class="move" href="${questionVO.q_num}">
-							      		<c:out value="${questionVO.q_title}" />
-							      		<input type="hidden" name="q_open" value="${questionVO.q_open}">
-							      	</a>
-							      </td>
-							      <td scope="row">
-							      	<c:out value="${fn:substring(questionVO.m_id, 0, fn:length(questionVO.m_id) - 4)}" /> ****
-							      </td>
-							      <td scope="row">
-							      	<fmt:formatDate value="${questionVO.q_regdate}" pattern="yyyy-MM-dd"/>
-							      </td>
-							    </tr>
-							   </c:forEach> 
-							  </tbody>
-							</table>
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+		<section class="text-center" style="margin: 100px">
+		    <div class="container">
+		      <h3>질문 게시판</h3>
+		    </div>
+		  </section>
+		  <div class="container">
+		      
+		      <!-- 주문 상품 -->
+		      <div class="row">
+			      	<div class="col-md-12">      	
+			      		<div class="box box-primary">
+			      			<div class="box-header">
+			      			</div>	
+			      			<div class="box-body">
+			      				<form id="searchForm" action="/user/qna/userQuestionList" method="get">
+								  <%-- 검색 단추를 누르면  --%>
+								    <select name="type">
+										 <option value="" <c:out value="${pageMaker.cri.type == null ? 'selected' : ''}" />>--</option> 
+										 <option value="T" <c:out value="${pageMaker.cri.type eq 'T' ? 'selected' : ''}" />>제목</option> <%-- Title --%>
+										 <option value="C" <c:out value="${pageMaker.cri.type eq 'C' ? 'selected' : ''}" />>내용</option> <%-- Content --%>
+										 <option value="W" <c:out value="${pageMaker.cri.type eq 'W' ? 'selected' : ''}" />>작성자</option> <%-- Writer --%>
+										 <option value="TC" <c:out value="${pageMaker.cri.type eq 'TC' ? 'selected' : ''}" />>제목  or 내용</option>
+										 <option value="TW" <c:out value="${pageMaker.cri.type eq 'TW' ? 'selected' : ''}" />>제목  or 작성자</option>
+										 <option value="TCW" <c:out value="${pageMaker.cri.type eq 'TCW' ? 'selected' : ''}" />>제목  or 작성자  or 내용</option>
+								  	</select>
+								  	<input type="text" name="keyword" value="${pageMaker.cri.keyword}">
+								  	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+								  	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+								  	<button class="btn btn-info">Search</button>
+								  </form>
 							
-							<div class="text-right">
-								<button type="button" name="btnWriteQuestion" id="btnWriteQuestion" class="btn btn-dark">글쓰기</button>
-								<br>
-							</div>
-							<div>
-							<nav aria-label="pagination">
-							  <ul class="pagination justify-content-center">
-							  
-							  	<%-- 이전표시 --%>
-							  	<c:if test="${pageMaker.prev}">
-								    <li class="page-item">
-								      <a class="page-link" href="${pageMaker.startPage-1}">이전</a>
-								    </li>
-							    </c:if>
-							    
-							    <%-- 페이지 번호 표시 ( 1 2 3 4 5) --%>
-							    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
-							    	<li class='page-item ${pageMaker.cri.pageNum == num ? "active" : ""}'><a class="page-link" href="${num}">${num}</a></li>
-							    </c:forEach>
-							    
-							    <%-- 다음표시 --%>
-							    <c:if test="${pageMaker.next}">
-								    <li class="page-item">
-								      <a class="page-link" href="${pageMaker.endPage +1}">다음</a>
-								    </li>
-							    </c:if>   
-							  </ul>
-							  
-							  <form id="actionForm" action="/user/qna" method="get">
-									<%-- 페이지 번호 클릭시 list주소로 보낼 파라미터 작업 - model 덕분에 ${pageMaker.cri.___} 사용 가능 --%>
-									<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
-									<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
-									<input type="hidden" name="type" value="${pageMaker.cri.type}">
-									<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
-									<%-- 한 번 검색하면 list()메소드에 Criteria cri 에 값이 들어가게 되어 위 사용 가능 --%>
-								</form>
-							</nav>					
-    				</div>
-    			</div>
-    		</div>
-    	</div>
+							
+								  <table class="table table-hover">
+									  <thead>
+									    <tr>
+									      <th scope="col">번호</th>
+									      <th scope="col">제목</th>
+									      <th scope="col">작성자</th>
+									      <th scope="col">작성일</th>
+									    </tr>
+									  </thead>
+									  <tbody>
+									  <c:forEach items="${questionList}" var="questionVO">
+									    <tr>
+									      <td scope="row">
+									      	<c:out value="${questionVO.q_num}" />
+									      </td>
+									      <td scope="row">
+									      	<a class="move" href="${questionVO.q_num}">
+									      		<c:out value="${questionVO.q_title}" />
+									      		<input type="hidden" name="q_open" value="${questionVO.q_open}">
+									      	</a>
+									      </td>
+									      <td scope="row">
+									      	<c:out value="${fn:substring(questionVO.m_id, 0, fn:length(questionVO.m_id) - 4)}" /> ****
+									      </td>
+									      <td scope="row">
+									      	<fmt:formatDate value="${questionVO.q_regdate}" pattern="yyyy-MM-dd"/>
+									      </td>
+									    </tr>
+									   </c:forEach> 
+									  </tbody>
+									</table>
+									
+									<div class="text-right">
+										<button type="button" name="btnWriteQuestion" id="btnWriteQuestion" class="btn btn-dark">글쓰기</button>
+										<br>
+									</div>
+									<div>
+									<nav aria-label="pagination">
+									  <ul class="pagination justify-content-center">
+									  
+									  	<%-- 이전표시 --%>
+									  	<c:if test="${pageMaker.prev}">
+										    <li class="page-item">
+										      <a class="page-link" href="${pageMaker.startPage-1}">이전</a>
+										    </li>
+									    </c:if>
+									    
+									    <%-- 페이지 번호 표시 ( 1 2 3 4 5) --%>
+									    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
+									    	<li class='page-item ${pageMaker.cri.pageNum == num ? "active" : ""}'><a class="page-link" href="${num}">${num}</a></li>
+									    </c:forEach>
+									    
+									    <%-- 다음표시 --%>
+									    <c:if test="${pageMaker.next}">
+										    <li class="page-item">
+										      <a class="page-link" href="${pageMaker.endPage +1}">다음</a>
+										    </li>
+									    </c:if>   
+									  </ul>
+									  
+									  <form id="actionForm" action="/user/qna" method="get">
+											<%-- 페이지 번호 클릭시 list주소로 보낼 파라미터 작업 - model 덕분에 ${pageMaker.cri.___} 사용 가능 --%>
+											<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+											<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+											<input type="hidden" name="type" value="${pageMaker.cri.type}">
+											<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
+											<%-- 한 번 검색하면 list()메소드에 Criteria cri 에 값이 들어가게 되어 위 사용 가능 --%>
+										</form>
+									</nav>					
+		    				</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		  </div>
+		  </div>
+    </main>
   </div>
-  </div>
-</main>
+</div>
 
 <footer class="text-muted">
   <%@include file="/WEB-INF/views/include/footer.jsp" %>

@@ -57,15 +57,38 @@
 	<%@include file="/WEB-INF/views/include/header.jsp" %>
 </header>
 
-<main role="main" style="margin-top: 75px">
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse"  style="background-color: #e3f2fd;">
+      <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="/user/order/userOrderHistory">
+              	주문내역 
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/member/confirmPw">
+             	 회원 정보 수정
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/user/qna/userQuestionList">
+              	Q&A 
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-  <section class="jumbotron text-center">
-    <div class="container">
-      <h1>주문내역</h1>
-    </div>
-  </section>
-
- <div class="container">
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+	  <section class="text-center" style="margin: 100px">
+	    <div class="container">
+	      <h3>주문 내역</h3>
+	    </div>
+	  </section>
+	
+	  <div class="container">
 		<div class="row">
 	      	<div class="col-md-12">      	
 	      		<div class="box box-primary">
@@ -84,16 +107,10 @@
 					  	그 외 날짜 검색<input type="date" name="startDate" value="${startDate }"> ~ <input type="date" name="endDate" value="${endDate }">
 					  	<button type="submit" id="btnSearch" class="btn btn-info">검색</button>
 					  </form>
+					  
 					  <form action="/user/order/userOrderList" method="get" id="productSelectedForm">
-					  <%-- 
-					  <c:forEach var="i" begin="0" end="${fn:length(orderHistory)}" >
-					  	<fmt:formatDate value="${orderHistory[i].ORD_DATE}" pattern="yyyy-MM-dd"/> --%>
-					  	
-					     
-					  	<c:forEach items="${orderHistory}" var="orderHistory" varStatus="status">
-			
+				  		<c:forEach items="${orderHistory}" var="orderHistory" varStatus="status">
 					  		<hr>
-					  		  
 				  			<div class="row">          
 						       	<div class = "col-4">
 						  			<!-- 상품 이미지 -->
@@ -133,17 +150,16 @@
 						      		</c:if>
 						      	</div>
 						      </div>
-						      
-						 
-							 </c:forEach>
-							<%--  </c:forEach> --%>
+						 </c:forEach>
 						</form>								
 	      			</div>	
 	      		</div>     
 	      	</div>      
 	      </div>
 		</div>
-</main>
+    </main>
+  </div>
+</div>
 
 <footer class="text-muted">
   <%@include file="/WEB-INF/views/include/footer.jsp" %>

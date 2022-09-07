@@ -160,21 +160,21 @@
 
 				if($(this).val() == '상품') {
 
-					url += "<p>상품명: : </p>";
+					url += "상품명: : ";
 
 					CKEDITOR.instances.q_content.setData(url);
 
 				} else if($(this).val() == '교환/환불') {
 
-					url += "<p>주문번호 / 연락처 : </p>";
-					url += "<p>교환 / 환불 상품명 : </p>";
-					url += "<p>은행명, 환불계좌, 예금주 : </p>";
+					url += "주문번호 / 연락처 : <br>";
+					url += "교환 / 환불 상품명 : <br>";
+					url += "은행명, 환불계좌, 예금주 : <br>";
 
 					CKEDITOR.instances.q_content.setData(url);
 										
 				} else if($(this).val() == '취소/변경') {
 
-					url += "<p>주문번호 / 연락처 : </p>";
+					url += "주문번호 / 연락처 : ";
 
 					CKEDITOR.instances.q_content.setData(url);
 				} else {

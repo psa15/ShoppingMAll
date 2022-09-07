@@ -12,14 +12,20 @@
 			TBL_QNA
 				(Q_NUM, M_ID, Q_TITLE, Q_CONTENT, Q_REGDATE, Q_OPEN 
 				<if test='q_open.equals("N")'>
-					, Q_PASSWORD, Q_FILE_EXIST
+					, Q_PASSWORD
+				</if>
+				<if test='q_file_exist.equals("Y")'>
+					, Q_FILE_EXIST
 				</if>				
 				)
 				
 			VALUES
 				(#{q_num}, #{m_id}, #{q_title}, #{q_content}, SYSDATE, #{q_open}  
 				<if test='q_open.equals("N")'>
-					, #{q_password}, #{q_file_exist}
+					, #{q_password}
+				</if>
+				<if test='q_file_exist.equals("Y")'>
+					, #{q_file_exist}
 				</if>
 				)
 	
@@ -30,30 +36,26 @@
 		
 		INSERT INTO
 			TBL_QNA_ATTACH
-				(UUID, UPLOADPATH, FILENAME, Q_NUM)
+				(FILENAME, FILEFOLDER, Q_NUM)
 			VALUES
-				(#{uuid}, #{uploadpath}, #{filename}, #{q_num})
+				(#{filename}, #{fileFolder}, #{q_num})
 				
 	</insert>
 	
 	<!-- 검색 조건 쿼리 -->
 	<sql id="criteria">
-		<trim prefix="(" suffix=") AND " prefixOverrides="OR"><!-- serffix 공백 주의 -->
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
 			<foreach collection="typeArr" item="type">
-			 <!-- jstl문법의 foreach와는 다름, 이건 mybatis 문법 -->
-			 <!-- 6개 type에 따라 상황이 달라지기 때문에 이렇게 복잡해짐 -->
-			 <!-- typeArr : 파라미터타입의 Criteria클래스의 getter메소드를 가리킴, 검색종류(타입)의 값을 참조 -->
 			 	<trim prefix="OR">
 			 		<choose>
-			 			<!-- T, C, W 제외 다른 type은 조합이기 때문에 when절은 3개만 -->
-			 			<when test="type == 'N'.toString()">
-			 				P_NAME LIKE '%' || #{keyword} || '%'
+			 			<when test="type == 'T'.toString()">
+			 				Q_TITLE LIKE '%' || #{keyword} || '%'
 			 			</when>
 			 			<when test="type == 'C'.toString()">
-			 				P_COMPANY LIKE '%' || #{keyword} || '%'
+			 				Q_CONTENT LIKE '%' || #{keyword} || '%'
 			 			</when>
-			 			<when test="type == 'Y'.toString()">
-			 				P_BUY_OK LIKE '%' || #{keyword} || '%'
+			 			<when test="type == 'W'.toString()">
+			 				M_ID LIKE '%' || #{keyword} || '%'
 			 			</when>
 			 		</choose>
 			 	</trim>
@@ -98,6 +100,28 @@
 			Q_NUM > 0		
 	</select>
 	
-	<!--  -->
+	<!-- 질문 상세 -->
+	<select id="getQuestionByQNum" resultType="com.psamall.domain.QuestionVO">
+	
+		SELECT 
+			Q_NUM, M_ID, Q_TITLE, Q_CONTENT, Q_REGDATE, Q_OPEN, Q_PASSWORD, Q_FILE_EXIST
+		From
+			TBL_QNA
+		Where
+			Q_NUM = #{q_num}
+	
+	</select>
+	
+	<!-- 질문 파일 첨부 목록 가져오기  -->
+	<select id="getFileInfo" resultType="com.psamall.domain.QuestionFileVO">
+	
+		SELECT
+			FILENAME, FILEFOLDER, Q_NUM
+		FROM
+			TBL_QNA_ATTACH
+		Where
+			Q_NUM = #{q_num}		
+	
+	</select>
 
 </mapper>
