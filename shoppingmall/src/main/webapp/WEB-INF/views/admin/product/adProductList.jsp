@@ -162,7 +162,7 @@ desired effect
 					    </c:if>   
 					  </ul>
 					  
-					  <form id="actionForm" action="/admin/product/productList" method="get">
+					  <form id="actionForm" action="/admin/product/adProductList" method="get">
 							<%-- 페이지 번호 클릭시 list주소로 보낼 파라미터 작업 - @ModelAttribute("cri") 덕분에 ${pageMaker.cri.___} 사용 가능 --%>
 							<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
 							<input type="hidden" name="amount" value="${pageMaker.cri.amount}">

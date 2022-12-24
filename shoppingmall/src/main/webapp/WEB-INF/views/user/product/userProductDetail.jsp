@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.88.1">
-    <title>PsaMall</title>
+    <title>REAL Mall</title>
     
     <style>
       .bd-placeholder-img {
@@ -101,7 +101,7 @@
        	<div class = "col-6">
   			<!-- 상품 이미지 -->
       		<img src="/user/product/displayFile?folderName=${productVO.p_image_folder}&fileName=${productVO.p_image}" 
-					alt="" class="bd-placeholder-img card-img-top" width="100%" height="225" onerror="this.onerror=null; this.src='/image/no_image.png'">
+					alt="" class="bd-placeholder-img card-img-top" onerror="this.onerror=null; this.src='/image/no_image.png'">
       	</div>
       	<div class = "col-6">
       		<!-- 상품 이미지 필드 정보 -->
@@ -220,17 +220,11 @@
 					dataType: 'text',
 					success: function(result) {
 					
-						alert(result);
 						if(result == "success") {
 							alert("장바구니가 추가되었습니다.");
 							if(confirm("장바구니로 이동하시겠습니까?")) {
 								location.href = "/user/cart/cartList"
 							}
-						}
-						
-						if(result == "noID") {
-							alert("로그인 후 사용해 주세요.");
-							location.href = "/member/login";						
 						}
 					}
 				});

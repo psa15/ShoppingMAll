@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.88.1">
-    <title>PsaMall</title>
+    <title>REAL Mall</title>
 
 
     <style>
@@ -335,7 +335,7 @@
 			//6개월 버튼 클릭 시
 			$("#btnSixMonth").on("click", function(){
 
-				MonthAgo = new Date(year, month - 6, date); //실패
+				MonthAgo = new Date(year, month - 6, date);
 				//console.log("month: " + MonthAgo.getMonth());
 				startDate = calStartDate(MonthAgo, startDate);
 				//console.log(startDate);

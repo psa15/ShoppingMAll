@@ -23,7 +23,7 @@
         <ul class="nav navbar-nav">
           <c:if test="${sessionScope.adLoginStatus != null}">
 	          <li>
-	          	<a href="adLogout">[로그아웃]</a>
+	          	<a href="/admin/adLogout">[로그아웃]</a>
 	          </li>
           </c:if>
           <!-- Messages: style can be found in dropdown.less-->

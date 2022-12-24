@@ -67,7 +67,7 @@ desired effect
 
       <div class="row">
       	<div class="col-md-12">
-      	<form id="productForm" method="post" action="addProduct" enctype="multipart/form-data">
+      	<form id="productForm" method="post" action="adAddProduct" enctype="multipart/form-data">
       		<div class="box box-primary">
       			<div class="box-header">
       				REGISTER PRODUCT

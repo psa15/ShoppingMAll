@@ -16,8 +16,6 @@ public class CartListVO {
 	private String m_id;
 	private int cart_amount;
 	
-	private int m_point;
-	
 	private String p_buy_ok;
 	private int p_cost;
 	private String p_image;

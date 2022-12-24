@@ -399,6 +399,7 @@
 			//카카오페이 버튼 클릭(ajax구문으로 사용해야 함)
 			$("img#kakao_pay").on("click", function(){
 
+				console.log("클릭");
 				//카카오 페이에서 요청하는 필수 입력값 확보
 				
 				//주문자				
@@ -408,7 +409,10 @@
 				//전자우편
 				let ord_email = $("input[name='ord_email']").val();
 				//전체금액
-				let ord_totalcost = $("input[name='ord_totalcost']").val();
+				let totalPrice = $("#cartTotalPrice").text();
+				let ord_totalcost = $.withoutCommas(totalPrice);
+				
+				console.log(ord_totalcost);
 				//적립금
 				//쿠폰
 
@@ -424,6 +428,7 @@
 						ord_addr_d : $("input[name='ord_addr_d']").val(),
 						ord_tel : ord_tel,
 						ord_totalcost : ord_totalcost,
+						ord_email : ord_email,
 						ord_message : $("select[name='selectBox']").val(),
 						pay_status : '결제완료',
 

@@ -417,21 +417,34 @@
 				//전자우편
 				let ord_email = $("input[name='ord_email']").val();
 				//전체금액
-				let ord_totalcost = $("input[name='ord_totalcost']").val();
-				//적립금
-				//쿠폰
+				let totalPrice = $("#cartTotalPrice").text();
+				let ord_totalcost = $.withoutCommas(totalPrice);
+				
+				//상품번호
+				let pNumValueLength = $("input[name='p_num']").length;
+				console.log(pNumValueLength);
+				//배열 생성
+				let pNumArr = new Array(pNumValueLength);
+				//배열에 값 주입
+				for(let i=0; i<pNumValueLength; i++){                          
+					pNumArr[i] = $("input[name='p_num']").eq(i).val();
+				}
+				
+				console.log("email : " + ord_email);
 
 				$.ajax({
 					url: '/user/order/orderPay',
 					type: 'get',
 					data: {
 						totalAmount : ord_totalcost,
+						pNumArr : pNumArr,
 
 						ord_name : ord_name,
 						ord_postcode : $("input[name='ord_postcode']").val(),
 						ord_addr : $("input[name='ord_addr']").val(),
 						ord_addr_d : $("input[name='ord_addr_d']").val(),
 						ord_tel : ord_tel,
+						ord_email : ord_email,
 						ord_totalcost : ord_totalcost,
 						ord_message : $("select[name='selectBox']").val(),
 						pay_status : '결제완료',
@@ -447,7 +460,7 @@
 						location.href = response.next_redirect_pc_url;
 					}
 
-				});
+				}); 
 			});
 
 			//무통장 입금 선택 시

@@ -128,7 +128,7 @@ desired effect
 						      <th scope="col">주문일시</th>
 						      <th scope="col">수령인 / 주문자 아이디 </th>
 						      <th scope="col">주문금액 / 배송비</th>
-						      <th scope="col">결제 방법 / 결제 상태</th>
+						      <th scope="col">결제 상태</th>
 						      <th scope="col">주문 상태</th>
 						      <th scope="col">CS 상태</th>
 						      <th scope="col">주문 상세</th>
@@ -350,7 +350,7 @@ desired effect
 
     //결제 상태 변경 작업
     $("button[name='btnChangePayStatus']").on("click", function(){
-      console.log("변경 버튼 클릭");
+      //console.log("변경 버튼 클릭");
       
       let ord_code = $(this).data("ord_code");
       let pay_status = $(this).parent().find("select#pay_status option:selected").val();

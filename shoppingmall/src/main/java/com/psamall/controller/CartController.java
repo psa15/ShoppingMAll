@@ -39,25 +39,17 @@ public class CartController {
 		ResponseEntity<String> entity = null;
 		
 		
-		if((MemberVO)session.getAttribute("loginStatus") == null){
-			
-			//로그인 후 사용해달라는 메시지를 띄우기 위한 작업
-			//rttr.addFlashAttribute("msg", "needLogin");
-			
-			entity = new ResponseEntity<String>("noID", HttpStatus.OK);
-		} else {
-			//로그인 시 사용한 세션 정보
-			String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
-			vo.setM_id(m_id);
-			
-			cartService.addCart(vo);
-			log.info("장바구니 정보: " + vo);
-			
-			session.removeAttribute("totalCart");
-			session.setAttribute("totalCart", cartService.totalCart(vo.getM_id()));
-			
-			entity = new ResponseEntity<String>("success", HttpStatus.OK);
-		}
+		String m_id = ((MemberVO)session.getAttribute("loginStatus")).getM_id();
+		vo.setM_id(m_id);
+		
+		cartService.addCart(vo);
+		log.info("장바구니 정보: " + vo);
+		
+		session.removeAttribute("totalCart");
+		session.setAttribute("totalCart", cartService.totalCart(vo.getM_id()));
+		
+		entity = new ResponseEntity<String>("success", HttpStatus.OK);
+		
 		return entity;
 	}
 	

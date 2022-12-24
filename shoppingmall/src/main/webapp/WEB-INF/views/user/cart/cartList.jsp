@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.88.1">
-    <title>PsaMall</title>
+    <title>REAL Mall</title>
 
 
     <style>
@@ -75,8 +75,7 @@
 						      <th scope="col">제품</th>
 						      <th scope="col">수량</th>
 						      <th scope="col">배송비</th>
-						      <th scope="col">가격</th>						      
-						      <th scope="col">적립</th>
+						      <th scope="col">가격</th>
 						      <th scope="col">취소</th>
 						    </tr>
 						  </thead>
@@ -92,7 +91,6 @@
 						      	<input type="hidden" class="productPriceForCal" value="${cartVO.p_cost}">
 						      	<input type="hidden" class="productAmountForCal" value="${cartVO.cart_amount}">
 						      	<input type="hidden" class="productTotalPriceForCal" value="${cartVO.p_cost * cartVO.cart_amount}">
-						      	<input type="hidden" class="productPointForCal" value="${cartVO.p_cost * 0.005}">
 								
 						      	
 						      </td>	
@@ -120,11 +118,7 @@
 								<span class="unitPrice">						      	
 									<fmt:formatNumber type="number" maxFractionDigits="3" value="${price}" />
 								</span>
-							  </td>						  
-						      <!-- 적립 -->
-						      <td>
-						      	<c:out value="${cartVO.m_point}" />
-						      </td>
+							  </td>	
 						      <!-- 삭제 -->
 						      <td>
 			                    <input type="hidden" name="p_image_dateFolder" value="${cartVO.p_image_folder}">
@@ -224,7 +218,7 @@
 
 			//장바구니 페이지에서 상품 수량 변경
 			$("button[name='btnCartAmountChange']").on("click", function(){
-				console.log("수량 변경 버튼 클릭");
+				//console.log("수량 변경 버튼 클릭");
 
 				let btnCartAmountChange = $(this);
 
@@ -244,22 +238,9 @@
 							let p_cost = btnCartAmountChange.parent().find("input[name='p_cost']").val();
 							btnCartAmountChange.parents("tr").find("span.unitPrice").html($.numberWithCommas(p_cost * cart_amount));
 							
-							//새로고침 안하려고 ajax를 사용했으나 수량 수정 후 총구매금액 변경이 안됨...
 							location.href="/user/cart/cartList";
-
-							//총 구매금액 변경
-							// let totalPrice = 0;
-							/* $("table#tblCartList tr td span.unitPrice").each(function(index, item){
-								// console.log("단위가격: " + $(item).html());
-								// console.log("단위가격: " + $(item).text());
-								
-								// totalPrice += parseInt($.withoutCommas($(item).text())); //무언갈 읽어오는 데이터는 전부 text(String)
-								// $("table#tblCartList tr td span#cartTotalPrice").text($.numberWithCommas(totalPrice));
-							});  */
 						}
-					}
-
-					
+					}					
 				});
 
 			});
@@ -387,12 +368,11 @@
 		}
 
 		//변경될때마다 초기화
-		//선택한 상품의 정보만 계산하기(배송비, 총 가격, 적립금)
+		//선택한 상품의 정보만 계산하기(배송비, 총 가격)
 		function totalInfo(){
 
  			let totalCost = 0; //주문할 상품 총 가격
 			let deliveryCost = 0; //배송비
-			let totalPoint = 0; //상품 주문시 적립될 포인트 
 			let realTotalCost = 0; //상품 총 가격 + 배송비
 			
 			
@@ -403,7 +383,6 @@
 				if($(item).find("input[name='checkProduct']").is(":checked") == true) {
 
 					totalCost += parseInt($(item).find(".productTotalPriceForCal").val());
-					totalPoint += parseInt($(item).find(".productPointForCal").val());
 				} 
 								
 			});

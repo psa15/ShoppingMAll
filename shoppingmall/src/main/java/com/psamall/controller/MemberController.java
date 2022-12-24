@@ -239,7 +239,7 @@ public class MemberController {
 			memberService.updateTempPw(m_id, bCryptPasswordEncoder.encode(temp_m_passwd));
 			
 			//메일보내기
-			EmailDTO dto = new EmailDTO("PsaMall", "PsaMall", m_email, "PSA Mall 임시비밀번호 입니다.", "");
+			EmailDTO dto = new EmailDTO("REALmall", "REALmall", m_email, "REAL MAll 임시비밀번호 입니다.", "");
 			try {
 				
 				emailService.sendMail(dto, temp_m_passwd);
@@ -315,13 +315,6 @@ public class MemberController {
 			vo.setM_passwd(cryptEncoderPw);
 		}
 		
-		/*
-		 메일 수신 여부
-		 <input type="checkbox" value="Y"> 라고 value값을 지정해 뒀다면 if(vo.getM_email_accept().equals("Y"))
-		 <input type="checkbox"> value값 지정 안하면 체크박스 선택 안할 시 null로 인식이 됨
-		 	-> if(vo.getM_email_accept() != null)
-		 
-		 */
 		if(vo.getM_email_accept().equals("on")) {
 			vo.setM_email_accept("Y");
 		} else {

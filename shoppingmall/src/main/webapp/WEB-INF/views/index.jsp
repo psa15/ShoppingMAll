@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.88.1">
-    <title>PsaMall</title>
+    <title>REAL Mall</title>
 
 
     <style>
@@ -52,11 +52,27 @@
 
 <main role="main" style="margin-top: 90px">
 
-  <section class="jumbotron text-center">
-    <div class="container">
-      <h1>슬라이드 이미지</h1>
-    </div>
-  </section>
+  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+	  <div class="carousel-inner">
+	    <div class="carousel-item active">
+	      <img src="/image/indexImg1.jpg" class="d-block w-100" alt="신상1">
+	    </div>
+	    <div class="carousel-item">
+	      <img src="/image/indexImg2.jpg" class="d-block w-100" alt="신상2">
+	    </div>
+	    <div class="carousel-item">
+	      <img src="/image/indexImg3.jpg" class="d-block w-100" alt="신상3">
+	    </div>
+	  </div>
+	 <button class="carousel-control-prev" type="button" data-target="#carouselExampleControls" data-slide="prev">
+	    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	    <span class="sr-only">Previous</span>
+	  </button>
+	  <button class="carousel-control-next" type="button" data-target="#carouselExampleControls" data-slide="next">
+	    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	    <span class="sr-only">Next</span>
+	  </button>
+	</div>
 
 
   <div class="album py-5 bg-light">

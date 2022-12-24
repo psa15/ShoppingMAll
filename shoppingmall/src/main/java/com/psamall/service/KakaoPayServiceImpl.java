@@ -99,7 +99,7 @@ public class KakaoPayServiceImpl {
 	// Kakao Pay request의 두번사용시 공통 Header정보 설정.
 	private HttpHeaders getHeaders() {
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "KakaoAK ");
+		headers.set("Authorization", "KakaoAK a004b812a39c5ea079e96e67fe0be02a");
 		headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		
 		return headers;

@@ -87,6 +87,10 @@
 
 		$(function(){
 			
+			//주문내역 조회 버튼 클릭시
+			$("#btnOrderList").on("click", function(){
+				location.href="/user/order/userOrderHistory";
+			});
 		});
 
 
